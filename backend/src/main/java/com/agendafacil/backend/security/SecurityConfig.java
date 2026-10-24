@@ -2,6 +2,7 @@ package com.agendafacil.backend.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -13,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 // platform-setup placeholder endpoints stay open; identity Task 4 adds JWT validation for everything else
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean

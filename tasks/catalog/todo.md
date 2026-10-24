@@ -2,16 +2,18 @@
 
 Plan: [plan.md](plan.md) · Spec: [../../SPEC-catalog.md](../../SPEC-catalog.md)
 
-## Task 1: Enable method security
+## Task 1: Enable method security ✅
 
 **Description:** Turn on `@EnableMethodSecurity` so `@PreAuthorize("hasRole('ADMIN')")` works on controller methods. `identity`'s `JwtAuthenticationConverter` already produces the `ROLE_ADMIN`/`ROLE_CLIENTE` authorities this relies on.
 
 **Acceptance criteria:**
-- [ ] `@EnableMethodSecurity` added to `SecurityConfig` (or a dedicated config class)
-- [ ] A trivial `@PreAuthorize("hasRole('ADMIN')")`-annotated test endpoint (or a unit test exercising the security expression directly) proves CLIENTE → 403, ADMIN → 200, no token → 401
+- [x] `@EnableMethodSecurity` added to `SecurityConfig`
+- [x] A trivial `@PreAuthorize("hasRole('ADMIN')")`-annotated test-only controller (nested in `MethodSecurityTest`, `@Import`ed, never shipped in production code) proves CLIENTE → 403, ADMIN → 200, no token → 401
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
+- [x] Tests pass: `./mvnw test` (TDD red→green) and full `./mvnw clean verify`
+
+**Bug found and fixed as part of this task:** `@PreAuthorize` denial (`AccessDeniedException`) had no specific handler in `GlobalExceptionHandler`, so it fell through to the generic catch-all and returned 500 instead of 403. Added a handler mapping it to 403 with the same `ErrorResponse` shape — same category of gap as the 404 fix at the end of `identity`, caught this time by the task's own test instead of manual verification.
 
 **Dependencies:** None
 

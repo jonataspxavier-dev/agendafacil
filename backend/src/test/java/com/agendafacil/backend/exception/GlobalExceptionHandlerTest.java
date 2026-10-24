@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -60,6 +61,17 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
         assertThat(response.getBody().status()).isEqualTo(401);
         assertThat(response.getBody().error()).isEqualTo("Unauthorized");
+    }
+
+    @Test
+    void mapsAccessDeniedTo403() {
+        AccessDeniedException ex = new AccessDeniedException("acesso negado");
+
+        ResponseEntity<ErrorResponse> response = handler.handleAccessDenied(ex, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(response.getBody().status()).isEqualTo(403);
+        assertThat(response.getBody().error()).isEqualTo("Forbidden");
     }
 
     @Test

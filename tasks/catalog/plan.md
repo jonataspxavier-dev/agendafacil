@@ -17,7 +17,7 @@ Servico and Profissional CRUD, backed by Flyway migrations `V5`-`V8`, with publi
 ## Task List
 
 ### Phase 1: Foundation
-- [ ] Task 1: Enable method security (`@EnableMethodSecurity` in `SecurityConfig`)
+- [x] Task 1: Enable method security (`@EnableMethodSecurity` in `SecurityConfig`)
 - [ ] Task 2: `servico` schema (`V5`) + `Servico` entity + `ServicoRepository`
 - [ ] Task 3: `profissional` + `profissional_servico` + `jornada` schema (`V6`, `V7`) + entities + repositories — depends on Task 2 (FK to `servico`)
 
