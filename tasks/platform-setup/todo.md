@@ -53,18 +53,18 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-plat
 
 ---
 
-## Task 3: Backend test infra (JUnit 5, Mockito, Testcontainers)
+## Task 3: Backend test infra (JUnit 5, Mockito, Testcontainers) ✅ (container smoke test pending Docker)
 
 **Description:** Wire JUnit 5, Mockito, and Testcontainers (Postgres module) onto the Maven classpath with a working Testcontainers base config, so `identity` can add its first `@Test` without touching build config.
 
 **Acceptance criteria:**
-- [ ] `./mvnw test` runs clean with zero `@Test` methods
-- [ ] A Testcontainers Postgres container can start successfully in a throwaway smoke test (deleted or kept as a trivial `contextLoads`-style test) to prove the wiring works
-- [ ] Dependencies are scoped `test` only
+- [x] `./mvnw test` runs clean with zero `@Test` methods
+- [ ] A Testcontainers Postgres container can start successfully in a throwaway smoke test — **blocked: needs Docker to actually spin up a container**
+- [x] Dependencies are scoped `test` only (`spring-boot-testcontainers`, `testcontainers-junit-jupiter`, `testcontainers-postgresql`; JUnit5/Mockito already came in via `spring-boot-starter-*-test` artifacts added in Task 2)
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
-- [ ] Manual check: logs show the Testcontainers Postgres container starting and stopping during the test run
+- [x] Tests pass: `./mvnw test` (0 tests, exit 0)
+- [ ] Manual check: logs show the Testcontainers Postgres container starting and stopping — **blocked on Docker**
 
 **Dependencies:** Task 2
 
