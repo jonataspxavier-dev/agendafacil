@@ -41,7 +41,7 @@ Build register/login/refresh/logout with JWT, backed by Postgres via Flyway migr
 - [ ] Task 8: Logout (`POST /api/auth/logout`, revokes the current refresh token) — depends on Task 7
 
 ### Checkpoint: Refresh lifecycle
-- [ ] Refresh rotates the token (old refresh token rejected after use)
+- [x] Refresh rotates the token (old refresh token rejected after use)
 - [ ] Logout revokes the refresh token (rejected on next use)
 - [ ] Swagger UI shows `/api/auth/refresh` and `/api/auth/logout`
 
