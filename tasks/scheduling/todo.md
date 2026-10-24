@@ -52,18 +52,18 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-scheduling.md](../../SPEC-scheduli
 
 ---
 
-## Task 3: `GET /api/disponibilidade`
+## Task 3: `GET /api/disponibilidade` ✅
 
 **Description:** Public endpoint wiring `DisponibilidadeService`'s DB-fetching orchestration to HTTP: `profissionalId`, `servicoId`, `data` query params → list of available slots.
 
 **Acceptance criteria:**
-- [ ] `GET /api/disponibilidade?profissionalId=&servicoId=&data=` returns 200 with no auth required
-- [ ] 404 if `profissionalId` or `servicoId` doesn't exist, or the professional doesn't offer that service (not in `profissional_servico`)
-- [ ] Integration test: a professional with a Monday 09:00-18:00 jornada and no bookings returns the expected slot count for a 30-min service; booking one slot removes it from a subsequent call
+- [x] `GET /api/disponibilidade?profissionalId=&servicoId=&data=` returns 200 with no auth required
+- [x] 404 if `profissionalId` or `servicoId` doesn't exist; **400** (not 404) if the professional doesn't offer that service — `InvalidRequestException`, consistent with `catalog`'s precedent for "ids exist but the combination is invalid" (adjusted from this task's original 404-for-everything wording during implementation, to match what `DisponibilidadeService` already threw from Task 2)
+- [x] Integration test: a professional with a Monday 09:00-11:00 jornada and no bookings returns 4 slots for a 30-min service; an existing booking excludes exactly the overlapping slot (4 → 3)
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
-- [ ] Manual check: `docker compose up`, curl `/api/disponibilidade` against the seeded catalog data with no auth header → 200
+- [x] Tests pass: `./mvnw test` (TDD red→green, 4/4) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, curled `/api/disponibilidade` against the seeded catalog data (Ana Souza, Monday) with no auth header → 200, 18 slots (09:00-18:00, 30-min steps)
 
 **Dependencies:** Task 2
 

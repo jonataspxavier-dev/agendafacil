@@ -1,5 +1,6 @@
 package com.agendafacil.backend.service;
 
+import com.agendafacil.backend.dto.SlotResponse;
 import com.agendafacil.backend.entity.Agendamento;
 import com.agendafacil.backend.entity.Jornada;
 import com.agendafacil.backend.entity.Profissional;
@@ -37,7 +38,7 @@ public class DisponibilidadeService {
     }
 
     @Transactional(readOnly = true)
-    public List<LocalDateTime> calcular(Long profissionalId, Long servicoId, LocalDate data) {
+    public List<SlotResponse> calcular(Long profissionalId, Long servicoId, LocalDate data) {
         Profissional profissional = profissionalRepository.findById(profissionalId)
                 .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado: " + profissionalId));
         Servico servico = servicoRepository.findById(servicoId)
@@ -57,7 +58,10 @@ public class DisponibilidadeService {
         List<Agendamento> existentes = agendamentoRepository.findConflitantes(
                 profissionalId, StatusAgendamento.AGENDADO, data.atStartOfDay(), data.plusDays(1).atStartOfDay());
 
-        return calcularSlotsDisponiveis(jornadasDoDia, servico.getDuracaoMin(), data, existentes);
+        int duracaoMin = servico.getDuracaoMin();
+        return calcularSlotsDisponiveis(jornadasDoDia, duracaoMin, data, existentes).stream()
+                .map(inicio -> new SlotResponse(inicio, inicio.plusMinutes(duracaoMin)))
+                .toList();
     }
 
     static List<LocalDateTime> calcularSlotsDisponiveis(

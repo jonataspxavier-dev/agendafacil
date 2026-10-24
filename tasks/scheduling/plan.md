@@ -27,11 +27,11 @@ Build `disponibilidade` (availability calculation) and the full `agendamento` li
 
 ### Phase 2: Disponibilidade
 - [x] Task 2: `DisponibilidadeService` slot calculation (pure core + DB-fetching orchestration) — depends on Task 1
-- [ ] Task 3: `GET /api/disponibilidade` (public) — depends on Task 2
+- [x] Task 3: `GET /api/disponibilidade` (public) — depends on Task 2
 
 ### Checkpoint: Disponibilidade
-- [ ] Unit tests cover jornada boundaries, duration, multiple jornada windows per day, already-booked exclusion
-- [ ] Swagger shows `/api/disponibilidade`
+- [x] Unit tests cover jornada boundaries, duration, multiple jornada windows per day, already-booked exclusion
+- [x] Swagger shows `/api/disponibilidade`
 
 ### Phase 3: Booking creation (the critical path)
 - [ ] Task 4: `POST /api/agendamentos` — validation, conflict pre-check, exclusion-constraint-violation → 409 translation, `preco_cobrado` snapshot — depends on Task 1, Task 2 (reuses jornada/servico validation)
