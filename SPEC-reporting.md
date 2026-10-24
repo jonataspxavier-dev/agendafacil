@@ -55,12 +55,12 @@ Aggregate queries live in `AgendamentoRepository` as JPQL (`COUNT`, `SUM`, `GROU
 
 ## Success Criteria
 
-- [ ] `GET /api/admin/dashboard` returns 401 with no token, 403 with a CLIENTE token, 200 with an ADMIN token
-- [ ] `agendamentosHoje` is the count of today's bookings, excluding `CANCELADO`
-- [ ] `faturamentoMes` is the sum of `preco_cobrado` for `CONCLUIDO` bookings whose `inicio` falls in the current calendar month
-- [ ] `topServicos` lists services ranked by number of `CONCLUIDO` bookings (all-time), descending, limited to the top 5
-- [ ] Integration tests cover each of the three figures independently against seeded data spanning multiple days/months/statuses/services, plus the role check
-- [ ] Swagger UI shows the new operation
+- [x] `GET /api/admin/dashboard` returns 401 with no token, 403 with a CLIENTE token, 200 with an ADMIN token
+- [x] `agendamentosHoje` is the count of today's bookings, excluding `CANCELADO`
+- [x] `faturamentoMes` is the sum of `preco_cobrado` for `CONCLUIDO` bookings whose `inicio` falls in the current calendar month
+- [x] `topServicos` lists services ranked by number of `CONCLUIDO` bookings (all-time), descending, limited to the top 5
+- [x] Integration tests cover each of the three figures independently against seeded data spanning multiple days/months/statuses/services, plus the role check
+- [x] Swagger UI shows the new operation
 
 ## Open Questions
 

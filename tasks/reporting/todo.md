@@ -32,25 +32,25 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-reporting.md](../../SPEC-reporting
 
 ---
 
-## Task 2: `GET /api/admin/dashboard`
+## Task 2: `GET /api/admin/dashboard` ✅
 
 **Description:** Wire the Task 1 queries into a `DashboardService` and expose them as `ROLE_ADMIN`-only `GET /api/admin/dashboard`, returning a single `DashboardResponse`.
 
 **Acceptance criteria:**
-- [ ] 401 no token, 403 CLIENTE token, 200 for ADMIN
-- [ ] Response combines all three figures from Task 1 into one `DashboardResponse` JSON body
-- [ ] Integration test books/completes/cancels real bookings via the existing `POST /api/agendamentos` + `.../concluir` + `.../cancelar` flow (not direct repository saves) and asserts the dashboard reflects them correctly end-to-end
+- [x] 401 no token, 403 CLIENTE token, 200 for ADMIN
+- [x] Response combines all three figures from Task 1 into one `DashboardResponse` JSON body
+- [x] Integration test books/completes/cancels real bookings via the existing `POST /api/agendamentos` + `.../concluir` + `.../cancelar` flow (not direct repository saves) and asserts the dashboard reflects them correctly end-to-end
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test` and full `./mvnw clean verify`
-- [ ] Manual check: `docker compose up`, book a slot as a client, mark it `concluir` as admin, confirm `GET /api/admin/dashboard` shows it in `agendamentosHoje`, `faturamentoMes`, and `topServicos`. Swagger shows the operation.
+- [x] Tests pass: `./mvnw test` (TDD red→green, 3/3) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up --build`. Baseline dashboard (`agendamentosHoje:0, faturamentoMes:0, topServicos:[]`), then booked a real slot today as a client (showed up in `agendamentosHoje` only, still `AGENDADO`), marked it `concluir` as admin (then also appeared in `faturamentoMes: 50.00` and `topServicos`). CLIENTE token → 403, no token → 401. Swagger shows the operation.
 
 **Dependencies:** Task 1
 
 **Files likely touched:**
 - `backend/src/main/java/com/agendafacil/backend/service/DashboardService.java`
 - `backend/src/main/java/com/agendafacil/backend/controller/DashboardController.java`
-- `backend/src/main/java/com/agendafacil/backend/security/SecurityConfig.java` (no change expected — `/api/admin/**` already falls under `anyRequest().authenticated()`, `@PreAuthorize` handles the role, same as `scheduling`'s admin listing)
+- `backend/src/main/java/com/agendafacil/backend/security/SecurityConfig.java` (no change needed — confirmed `/api/admin/**` falls under `anyRequest().authenticated()`, `@PreAuthorize` handles the role, same as `scheduling`'s admin listing)
 - `backend/src/test/java/.../controller/DashboardControllerTest.java`
 
 **Estimated scope:** Small: 3-4 files — thin wiring over Task 1's already-correct queries
@@ -59,7 +59,7 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-reporting.md](../../SPEC-reporting
 
 ## Checkpoint: Module complete
 
-- [ ] All 2 tasks checked off
-- [ ] Every item in SPEC-reporting.md's Success Criteria is satisfied
-- [ ] `docker compose up --build` works end-to-end
+- [x] All 2 tasks checked off
+- [x] Every item in SPEC-reporting.md's Success Criteria is satisfied
+- [x] `docker compose up --build` works end-to-end
 - [ ] Human review before starting `client-web`/`admin-web`

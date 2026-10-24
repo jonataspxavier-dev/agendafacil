@@ -26,12 +26,12 @@ A single `ROLE_ADMIN`-only endpoint, `GET /api/admin/dashboard`, returning three
 - [x] Integration tests (Testcontainers Postgres) prove each of the three queries independently against seeded rows spanning multiple days/months/statuses/services — e.g. a `CANCELADO` row today must not count toward the today-count; an `AGENDADO` row this month must not count toward the revenue sum; a service with more `AGENDADO` bookings than `CONCLUIDO` ones must not outrank a service with fewer bookings but more `CONCLUIDO` ones
 
 ### Phase 2: Endpoint
-- [ ] Task 2: `GET /api/admin/dashboard` — `DashboardService` + `DashboardController`, `@PreAuthorize("hasRole('ADMIN')")` — depends on Task 1
+- [x] Task 2: `GET /api/admin/dashboard` — `DashboardService` + `DashboardController`, `@PreAuthorize("hasRole('ADMIN')")` — depends on Task 1
 
 ### Checkpoint: Module complete
-- [ ] Both tasks checked off
-- [ ] Every item in SPEC-reporting.md's Success Criteria is satisfied
-- [ ] `docker compose up --build` still works end-to-end
+- [x] Both tasks checked off
+- [x] Every item in SPEC-reporting.md's Success Criteria is satisfied
+- [x] `docker compose up --build` still works end-to-end
 - [ ] Human review before starting `client-web`/`admin-web`
 
 ## Risks and Mitigations
