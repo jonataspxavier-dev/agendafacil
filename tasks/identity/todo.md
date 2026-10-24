@@ -26,19 +26,19 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-identity.md](../../SPEC-identity.m
 
 ---
 
-## Task 2: `usuario` schema + entity + repository
+## Task 2: `usuario` schema + entity + repository ✅
 
 **Description:** `V2__create_usuario.sql` Flyway migration, `Usuario` JPA entity, `Perfil` enum (ADMIN/CLIENTE), `UsuarioRepository`, and a `PasswordEncoder` bean (BCrypt).
 
 **Acceptance criteria:**
-- [ ] `V2__create_usuario.sql`: `usuario(id, nome, email UNIQUE NOT NULL, senha_hash, perfil, criado_em)`
-- [ ] `Usuario` entity maps 1:1 to the table; `perfil` is the `Perfil` enum stored as a string column (`@Enumerated(EnumType.STRING)`), not a native Postgres enum
-- [ ] `UsuarioRepository extends JpaRepository<Usuario, Long>` with `findByEmail(String)`
-- [ ] `PasswordEncoder` bean (`BCryptPasswordEncoder`) registered
+- [x] `V2__create_usuario.sql`: `usuario(id, nome, email UNIQUE NOT NULL, senha_hash, perfil, criado_em)`
+- [x] `Usuario` entity maps 1:1 to the table; `perfil` is the `Perfil` enum stored as a string column (`@Enumerated(EnumType.STRING)`), not a native Postgres enum
+- [x] `UsuarioRepository extends JpaRepository<Usuario, Long>` with `findByEmail(String)`
+- [x] `PasswordEncoder` bean (`BCryptPasswordEncoder`) registered in `SecurityConfig`
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test` — Testcontainers Postgres applies `V1` then `V2` cleanly
-- [ ] Manual check: repository test saves and reads back a `Usuario`
+- [x] Tests pass: `./mvnw test` — Testcontainers Postgres applied `V1` then `V2` cleanly (log: "Migrating schema \"public\" to version \"2 - create usuario\"")
+- [x] Manual check: `UsuarioRepositoryTest` (TDD, written red first) saves and reads back a `Usuario` by email; full `./mvnw clean verify` green
 
 **Dependencies:** None (parallelizable with Task 1)
 
