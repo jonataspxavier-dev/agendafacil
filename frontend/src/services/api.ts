@@ -59,6 +59,16 @@ interface RetryableRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean
 }
 
+export function extractErrorMessage(error: unknown): string {
+  if (axios.isAxiosError(error)) {
+    const data = error.response?.data as { message?: string } | undefined
+    if (data?.message) {
+      return data.message
+    }
+  }
+  return 'Ocorreu um erro inesperado. Tente novamente.'
+}
+
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {

@@ -1,6 +1,8 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { AuthProvider } from '@/contexts/AuthContext'
+import { LoginPage } from '@/pages/LoginPage'
+import { RegisterPage } from '@/pages/RegisterPage'
 import { ServicosPage } from '@/pages/ServicosPage'
 
 function App() {
@@ -10,8 +12,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/servicos" replace />} />
           <Route path="/servicos" element={<ServicosPage />} />
-          <Route path="/login" element={<div>Login</div>} />
-          <Route path="/cadastro" element={<div>Cadastro</div>} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/cadastro" element={<RegisterPage />} />
           <Route
             path="/agendar"
             element={

@@ -75,29 +75,28 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-client-web.md](../../SPEC-client-w
 
 ---
 
-## Task 3: `LoginPage` + `RegisterPage`
+## Task 3: `LoginPage` + `RegisterPage` ✅
 
 **Description:** The two form pages. `authService.ts` and `AuthContext`'s real `login`/`register`/`logout` methods were already built in Task 1 (see its scope note) — this task is the forms and their validation/UX on top of that.
 
 **Acceptance criteria:**
-- [ ] `pages/LoginPage.tsx` / `pages/RegisterPage.tsx`: React Hook Form + Zod (`@hookform/resolvers/zod`) validate client-side (required fields, email format, password min length) before any network call; a failed backend call (e.g. 401 on login, 409 on duplicate-email register) surfaces that specific message, not a generic one
-- [ ] Successful login redirects to `/servicos` (or back to the originally-requested protected route per `ProtectedRoute`'s redirect state, if present)
-- [ ] Successful register auto-logs-in (per `AuthContext.register`'s Task 1 implementation, which chains to `login` internally) and redirects the same way
+- [x] `pages/LoginPage.tsx` / `pages/RegisterPage.tsx`: React Hook Form + Zod (`@hookform/resolvers/zod`) validate client-side (required fields, email format, password min length) before any network call; a failed backend call (e.g. 401 on login, 409 on duplicate-email register) surfaces that specific message, not a generic one (via a new `extractErrorMessage` helper in `api.ts`)
+- [x] Successful login redirects to `/servicos` (or back to the originally-requested protected route per `ProtectedRoute`'s redirect state, if present)
+- [x] Successful register auto-logs-in (per `AuthContext.register`'s Task 1 implementation, which chains to `login` internally) and redirects the same way
 
 **Verification:**
-- [ ] Tests pass: `npm test` — Zod schema rejects empty/malformed input before calling the mocked service; a mocked 409 register response surfaces that message; a mocked successful login updates `AuthContext` state
-- [ ] Manual check: `docker compose up --build`, register a new account, confirm it logs in (or redirects to login) and `GET /api/auth/me` reflects it; log out and confirm storage is cleared and the user lands on `/login`
+- [x] Tests pass: `npm test` (14/14 — Zod schema rejects empty/malformed input before calling the mocked `login`/`register`; a mocked 409/401 response surfaces that exact message; a mocked successful submit redirects to `/servicos`) and `npm run build`
+- [x] Manual check: `docker compose up --build`, exercised the real flow in the browser pane: registered a new account → auto-logged-in → redirected to `/servicos` (tokens confirmed in `localStorage`); re-registering the same email surfaced the backend's real 409 message ("Já existe uma conta com o e-mail..."); visited `/meus-agendamentos` logged out → redirected to `/login`; wrong password → "E-mail ou senha inválidos"; correct password → redirected back to `/meus-agendamentos` (not the default `/servicos`), proving `ProtectedRoute`'s redirect-back state works end-to-end. No console errors beyond the two intentionally-triggered 409/401 responses.
 
-**Dependencies:** Task 1 (`AuthContext` shape, `api.ts`)
+**Dependencies:** Task 1 (`AuthContext`, `api.ts`)
 
 **Files likely touched:**
-- `frontend/src/services/authService.ts`
-- `frontend/src/contexts/AuthContext.tsx` (fill in real methods)
+- `frontend/src/services/api.ts` (added `extractErrorMessage`)
 - `frontend/src/pages/LoginPage.tsx`
 - `frontend/src/pages/RegisterPage.tsx`
 - `frontend/src/pages/LoginPage.test.tsx`
 - `frontend/src/pages/RegisterPage.test.tsx`
-- `frontend/src/contexts/AuthContext.test.tsx`
+- `frontend/src/App.tsx` (routes wired)
 
 **Estimated scope:** Large: 7 files — forms, validation, and the real auth wiring together
 

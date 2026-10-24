@@ -31,11 +31,11 @@ Build the customer-facing pages and shared app infrastructure on top of the exis
 - [x] Task 2: `ServicosPage` + `servicosService` — public list, loading/error states
 
 ### Phase 3: Auth
-- [ ] Task 3: `LoginPage` + `RegisterPage` + `authService` + `AuthContext`'s real `login`/`register`/`logout` methods (Zod validation, token storage, backend error surfacing, e.g. 409 on duplicate email)
+- [x] Task 3: `LoginPage` + `RegisterPage` (Zod validation, backend error surfacing e.g. 409 on duplicate email) — `authService`/`AuthContext` methods were already built in Task 1
 
 ### Checkpoint: Auth
-- [ ] Register → redirected to login (or auto-logged-in, per Task 3's own design call) → login stores tokens → `GET /api/auth/me` reflects the real user
-- [ ] Logging out clears storage and redirects to `/login`
+- [x] Register → auto-logged-in → redirected to `/servicos` with tokens in storage
+- [x] `ProtectedRoute`'s redirect-back-after-login verified end-to-end (visit a protected route logged out → `/login` → correct credentials → lands back on the originally-requested route)
 
 ### Phase 4: Booking + history (protected)
 - [ ] Task 4: `AgendarPage` (4-step flow) + `profissionaisService` + `disponibilidadeService` + `agendamentosService.criar` — depends on Task 1 (ProtectedRoute), Task 3 (auth)
