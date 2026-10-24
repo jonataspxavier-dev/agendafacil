@@ -20,7 +20,7 @@ Source brief: [`../projeto-2-agendamentos-react-spring.md`](../projeto-2-agendam
 |---|---|
 | `platform-setup` | Done — all 8 tasks implemented and verified (Docker installed; `docker compose up --build` confirmed all 3 services healthy). Pending: human review before starting `identity` |
 | `identity` | Done — all 9 tasks implemented and verified end-to-end via docker compose; pending human review before `catalog` |
-| `catalog` | Not started |
+| `catalog` | Spec drafted — pending review |
 | `scheduling` | Not started |
 | `reporting` | Not started |
 | `client-web` | Not started |
