@@ -11,6 +11,7 @@ Scaffold the AgendaFácil repo — git, backend (Spring Boot/Maven), frontend (V
 
 ## Architecture Decisions
 
+- **Spring Boot 4.0.9, not 3.x.** Spring Initializr had dropped the entire 3.x line by the time Task 2 ran (only 4.0.x/4.1.x/4.2.x-RC offered). Confirmed with the user — 4.0.9 (latest stable 4.0.x) over 4.1.2 or hand-pinning an EOL 3.5.x. Still Java 21.
 - **Maven over Gradle** for the backend — matches the SPEC's default; more conventional for a Spring Boot portfolio piece.
 - **Spring Boot Actuator added** (not explicitly in the original brief) to get a real `/actuator/health` endpoint for the Docker Compose healthcheck and this module's verification step.
 - **Flyway baseline is a genuinely empty `V1__baseline.sql`** (no tables) — the `usuario`/`servico`/etc. schema belongs to `identity`/`catalog`, not this module. This module only proves Flyway runs against Postgres on startup.

@@ -2,7 +2,9 @@
 
 Conventions for this repo. Read [PLANO.md](PLANO.md) for the product brief and [capability-map.md](capability-map.md) for the module build order. Each module has its own `SPEC-<module>.md` and `tasks/<module>/{plan,todo}.md`.
 
-## Backend (Java 21, Spring Boot 3.x, Maven)
+## Backend (Java 21, Spring Boot 4.0.9, Maven)
+
+> Deviation from the original brief: the brief named Spring Boot 3.x, but by the time `platform-setup` was implemented, Spring Initializr no longer offered any 3.x version (3.x had aged out; only 4.0.x/4.1.x/4.2.x-RC remained). Confirmed with the user — target is Spring Boot 4.0.9, which still runs on Java 21.
 
 - **Layering:** `controller/` → `service/` → `repository/`. Controllers depend on services, services depend on repositories. Never skip a layer.
 - **DTOs are records, never entities over the wire.** A controller method never returns or accepts a `@Entity` directly — always a `record` DTO in `dto/`.

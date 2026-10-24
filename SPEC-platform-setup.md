@@ -10,7 +10,7 @@ This module has no end-user — the "user" is the developer. Done means: a fresh
 
 ## Tech Stack
 
-- Backend: Java 21, Spring Boot 3.x — Web, Data JPA, Security, Validation, Flyway, PostgreSQL driver
+- Backend: Java 21, Spring Boot 4.0.9 (brief named 3.x, but Initializr had dropped the whole 3.x line by implementation time — confirmed with user, see Open Questions) — Web, Data JPA, Security, Validation, Flyway, PostgreSQL driver
 - API docs: springdoc-openapi (Swagger UI)
 - Build: Maven (brief doesn't specify Maven vs Gradle — defaulting to Maven; see Open Questions)
 - Frontend: React + Vite + TypeScript
@@ -113,3 +113,4 @@ No business logic exists yet in this module, so there are no test *cases* to wri
 1. **Maven or Gradle?** Brief doesn't specify. Defaulting to Maven (more common default for Spring Boot tutorials/portfolios) — flag if you want Gradle instead.
 2. **Git remote now or later?** This module only requires a local `git init` + initial commit. Creating a GitHub remote is left for the `Fase 6 — Entrega` deploy step from the original brief, not this module.
 3. **Swagger wired now with nothing to show?** Yes — the dependency and base config go in now; there's nothing to document until `identity` adds the first real endpoints.
+4. **Resolved during Task 2:** Spring Boot 3.x is no longer offered by Spring Initializr (only 4.0.x/4.1.x/4.2.x-RC remain). User chose **Spring Boot 4.0.9** over 4.1.2 or hand-pinning an EOL 3.5.x. Still targets Java 21.
