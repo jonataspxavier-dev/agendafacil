@@ -77,18 +77,20 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-catalog.md](../../SPEC-catalog.md)
 
 ---
 
-## Task 4: `GET /api/servicos`
+## Task 4: `GET /api/servicos` ✅
 
 **Description:** Public listing of active services, optional paging.
 
 **Acceptance criteria:**
-- [ ] `GET /api/servicos` returns only `ativo = true` services, 200, no auth required
-- [ ] Optional `page`/`size`/`sort` query params page the result; omitting them returns the full active list
-- [ ] `ServicoResponse` DTO — no entity exposed
+- [x] `GET /api/servicos` returns only `ativo = true` services, 200, no auth required
+- [x] Optional `page`/`size`/`sort` query params page the result (wrapped in `PageResponse<T>`); omitting them returns the full active list as a plain JSON array
+- [x] `ServicoResponse` DTO — no entity exposed
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
-- [ ] Manual check: `docker compose up`, curl `/api/servicos` with no auth header → 200 with the active list
+- [x] Tests pass: `./mvnw test` (TDD red→green) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, curl `/api/servicos` with no auth header → 200 `[]`, with `?page=0&size=1` → 200 paged wrapper
+
+**Bug found and fixed during TDD green step (test isolation, not production code):** `ServicoControllerListTest`'s two `@Test` methods both seed data via `@BeforeEach` with no cleanup; `@SpringBootTest` doesn't roll back between methods like `@DataJpaTest` does, so the second test saw 4 active services instead of 2. Added `@Transactional` to the test class. Documented in `CLAUDE.md` — relevant to every future `@SpringBootTest` integration test that asserts a count.
 
 **Dependencies:** Task 2
 

@@ -26,7 +26,7 @@ Servico and Profissional CRUD, backed by Flyway migrations `V5`-`V8`, with publi
 - [x] No endpoint exists yet — schema + cross-cutting infra only
 
 ### Phase 2: Servico CRUD
-- [ ] Task 4: `GET /api/servicos` (public, `ativo = true` only, optional paging) — depends on Task 2
+- [x] Task 4: `GET /api/servicos` (public, `ativo = true` only, optional paging) — depends on Task 2
 - [ ] Task 5: `POST`/`PUT`/`DELETE /api/servicos` (`ROLE_ADMIN`, soft delete) — depends on Task 1, Task 2
 
 ### Checkpoint: Servico
