@@ -26,7 +26,7 @@ Build `disponibilidade` (availability calculation) and the full `agendamento` li
 - [x] A repository-level test proves the exclusion constraint itself rejects a raw overlapping insert (before any service-layer code exists to pre-check anything)
 
 ### Phase 2: Disponibilidade
-- [ ] Task 2: `DisponibilidadeService` slot calculation (pure core + DB-fetching orchestration) — depends on Task 1
+- [x] Task 2: `DisponibilidadeService` slot calculation (pure core + DB-fetching orchestration) — depends on Task 1
 - [ ] Task 3: `GET /api/disponibilidade` (public) — depends on Task 2
 
 ### Checkpoint: Disponibilidade

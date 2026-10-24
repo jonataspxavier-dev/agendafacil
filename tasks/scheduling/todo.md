@@ -29,18 +29,18 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-scheduling.md](../../SPEC-scheduli
 
 ---
 
-## Task 2: `DisponibilidadeService` slot calculation
+## Task 2: `DisponibilidadeService` slot calculation ✅
 
 **Description:** Pure slot-calculation core (jornada windows + service duration + existing bookings → free slots) separated from DB-fetching orchestration, so the math is unit-testable without Testcontainers.
 
 **Acceptance criteria:**
-- [ ] Given a professional's jornada windows for a weekday, a service duration, and existing `AGENDADO` bookings for that date, returns 30-minute-stepped candidate slots that fit inside a window and don't overlap an existing booking
-- [ ] Handles multiple jornada windows on the same day (split shift) — slots generated independently per window, not just the first
-- [ ] A slot whose end would exceed the window's `horaFim` is excluded
-- [ ] Unit tests (no DB): empty jornada → no slots; one window, no bookings → full set of slots; one window with a booking in the middle → that slot excluded, others remain; two windows same day → slots from both
+- [x] Given a professional's jornada windows for a weekday, a service duration, and existing `AGENDADO` bookings for that date, returns 30-minute-stepped candidate slots that fit inside a window and don't overlap an existing booking
+- [x] Handles multiple jornada windows on the same day (split shift) — slots generated independently per window, not just the first
+- [x] A slot whose end would exceed the window's `horaFim` is excluded; one ending exactly at `horaFim` is included
+- [x] Unit tests (no DB, 0.1s for all 5): empty jornada → no slots; one window, no bookings → full step sequence; exact-boundary slot included; existing booking excludes only the overlapping slot, not neighbors; two windows same day → slots from both
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
+- [x] Tests pass: `./mvnw test` (TDD red→green, 5/5) and full `./mvnw clean verify`
 
 **Dependencies:** Task 1
 
