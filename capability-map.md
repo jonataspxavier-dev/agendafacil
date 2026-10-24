@@ -23,5 +23,5 @@ Source brief: [`../projeto-2-agendamentos-react-spring.md`](../projeto-2-agendam
 | `catalog` | Done — all 8 tasks implemented and verified end-to-end via docker compose; pending human review before `scheduling` |
 | `scheduling` | Done — all 8 tasks implemented and verified end-to-end via docker compose; pending human review before `reporting` |
 | `reporting` | Done — all 2 tasks implemented and verified end-to-end via docker compose; pending human review before `client-web`/`admin-web` |
-| `client-web` | Not started |
+| `client-web` | Spec approved; implementation plan drafted (6 tasks) — pending review |
 | `admin-web` | Not started |

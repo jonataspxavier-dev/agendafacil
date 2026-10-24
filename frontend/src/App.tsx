@@ -1,11 +1,34 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
+import { AuthProvider } from '@/contexts/AuthContext'
+
 function App() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50">
-      <div className="rounded-lg border border-slate-200 bg-white p-6 shadow">
-        <h1 className="text-xl font-semibold text-slate-900">AgendaFácil</h1>
-        <p className="mt-1 text-sm text-slate-500">platform-setup scaffold</p>
-      </div>
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<div>AgendaFácil</div>} />
+          <Route path="/login" element={<div>Login</div>} />
+          <Route path="/cadastro" element={<div>Cadastro</div>} />
+          <Route
+            path="/agendar"
+            element={
+              <ProtectedRoute>
+                <div>Agendar</div>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/meus-agendamentos"
+            element={
+              <ProtectedRoute>
+                <div>Meus agendamentos</div>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 
