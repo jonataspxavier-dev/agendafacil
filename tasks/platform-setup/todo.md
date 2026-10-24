@@ -2,18 +2,18 @@
 
 Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-platform-setup.md)
 
-## Task 1: Git init + top-level structure + CLAUDE.md
+## Task 1: Git init + top-level structure + CLAUDE.md ✅
 
 **Description:** Initialize the git repo at `agendafacil/`, create the top-level folders (`backend/`, `frontend/`), copy the original brief in as `PLANO.md`, and write `CLAUDE.md` documenting the conventions every later module must follow.
 
 **Acceptance criteria:**
-- [ ] `agendafacil/` is a git repo with `backend/` and `frontend/` directories present (even if empty)
-- [ ] `PLANO.md` is a copy of `../projeto-2-agendamentos-react-spring.md`
-- [ ] `CLAUDE.md` documents: layered backend architecture (controller/service/repository/dto/entity/security/exception), DTOs-as-records rule, never-expose-entities rule, mandatory tests for business rules, small-commit convention, and the Flyway naming convention (`V<n>__description.sql`, empty baseline pattern)
+- [x] `agendafacil/` is a git repo with `backend/` and `frontend/` directories present (even if empty)
+- [x] `PLANO.md` is a copy of `../projeto-2-agendamentos-react-spring.md`
+- [x] `CLAUDE.md` documents: layered backend architecture (controller/service/repository/dto/entity/security/exception), DTOs-as-records rule, never-expose-entities rule, mandatory tests for business rules, small-commit convention, and the Flyway naming convention (`V<n>__description.sql`, empty baseline pattern)
 
 **Verification:**
-- [ ] `git log` shows at least one commit
-- [ ] Manual check: `CLAUDE.md` read back and each convention above is present
+- [x] `git log` shows at least one commit (`2f0cd30`)
+- [x] Manual check: `CLAUDE.md` read back and each convention above is present
 
 **Dependencies:** None
 

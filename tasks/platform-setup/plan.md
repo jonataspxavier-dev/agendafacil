@@ -20,7 +20,7 @@ Scaffold the AgendaFácil repo — git, backend (Spring Boot/Maven), frontend (V
 ## Task List
 
 ### Phase 1: Repo foundation
-- [ ] Task 1: Git init + top-level structure + CLAUDE.md
+- [x] Task 1: Git init + top-level structure + CLAUDE.md
 - [ ] Task 2: Backend Spring Boot scaffold + Dockerfile
 
 ### Checkpoint: Phase 1
