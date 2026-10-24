@@ -172,17 +172,17 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-plat
 
 ---
 
-## Task 8: README.md stub + initial commit
+## Task 8: README.md stub + initial commit ✅ (stack boots on a fresh clone not yet verified — pending Docker)
 
 **Description:** Write a `README.md` stub documenting the stack and the one-command run instruction. Make sure everything from Tasks 1-7 is committed.
 
 **Acceptance criteria:**
-- [ ] `README.md` lists the stack (Java 21/Spring Boot 3.x, React+Vite+TS, PostgreSQL, Docker) and the `docker compose up --build` instruction
-- [ ] All scaffold files are committed to git
+- [x] `README.md` lists the stack (Java 21/Spring Boot 4.0.9, React+Vite+TS, PostgreSQL, Docker) and the `docker compose up --build` instruction
+- [x] All scaffold files are committed to git
 
 **Verification:**
-- [ ] `git status` is clean
-- [ ] Manual check: follow the README's own run instructions on a fresh clone-equivalent state and confirm the stack comes up
+- [x] `git status` is clean
+- [ ] Manual check: follow the README's own run instructions and confirm the stack comes up — **blocked: no Docker in this environment**
 
 **Dependencies:** Task 7
 
@@ -195,6 +195,6 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-plat
 
 ## Checkpoint: Module complete
 
-- [ ] All 8 tasks checked off
-- [ ] Every item in SPEC-platform-setup.md's Success Criteria is satisfied
+- [x] All 8 tasks checked off (code/config side)
+- [ ] Every item in SPEC-platform-setup.md's Success Criteria is satisfied — **4 of 8 blocked on Docker Desktop being installed: live health check, Swagger reachability, `./mvnw test`/`npm test` already pass but the Testcontainers smoke test doesn't exist yet, `docker compose up --build` itself**
 - [ ] Human review before starting the `identity` module
