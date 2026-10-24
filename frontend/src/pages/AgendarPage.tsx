@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { ErrorMessage } from '@/components/ErrorMessage'
+import { LoadingSpinner } from '@/components/LoadingSpinner'
 import * as agendamentosService from '@/services/agendamentosService'
 import { extractErrorMessage } from '@/services/api'
 import * as disponibilidadeService from '@/services/disponibilidadeService'
@@ -138,22 +140,11 @@ export function AgendarPage() {
   }
 
   if (status === 'loading') {
-    return <p className="p-6 text-slate-600">Carregando...</p>
+    return <LoadingSpinner />
   }
 
   if (status === 'error') {
-    return (
-      <div className="p-6">
-        <p className="text-red-600">Não foi possível carregar os dados do agendamento.</p>
-        <button
-          type="button"
-          onClick={carregarListas}
-          className="mt-2 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white"
-        >
-          Tentar novamente
-        </button>
-      </div>
-    )
+    return <ErrorMessage message="Não foi possível carregar os dados do agendamento." onRetry={carregarListas} />
   }
 
   return (
@@ -268,8 +259,8 @@ export function AgendarPage() {
       {step === 4 && (
         <section className="mt-4">
           <h2 className="text-lg font-medium text-slate-900">4. Escolha o horário</h2>
-          {slotsStatus === 'loading' && <p className="mt-2 text-sm text-slate-600">Carregando horários...</p>}
-          {slotsStatus === 'error' && <p className="mt-2 text-sm text-red-600">Não foi possível carregar os horários.</p>}
+          {slotsStatus === 'loading' && <LoadingSpinner label="Carregando horários..." />}
+          {slotsStatus === 'error' && <ErrorMessage message="Não foi possível carregar os horários." />}
           {slotsStatus === 'success' && slots.length === 0 && (
             <p className="mt-2 text-sm text-slate-600">Nenhum horário disponível para esta data.</p>
           )}

@@ -157,19 +157,19 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-client-web.md](../../SPEC-client-w
 
 ---
 
-## Task 6: Polish + end-to-end verification
+## Task 6: Polish + end-to-end verification ✅
 
 **Description:** Shared layout/nav, consistent loading/error UI, a responsive pass, and the full manual journey through the real stack.
 
 **Acceptance criteria:**
-- [ ] `components/Layout.tsx`/`Nav.tsx`: auth-aware nav links (Login/Cadastro when logged out; Meus Agendamentos/Sair when logged in), wraps all routes
-- [ ] `components/LoadingSpinner.tsx` and `components/ErrorMessage.tsx` extracted and reused across every page built in Tasks 2-5 (replacing any ad hoc loading/error markup written along the way)
-- [ ] Layout is usable at mobile width (no horizontal scroll, nav doesn't overlap content) — manual check at a narrow viewport, not an automated test
-- [ ] Full manual walkthrough against `docker compose up --build`: register → browse `/servicos` with no login → attempt `/agendar` while logged out (redirected to `/login`) → log in → book a real slot → see it in `/meus-agendamentos` → cancel it → log out
+- [x] `components/Layout.tsx`/`Nav.tsx`: auth-aware nav links (Entrar/Cadastrar when logged out; Meus agendamentos/Sair when logged in), wraps all routes
+- [x] `components/LoadingSpinner.tsx` and `components/ErrorMessage.tsx` extracted and reused across every page built in Tasks 2-5 (replacing the ad hoc loading/error markup each page had grown)
+- [x] Layout is usable at mobile width (375px) — checked in the browser pane, no horizontal scroll, nav wraps cleanly
+- [x] Full manual walkthrough against `docker compose up --build`: registered a fresh account → browsed `/servicos` with no login → attempted `/agendar` while logged out (redirected to `/login`) → registered → auto-logged-in → booked a real Manicure slot end-to-end → saw it immediately in `/meus-agendamentos` → cancelled it (status updated in place) → logged out (Nav reverted, tokens cleared from `localStorage`)
 
 **Verification:**
-- [ ] Tests pass: `npm test` (full suite) and `npm run build`
-- [ ] Manual check: the walkthrough above, performed once start-to-finish against the real Docker Compose stack, no console errors (CORS or otherwise)
+- [x] Tests pass: `npm test` (27/27, full suite) and `npm run build`
+- [x] Manual check: the walkthrough above, performed start-to-finish against the real Docker Compose stack in the browser pane — zero console errors throughout (no CORS, no unhandled rejections). Separately verified the token-refresh Success Criterion that nothing else had exercised: corrupted the stored access token (kept a valid refresh token) → the silent refresh-and-retry succeeded, confirmed by a genuinely new JWT in storage; then corrupted both tokens → cleanly redirected to `/login` with storage cleared, no stuck loading state
 
 **Dependencies:** Tasks 1-5
 
@@ -187,7 +187,7 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-client-web.md](../../SPEC-client-w
 
 ## Checkpoint: Module complete
 
-- [ ] All 6 tasks checked off
-- [ ] Every item in SPEC-client-web.md's Success Criteria is satisfied
-- [ ] `docker compose up --build` works end-to-end for the full customer journey
+- [x] All 6 tasks checked off
+- [x] Every item in SPEC-client-web.md's Success Criteria is satisfied
+- [x] `docker compose up --build` works end-to-end for the full customer journey
 - [ ] Human review before starting `admin-web`

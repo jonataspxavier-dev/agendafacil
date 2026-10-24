@@ -63,15 +63,15 @@ Vitest + Testing Library (already configured), consistent with this project's "t
 
 ## Success Criteria
 
-- [ ] `/servicos` lists active services with no login required; shows a loading state, then the list, or an error message on failure
-- [ ] `/cadastro` and `/login` validate input client-side (Zod) and surface backend errors (e.g. duplicate email → 409) clearly; successful login stores tokens and redirects
-- [ ] An unauthenticated visitor hitting `/agendar` or `/meus-agendamentos` is redirected to `/login`, not shown a broken page
-- [ ] The booking flow's 4 steps (serviço → profissional → data → horário → confirmar) only show professionals that offer the selected service, only show real open slots from `GET /api/disponibilidade`, and the confirm step calls `POST /api/agendamentos` with exactly the selected ids/time
-- [ ] A successful booking immediately appears in `/meus-agendamentos`
-- [ ] Cancelling a booking more than 2 hours out succeeds and updates the list; cancelling one inside the window shows the backend's error message, not a generic failure
-- [ ] An expired/invalid access token triggers a silent refresh-and-retry; a failed refresh logs the user out cleanly (no stuck loading state, no stale token left in storage)
-- [ ] `docker compose up --build` serves the frontend and it can complete a full register → book → cancel flow against the real backend with no CORS errors in the browser console
-- [ ] Automated tests (Vitest) pass for `ProtectedRoute`, `AuthContext`, form validation, and the booking flow's step-guarding logic
+- [x] `/servicos` lists active services with no login required; shows a loading state, then the list, or an error message on failure
+- [x] `/cadastro` and `/login` validate input client-side (Zod) and surface backend errors (e.g. duplicate email → 409) clearly; successful login stores tokens and redirects
+- [x] An unauthenticated visitor hitting `/agendar` or `/meus-agendamentos` is redirected to `/login`, not shown a broken page
+- [x] The booking flow's steps (serviço → profissional → data → horário → confirmar) only show professionals that offer the selected service, only show real open slots from `GET /api/disponibilidade`, and the confirm step calls `POST /api/agendamentos` with exactly the selected ids/time
+- [x] A successful booking immediately appears in `/meus-agendamentos`
+- [x] Cancelling a booking more than 2 hours out succeeds and updates the list; cancelling one inside the window shows the backend's error message, not a generic failure
+- [x] An expired/invalid access token triggers a silent refresh-and-retry; a failed refresh logs the user out cleanly (no stuck loading state, no stale token left in storage) — verified directly by corrupting the stored access token (valid refresh token → silent refresh succeeded, new token confirmed in storage) and by corrupting both tokens (failed refresh → cleanly redirected to `/login` with storage cleared)
+- [x] `docker compose up --build` serves the frontend and it can complete a full register → book → cancel flow against the real backend with no CORS errors in the browser console
+- [x] Automated tests (Vitest) pass for `ProtectedRoute`, `AuthContext`, form validation, and the booking flow's step-guarding logic
 
 ## Open Questions
 

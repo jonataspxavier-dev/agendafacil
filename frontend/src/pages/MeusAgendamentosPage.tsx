@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
+import { ErrorMessage } from '@/components/ErrorMessage'
+import { LoadingSpinner } from '@/components/LoadingSpinner'
 import * as agendamentosService from '@/services/agendamentosService'
 import type { Agendamento } from '@/services/agendamentosService'
 import { extractErrorMessage } from '@/services/api'
@@ -56,22 +58,11 @@ export function MeusAgendamentosPage() {
   }
 
   if (status === 'loading') {
-    return <p className="p-6 text-slate-600">Carregando...</p>
+    return <LoadingSpinner />
   }
 
   if (status === 'error') {
-    return (
-      <div className="p-6">
-        <p className="text-red-600">Não foi possível carregar seus agendamentos.</p>
-        <button
-          type="button"
-          onClick={carregar}
-          className="mt-2 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white"
-        >
-          Tentar novamente
-        </button>
-      </div>
-    )
+    return <ErrorMessage message="Não foi possível carregar seus agendamentos." onRetry={carregar} />
   }
 
   return (

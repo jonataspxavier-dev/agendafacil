@@ -47,12 +47,12 @@ Build the customer-facing pages and shared app infrastructure on top of the exis
 - [x] An unauthenticated visit to either route redirects to `/login`, not a crash (verified for both routes — `/meus-agendamentos` during Task 3, `/agendar` is the same `ProtectedRoute` component already covered by its own unit tests)
 
 ### Phase 5: Polish + end-to-end verification
-- [ ] Task 6: Shared `Layout`/`Nav` (auth-aware links), consistent `LoadingSpinner`/`ErrorMessage`, responsive pass, full manual `docker compose up --build` walkthrough: register → browse → book → see it in history → cancel
+- [x] Task 6: Shared `Layout`/`Nav` (auth-aware links), consistent `LoadingSpinner`/`ErrorMessage`, responsive pass, full manual `docker compose up --build` walkthrough: register → browse → book → see it in history → cancel
 
 ### Checkpoint: Module complete
-- [ ] All 6 tasks checked off
-- [ ] Every item in SPEC-client-web.md's Success Criteria is satisfied
-- [ ] `docker compose up --build` works end-to-end for the full customer journey
+- [x] All 6 tasks checked off
+- [x] Every item in SPEC-client-web.md's Success Criteria is satisfied
+- [x] `docker compose up --build` works end-to-end for the full customer journey
 - [ ] Human review before starting `admin-web`
 
 ## Risks and Mitigations

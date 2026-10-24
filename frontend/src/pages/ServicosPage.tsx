@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ErrorMessage } from '@/components/ErrorMessage'
+import { LoadingSpinner } from '@/components/LoadingSpinner'
 import * as servicosService from '@/services/servicosService'
 import type { Servico } from '@/services/servicosService'
 
@@ -33,22 +35,11 @@ export function ServicosPage() {
   }
 
   if (status === 'loading') {
-    return <p className="p-6 text-slate-600">Carregando serviços...</p>
+    return <LoadingSpinner label="Carregando serviços..." />
   }
 
   if (status === 'error') {
-    return (
-      <div className="p-6">
-        <p className="text-red-600">Não foi possível carregar os serviços.</p>
-        <button
-          type="button"
-          onClick={carregar}
-          className="mt-2 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white"
-        >
-          Tentar novamente
-        </button>
-      </div>
-    )
+    return <ErrorMessage message="Não foi possível carregar os serviços." onRetry={carregar} />
   }
 
   return (
