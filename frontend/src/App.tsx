@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { AuthProvider } from '@/contexts/AuthContext'
+import { AgendarPage } from '@/pages/AgendarPage'
 import { LoginPage } from '@/pages/LoginPage'
 import { RegisterPage } from '@/pages/RegisterPage'
 import { ServicosPage } from '@/pages/ServicosPage'
@@ -18,7 +19,7 @@ function App() {
             path="/agendar"
             element={
               <ProtectedRoute>
-                <div>Agendar</div>
+                <AgendarPage />
               </ProtectedRoute>
             }
           />

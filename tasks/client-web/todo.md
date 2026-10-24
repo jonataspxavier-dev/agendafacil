@@ -102,20 +102,20 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-client-web.md](../../SPEC-client-w
 
 ---
 
-## Task 4: `AgendarPage` (4-step booking flow)
+## Task 4: `AgendarPage` (booking flow) ✅
 
 **Description:** The product's core customer-facing flow: serviço → profissional → data → horário → confirmar, against real backend data.
 
 **Acceptance criteria:**
-- [ ] `services/profissionaisService.ts`: `listar()` → `GET /api/profissionais`; `services/disponibilidadeService.ts`: `buscar(profissionalId, servicoId, data)` → `GET /api/disponibilidade`; `services/agendamentosService.ts` gets `criar(profissionalId, servicoId, inicio)` → `POST /api/agendamentos`
-- [ ] Step 1 (serviço): pre-selected if arriving from `ServicosPage` with a `servicoId`, otherwise a picker; Step 2 (profissional): only professionals whose `servicoIds` includes the selected service (filtered client-side); Step 3 (data): a date picker (today or later); Step 4 (horário): real slots from `GET /api/disponibilidade` for the selected profissional+servico+data, showing "no slots" clearly if the list is empty
-- [ ] Each step's "next" control is disabled until that step has a real selection — can't advance on an empty step
-- [ ] Confirm step shows a summary (serviço, profissional, data/horário, preço) and calls `POST /api/agendamentos` with exactly the selected ids/time on submit; success navigates to `/meus-agendamentos`; a backend error (e.g. 409 conflict, 400 outside jornada) surfaces inline, not as a crash
-- [ ] Route wrapped in `ProtectedRoute`
+- [x] `services/profissionaisService.ts`: `listar()` → `GET /api/profissionais`; `services/disponibilidadeService.ts`: `buscar(profissionalId, servicoId, data)` → `GET /api/disponibilidade`; `services/agendamentosService.ts` gets `criar(profissionalId, servicoId, inicio)` → `POST /api/agendamentos`
+- [x] Step 1 (serviço): pre-selected if arriving from `ServicosPage` with a `servicoId` (still shown as a picker so it can be changed); Step 2 (profissional): only professionals whose `servicoIds` includes the selected service (filtered client-side); Step 3 (data): a date picker (`min` = today); Step 4 (horário): real slots from `GET /api/disponibilidade` for the selected profissional+servico+data, showing "Nenhum horário disponível" clearly if empty; Step 5 (confirmar): summary + submit
+- [x] Each step's "Avançar" is disabled until that step has a real selection — verified for every step
+- [x] Confirm step shows a summary (serviço, profissional, data/horário, preço) and calls `POST /api/agendamentos` with exactly the selected ids/time on submit; success navigates to `/meus-agendamentos`; a backend error surfaces inline via `extractErrorMessage`, not as a crash
+- [x] Route wrapped in `ProtectedRoute`
 
 **Verification:**
-- [ ] Tests pass: `npm test` — step-guarding logic (can't advance without a selection); professional list is correctly filtered by the selected service's id; the confirm submission payload matches the selections exactly (mocked service)
-- [ ] Manual check: `docker compose up --build`, log in, book a real slot end-to-end, confirm it's created with the right price snapshot
+- [x] Tests pass: `npm test` (22/22 — step-guarding logic for every step; professional list correctly filtered by the selected service's id; the confirm submission payload matches the selections exactly; backend error surfaces inline) and `npm run build`
+- [x] Manual check: `docker compose up --build`, logged in with a previously-registered account (session persisted from earlier testing), clicked "Agendar" on Corte de Cabelo from `/servicos` — service pre-selected, step 2 correctly showed only the 2 professionals (of 3 seeded) who offer that service, picked a date already partially booked from earlier manual testing and confirmed the already-taken 10:00 slot correctly did not appear, booked 11:00, confirmed the summary, submitted, redirected to `/meus-agendamentos`, and verified via a direct `GET /api/agendamentos/meus` call that the booking was created with exactly the right ids/time/price. No console errors.
 
 **Dependencies:** Task 1 (`ProtectedRoute`), Task 3 (real auth)
 
@@ -125,6 +125,7 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-client-web.md](../../SPEC-client-w
 - `frontend/src/services/agendamentosService.ts` (new file; also used by Task 5)
 - `frontend/src/pages/AgendarPage.tsx`
 - `frontend/src/pages/AgendarPage.test.tsx`
+- `frontend/src/App.tsx` (route wired)
 
 **Estimated scope:** Large: 6 files — the module's most involved page
 

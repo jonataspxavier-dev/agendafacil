@@ -38,7 +38,7 @@ Build the customer-facing pages and shared app infrastructure on top of the exis
 - [x] `ProtectedRoute`'s redirect-back-after-login verified end-to-end (visit a protected route logged out → `/login` → correct credentials → lands back on the originally-requested route)
 
 ### Phase 4: Booking + history (protected)
-- [ ] Task 4: `AgendarPage` (4-step flow) + `profissionaisService` + `disponibilidadeService` + `agendamentosService.criar` — depends on Task 1 (ProtectedRoute), Task 3 (auth)
+- [x] Task 4: `AgendarPage` (5-stage flow: serviço→profissional→data→horário→confirmar) + `profissionaisService` + `disponibilidadeService` + `agendamentosService.criar` — depends on Task 1 (ProtectedRoute), Task 3 (auth)
 - [ ] Task 5: `MeusAgendamentosPage` + `agendamentosService.listarMeus`/`cancelar` — depends on Task 1, Task 3
 
 ### Checkpoint: Booking + history
