@@ -22,8 +22,8 @@ Build register/login/refresh/logout with JWT, backed by Postgres via Flyway migr
 - [x] Task 2: `usuario` schema (`V2`) + `Usuario` entity + `UsuarioRepository` + `Perfil` enum + `PasswordEncoder` bean
 
 ### Checkpoint: Foundation
-- [ ] `./mvnw test` passes (Testcontainers Postgres applies `V1`+`V2` cleanly)
-- [ ] No endpoint exists yet — this phase is schema + cross-cutting infra only
+- [x] `./mvnw test` passes (Testcontainers Postgres applies `V1`+`V2` cleanly)
+- [x] No endpoint exists yet — this phase is schema + cross-cutting infra only
 
 ### Phase 2: Register, login, JWT validation
 - [ ] Task 3: Register endpoint (`POST /api/auth/register`) — depends on Task 1, Task 2
