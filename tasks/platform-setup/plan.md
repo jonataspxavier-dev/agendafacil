@@ -30,9 +30,9 @@ Scaffold the AgendaFácil repo — git, backend (Spring Boot/Maven), frontend (V
 - [ ] CLAUDE.md documents layering, DTO, and testing conventions
 
 ### Phase 2: Test infra + frontend
-- [ ] Task 3: Backend test infra (JUnit 5, Mockito, Testcontainers) with zero test cases
-- [ ] Task 4: Frontend Vite+TS scaffold + libs (Router, Axios, RHF, Zod, Tailwind) + Dockerfile
-- [ ] Task 5: Frontend test infra (Vitest + RTL) with zero test cases
+- [ ] Task 3: Backend test infra (JUnit 5, Mockito, Testcontainers) with zero test cases — **blocked on Docker**
+- [x] Task 4: Frontend Vite+TS scaffold + libs (Router, Axios, RHF, Zod, Tailwind) + Dockerfile
+- [x] Task 5: Frontend test infra (Vitest + RTL) with zero test cases
 
 ### Checkpoint: Phase 2
 - [ ] `./mvnw test` passes clean (0 tests)

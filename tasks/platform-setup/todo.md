@@ -77,21 +77,21 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-plat
 
 ---
 
-## Task 4: Frontend Vite+TS scaffold + libs + Dockerfile
+## Task 4: Frontend Vite+TS scaffold + libs + Dockerfile ✅ (image build pending Docker)
 
 **Description:** Scaffold `frontend/` with Vite + React + TypeScript, install and configure Tailwind CSS, and install (unused for now) React Router, Axios, React Hook Form, Zod. Create the `pages/`, `components/`, `services/`, `hooks/`, `contexts/` directories. Add a `Dockerfile` for the frontend.
 
 **Acceptance criteria:**
-- [ ] `npm run dev` serves the default Vite page with Tailwind classes rendering correctly (e.g. a styled test element)
-- [ ] `npm run build` succeeds
-- [ ] `npm run lint` succeeds with no errors
-- [ ] React Router, Axios, React Hook Form, Zod are installed dependencies (not yet used in any component)
-- [ ] All five directories exist
-- [ ] `frontend/Dockerfile` builds a runnable image (static build served, or dev server — document which in the Dockerfile comment)
+- [x] `npm run dev` serves a page with Tailwind classes rendering correctly (verified in-browser: bordered/shadowed card, correct typography)
+- [x] `npm run build` succeeds
+- [x] `npm run lint` succeeds with no errors (oxlint — Vite's current default linter)
+- [x] React Router, Axios, React Hook Form, Zod are installed dependencies (not yet used in any component)
+- [x] All five directories exist
+- [x] `frontend/Dockerfile` written (multi-stage: `npm run build` then nginx serves `dist/`) — **image build itself not yet tested, needs Docker**
 
 **Verification:**
-- [ ] Build succeeds: `npm run build`
-- [ ] Manual check: `npm run dev`, open in browser, confirm Tailwind styling renders
+- [x] Build succeeds: `npm run build`
+- [x] Manual check: `npm run dev`, opened in the built-in browser, confirmed Tailwind styling renders
 
 **Dependencies:** Task 1
 
@@ -105,16 +105,16 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-plat
 
 ---
 
-## Task 5: Frontend test infra (Vitest + RTL)
+## Task 5: Frontend test infra (Vitest + RTL) ✅
 
 **Description:** Configure Vitest and React Testing Library so `client-web`/`admin-web` can add their first component test without touching build config.
 
 **Acceptance criteria:**
-- [ ] `npm test` runs clean with zero spec files (or one trivial smoke test, e.g. renders `<App />` without throwing)
-- [ ] Vitest config matches the Vite config (aliases, JSX transform)
+- [x] `npm test` runs clean with one trivial smoke test (renders `<App />`, asserts text content)
+- [x] Vitest config matches the Vite config (React plugin, Tailwind plugin, `@/` alias)
 
 **Verification:**
-- [ ] Tests pass: `npm test`
+- [x] Tests pass: `npm test` (1 passed)
 
 **Dependencies:** Task 4
 
