@@ -133,18 +133,20 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-catalog.md](../../SPEC-catalog.md)
 
 ---
 
-## Task 6: `GET /api/profissionais`
+## Task 6: `GET /api/profissionais` ✅
 
 **Description:** Public listing of active professionals, including their service ids and jornada, optional paging.
 
 **Acceptance criteria:**
-- [ ] `GET /api/profissionais` returns only `ativo = true` professionals, 200, no auth required
-- [ ] `ProfissionalResponse` includes `servicoIds` (list of linked service ids) and `jornada` (list of day/start/end)
-- [ ] Optional `page`/`size`/`sort` query params, same pattern as Task 4
+- [x] `GET /api/profissionais` returns only `ativo = true` professionals, 200, no auth required
+- [x] `ProfissionalResponse` includes `servicoIds` (list of linked service ids) and `jornada` (list of day/start/end)
+- [x] Optional `page`/`size`/`sort` query params, same pattern as Task 4 (shared `PageableFactory`)
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
-- [ ] Manual check: `docker compose up`, curl `/api/profissionais` with no auth header → 200
+- [x] Tests pass: `./mvnw test` (TDD red→green) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, curl `/api/profissionais` with no auth header → 200 `[]`
+
+**Refactor:** extracted the `page`/`size`/`sort` → `Pageable` logic out of `ServicoController` into `web/PageableFactory` so this task didn't duplicate it; `ServicoController` now uses the same shared helper.
 
 **Dependencies:** Task 3
 

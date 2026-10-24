@@ -51,6 +51,8 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/servicos", "/api/servicos/**")
                         .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/profissionais", "/api/profissionais/**")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
         return http.build();

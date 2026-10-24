@@ -34,7 +34,7 @@ Servico and Profissional CRUD, backed by Flyway migrations `V5`-`V8`, with publi
 - [x] Swagger shows `/api/servicos/*`
 
 ### Phase 3: Profissional CRUD + associations + jornada
-- [ ] Task 6: `GET /api/profissionais` (public, response includes `servicoIds` + `jornada`, optional paging) — depends on Task 3
+- [x] Task 6: `GET /api/profissionais` (public, response includes `servicoIds` + `jornada`, optional paging) — depends on Task 3
 - [ ] Task 7: `POST`/`PUT`/`DELETE /api/profissionais` (`ROLE_ADMIN`, soft delete, atomic `servicoIds`+`jornada` replace on write) — depends on Task 1, Task 3
 
 ### Checkpoint: Profissional
