@@ -1,6 +1,9 @@
 package com.agendafacil.backend.service;
 
+import com.agendafacil.backend.dto.ServicoRequest;
 import com.agendafacil.backend.dto.ServicoResponse;
+import com.agendafacil.backend.entity.Servico;
+import com.agendafacil.backend.exception.ResourceNotFoundException;
 import com.agendafacil.backend.repository.ServicoRepository;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -27,5 +30,39 @@ public class ServicoService {
     @Transactional(readOnly = true)
     public Page<ServicoResponse> listarAtivos(Pageable pageable) {
         return servicoRepository.findAllByAtivoTrue(pageable).map(ServicoResponse::from);
+    }
+
+    @Transactional
+    public ServicoResponse criar(ServicoRequest request) {
+        Servico servico = new Servico();
+        aplicar(servico, request);
+        servico.setAtivo(true);
+        return ServicoResponse.from(servicoRepository.save(servico));
+    }
+
+    @Transactional
+    public ServicoResponse atualizar(Long id, ServicoRequest request) {
+        Servico servico = buscarOuFalhar(id);
+        aplicar(servico, request);
+        return ServicoResponse.from(servicoRepository.save(servico));
+    }
+
+    @Transactional
+    public void desativar(Long id) {
+        Servico servico = buscarOuFalhar(id);
+        servico.setAtivo(false);
+        servicoRepository.save(servico);
+    }
+
+    private Servico buscarOuFalhar(Long id) {
+        return servicoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Serviço não encontrado: " + id));
+    }
+
+    private void aplicar(Servico servico, ServicoRequest request) {
+        servico.setNome(request.nome());
+        servico.setDescricao(request.descricao());
+        servico.setDuracaoMin(request.duracaoMin());
+        servico.setPreco(request.preco());
     }
 }

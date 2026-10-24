@@ -104,20 +104,22 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-catalog.md](../../SPEC-catalog.md)
 
 ---
 
-## Task 5: `POST`/`PUT`/`DELETE /api/servicos`
+## Task 5: `POST`/`PUT`/`DELETE /api/servicos` ✅
 
 **Description:** Admin-only write endpoints. `DELETE` sets `ativo = false`.
 
 **Acceptance criteria:**
-- [ ] `POST /api/servicos` creates, 201, `ROLE_ADMIN` only (401 no token, 403 CLIENTE token)
-- [ ] `PUT /api/servicos/{id}` updates, 200, same auth rule; 404 if id doesn't exist
-- [ ] `DELETE /api/servicos/{id}` sets `ativo = false`, 204, same auth rule; the service then disappears from `GET /api/servicos`
-- [ ] `ServicoRequest` validated (`nome` not blank, `duracaoMin` positive, `preco` positive)
-- [ ] Integration tests: full CRUD cycle as ADMIN; 401/403 as no-token/CLIENTE
+- [x] `POST /api/servicos` creates, 201, `ROLE_ADMIN` only (401 no token, 403 CLIENTE token)
+- [x] `PUT /api/servicos/{id}` updates, 200, same auth rule; 404 if id doesn't exist
+- [x] `DELETE /api/servicos/{id}` sets `ativo = false`, 204, same auth rule; the service then disappears from `GET /api/servicos`
+- [x] `ServicoRequest` validated (`nome` not blank, `duracaoMin` positive, `preco` positive)
+- [x] Integration tests: full CRUD cycle as ADMIN; 401/403 as no-token/CLIENTE; 400 on blank nome; 404 on nonexistent id
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
-- [ ] Manual check: `docker compose up`, full CRUD cycle via curl with an admin token (from `identity`'s seeded admin)
+- [x] Tests pass: `./mvnw test` (TDD red→green) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, full CRUD cycle via curl with the seeded admin token — create 201, update 200, delete 204, confirmed gone from the list
+
+**Added `ResourceNotFoundException`** (generic, in `exception/`) with a `GlobalExceptionHandler` case → 404, reusable by `profissional`'s write endpoints (Task 7) and any future module.
 
 **Dependencies:** Task 1, Task 2
 

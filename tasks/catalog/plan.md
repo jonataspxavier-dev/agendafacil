@@ -27,11 +27,11 @@ Servico and Profissional CRUD, backed by Flyway migrations `V5`-`V8`, with publi
 
 ### Phase 2: Servico CRUD
 - [x] Task 4: `GET /api/servicos` (public, `ativo = true` only, optional paging) — depends on Task 2
-- [ ] Task 5: `POST`/`PUT`/`DELETE /api/servicos` (`ROLE_ADMIN`, soft delete) — depends on Task 1, Task 2
+- [x] Task 5: `POST`/`PUT`/`DELETE /api/servicos` (`ROLE_ADMIN`, soft delete) — depends on Task 1, Task 2
 
 ### Checkpoint: Servico
-- [ ] Full CRUD cycle works via integration test; 401/403/200 verified for write endpoints
-- [ ] Swagger shows `/api/servicos/*`
+- [x] Full CRUD cycle works via integration test; 401/403/200 verified for write endpoints
+- [x] Swagger shows `/api/servicos/*`
 
 ### Phase 3: Profissional CRUD + associations + jornada
 - [ ] Task 6: `GET /api/profissionais` (public, response includes `servicoIds` + `jornada`, optional paging) — depends on Task 3

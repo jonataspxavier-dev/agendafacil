@@ -86,6 +86,17 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
+    void mapsResourceNotFoundTo404() {
+        ResourceNotFoundException ex = new ResourceNotFoundException("Serviço não encontrado: 999");
+
+        ResponseEntity<ErrorResponse> response = handler.handleResourceNotFound(ex, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody().status()).isEqualTo(404);
+        assertThat(response.getBody().message()).contains("999");
+    }
+
+    @Test
     void mapsUnhandledExceptionTo500() {
         RuntimeException ex = new RuntimeException("algo inesperado");
 
