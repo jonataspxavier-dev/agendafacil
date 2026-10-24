@@ -131,19 +131,19 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-client-web.md](../../SPEC-client-w
 
 ---
 
-## Task 5: `MeusAgendamentosPage`
+## Task 5: `MeusAgendamentosPage` ✅
 
 **Description:** The authenticated user's booking history, with cancellation.
 
 **Acceptance criteria:**
-- [ ] `agendamentosService` (from Task 4) gets `listarMeus()` → `GET /api/agendamentos/meus`; `cancelar(id)` → `PATCH /api/agendamentos/{id}/cancelar`
-- [ ] `pages/MeusAgendamentosPage.tsx`: fetches on mount, loading/error states; each booking shows service, professional, date/time, status, price; a "Cancelar" action only on `AGENDADO` bookings
-- [ ] Cancelling more than 2h out succeeds and the list updates (either by refetching or updating local state) to show `CANCELADO`; cancelling inside the window shows the backend's actual error message (not a generic "something went wrong")
-- [ ] Route wrapped in `ProtectedRoute`
+- [x] `agendamentosService` (from Task 4) gets `listarMeus()` → `GET /api/agendamentos/meus`; `cancelar(id)` → `PATCH /api/agendamentos/{id}/cancelar`
+- [x] `pages/MeusAgendamentosPage.tsx`: fetches on mount, loading/error states; each booking shows service, professional, date/time, status, price; a "Cancelar" action only on `AGENDADO` bookings
+- [x] Cancelling more than 2h out succeeds and the list updates in place (no refetch needed — the PATCH response replaces that item) to show `CANCELADO`; cancelling inside the window shows the backend's actual error message inline, per-booking
+- [x] Route wrapped in `ProtectedRoute`
 
 **Verification:**
-- [ ] Tests pass: `npm test` — list renders bookings with correct status-based cancel-button visibility; a mocked cancel success updates state; a mocked cancel failure (400) surfaces its message
-- [ ] Manual check: `docker compose up --build`, book a slot, see it listed, cancel it (success), attempt to cancel a near-future booking inside the 2h window and see the backend's rejection message
+- [x] Tests pass: `npm test` (27/27 — list renders bookings with correct status-based cancel-button visibility; a mocked cancel success updates state in place; a mocked cancel failure (400) surfaces its message inline) and `npm run build`
+- [x] Manual check: `docker compose up --build`, opened `/meus-agendamentos` with the booking created during Task 4's manual test (>2h out) — cancelled it successfully, status updated to "Cancelado" in place, button disappeared. Created a second booking 90 minutes out directly via the API, attempted to cancel it through the UI, and got the backend's real message ("Cancelamento só é permitido até 2 horas antes do horário agendado") inline, booking stayed `AGENDADO`. No console errors beyond the expected 400.
 
 **Dependencies:** Task 1 (`ProtectedRoute`), Task 3 (real auth), Task 4 (`agendamentosService` exists)
 
@@ -151,6 +151,7 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-client-web.md](../../SPEC-client-w
 - `frontend/src/services/agendamentosService.ts` (add `listarMeus`/`cancelar`)
 - `frontend/src/pages/MeusAgendamentosPage.tsx`
 - `frontend/src/pages/MeusAgendamentosPage.test.tsx`
+- `frontend/src/App.tsx` (route wired)
 
 **Estimated scope:** Medium: 3 files
 

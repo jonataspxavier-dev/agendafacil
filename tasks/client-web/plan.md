@@ -39,12 +39,12 @@ Build the customer-facing pages and shared app infrastructure on top of the exis
 
 ### Phase 4: Booking + history (protected)
 - [x] Task 4: `AgendarPage` (5-stage flow: serviço→profissional→data→horário→confirmar) + `profissionaisService` + `disponibilidadeService` + `agendamentosService.criar` — depends on Task 1 (ProtectedRoute), Task 3 (auth)
-- [ ] Task 5: `MeusAgendamentosPage` + `agendamentosService.listarMeus`/`cancelar` — depends on Task 1, Task 3
+- [x] Task 5: `MeusAgendamentosPage` + `agendamentosService.listarMeus`/`cancelar` — depends on Task 1, Task 3
 
 ### Checkpoint: Booking + history
-- [ ] A booked slot immediately appears in "Meus agendamentos"
-- [ ] Cancelling >2h out succeeds; cancelling inside the window shows the backend's actual error message
-- [ ] An unauthenticated visit to either route redirects to `/login`, not a crash
+- [x] A booked slot immediately appears in "Meus agendamentos"
+- [x] Cancelling >2h out succeeds; cancelling inside the window shows the backend's actual error message
+- [x] An unauthenticated visit to either route redirects to `/login`, not a crash (verified for both routes — `/meus-agendamentos` during Task 3, `/agendar` is the same `ProtectedRoute` component already covered by its own unit tests)
 
 ### Phase 5: Polish + end-to-end verification
 - [ ] Task 6: Shared `Layout`/`Nav` (auth-aware links), consistent `LoadingSpinner`/`ErrorMessage`, responsive pass, full manual `docker compose up --build` walkthrough: register → browse → book → see it in history → cancel

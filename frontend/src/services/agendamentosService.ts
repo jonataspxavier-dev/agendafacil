@@ -18,3 +18,13 @@ export async function criar(profissionalId: number, servicoId: number, inicio: s
   const { data } = await api.post<Agendamento>('/agendamentos', { profissionalId, servicoId, inicio })
   return data
 }
+
+export async function listarMeus(): Promise<Agendamento[]> {
+  const { data } = await api.get<Agendamento[]>('/agendamentos/meus')
+  return data
+}
+
+export async function cancelar(id: number): Promise<Agendamento> {
+  const { data } = await api.patch<Agendamento>(`/agendamentos/${id}/cancelar`)
+  return data
+}

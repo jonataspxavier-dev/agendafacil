@@ -3,6 +3,7 @@ import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { AgendarPage } from '@/pages/AgendarPage'
 import { LoginPage } from '@/pages/LoginPage'
+import { MeusAgendamentosPage } from '@/pages/MeusAgendamentosPage'
 import { RegisterPage } from '@/pages/RegisterPage'
 import { ServicosPage } from '@/pages/ServicosPage'
 
@@ -27,7 +28,7 @@ function App() {
             path="/meus-agendamentos"
             element={
               <ProtectedRoute>
-                <div>Meus agendamentos</div>
+                <MeusAgendamentosPage />
               </ProtectedRoute>
             }
           />
