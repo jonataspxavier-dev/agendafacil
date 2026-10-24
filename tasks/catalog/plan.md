@@ -19,11 +19,11 @@ Servico and Profissional CRUD, backed by Flyway migrations `V5`-`V8`, with publi
 ### Phase 1: Foundation
 - [x] Task 1: Enable method security (`@EnableMethodSecurity` in `SecurityConfig`)
 - [x] Task 2: `servico` schema (`V5`) + `Servico` entity + `ServicoRepository`
-- [ ] Task 3: `profissional` + `profissional_servico` + `jornada` schema (`V6`, `V7`) + entities + repositories — depends on Task 2 (FK to `servico`)
+- [x] Task 3: `profissional` + `profissional_servico` + `jornada` schema (`V6`, `V7`) + entities + repositories — depends on Task 2 (FK to `servico`)
 
 ### Checkpoint: Foundation
-- [ ] `./mvnw test` passes (Testcontainers Postgres applies `V1`-`V7` cleanly)
-- [ ] No endpoint exists yet — schema + cross-cutting infra only
+- [x] `./mvnw test` passes (Testcontainers Postgres applies `V1`-`V7` cleanly)
+- [x] No endpoint exists yet — schema + cross-cutting infra only
 
 ### Phase 2: Servico CRUD
 - [ ] Task 4: `GET /api/servicos` (public, `ativo = true` only, optional paging) — depends on Task 2

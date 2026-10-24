@@ -47,19 +47,21 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-catalog.md](../../SPEC-catalog.md)
 
 ---
 
-## Task 3: `profissional` + `profissional_servico` + `jornada` schema + entities + repositories
+## Task 3: `profissional` + `profissional_servico` + `jornada` schema + entities + repositories ✅
 
 **Description:** `V6__create_profissional.sql` (profissional + join table), `V7__create_jornada.sql`. `Profissional` entity owns a `@ManyToMany Set<Servico>` and a `@OneToMany List<Jornada>` (cascade + orphanRemoval, since jornada rows have no existence outside their professional).
 
 **Acceptance criteria:**
-- [ ] `V6__create_profissional.sql`: `profissional(id, nome, ativo DEFAULT true)` + `profissional_servico(profissional_id, servico_id)` join table with a composite PK or unique constraint
-- [ ] `V7__create_jornada.sql`: `jornada(id, profissional_id FK, dia_semana, hora_inicio, hora_fim)`
-- [ ] `Profissional` entity: `@ManyToMany` to `Servico` via the join table, `@OneToMany(cascade = ALL, orphanRemoval = true)` to `Jornada`
-- [ ] `Jornada` entity: `diaSemana` as `java.time.DayOfWeek` (`@Enumerated(EnumType.STRING)`), `horaInicio`/`horaFim` as `LocalTime`
-- [ ] `ProfissionalRepository`, `JornadaRepository` (the latter mostly used internally by `ProfissionalService`, not exposed as its own REST resource)
+- [x] `V6__create_profissional.sql`: `profissional(id, nome, ativo DEFAULT true)` + `profissional_servico(profissional_id, servico_id)` join table with a composite PK
+- [x] `V7__create_jornada.sql`: `jornada(id, profissional_id FK, dia_semana, hora_inicio, hora_fim)`
+- [x] `Profissional` entity: `@ManyToMany` to `Servico` via the join table, `@OneToMany(cascade = ALL, orphanRemoval = true)` to `Jornada`
+- [x] `Jornada` entity: `diaSemana` as `java.time.DayOfWeek` (`@Enumerated(EnumType.STRING)`), `horaInicio`/`horaFim` as `LocalTime`
+- [x] `ProfissionalRepository`, `JornadaRepository`
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test` — Testcontainers Postgres applies `V1`→`V7` cleanly; a repository test saves a Profissional with services and jornada attached and reads it back
+- [x] Tests pass: `./mvnw test` (TDD red→green) — Testcontainers Postgres applied `V1`→`V7` cleanly; full `./mvnw clean verify` also green
+
+**Caught and fixed a false-positive test during this task:** the first version of `ProfissionalRepositoryTest` called `findById` right after `save` in the same persistence context, so Hibernate returned the in-memory object graph without ever querying the `profissional_servico` join table — the assertion passed even though no join-table `INSERT` had happened yet. Fixed by adding `TestEntityManager.flush()` + `.clear()` between save and findById, forcing a real round-trip; confirmed via the SQL log that `INSERT INTO profissional_servico` and the join-table `SELECT` now actually occur. Worth remembering for any future `@DataJpaTest` on an association.
 
 **Dependencies:** Task 2 (FK to `servico`)
 
