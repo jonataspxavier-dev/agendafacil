@@ -182,25 +182,28 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-scheduling.md](../../SPEC-scheduli
 
 ---
 
-## Task 8: `GET /api/admin/agendamentos`
+## Task 8: `GET /api/admin/agendamentos` ✅
 
 **Description:** `ROLE_ADMIN`-only listing with `data`/`status`/paging filters.
 
 **Acceptance criteria:**
-- [ ] 401 no token, 403 CLIENTE token, 200 for ADMIN
-- [ ] `data` filters to bookings on that date, `status` filters by status, both combinable; paging via the existing `PageableFactory` pattern
-- [ ] Integration test covers each filter independently and combined
+- [x] 401 no token, 403 CLIENTE token, 200 for ADMIN
+- [x] `data` filters to bookings on that date, `status` filters by status, both combinable; paging via the existing `PageableFactory` pattern
+- [x] Integration test covers each filter independently and combined
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
-- [ ] Manual check: `docker compose up`, book a couple of slots as different users, confirm admin listing + filters via curl with the admin token
+- [x] Tests pass: `./mvnw test` (TDD red→green, 7/7) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, booked two slots on different dates as a client, cancelled one, confirmed via curl with the admin token: no filters → both; `data=` → only that date's booking; `status=CANCELADO` → only the cancelled one; combined `data`+`status` → exact match or empty; `page`/`size` → `PageResponse` wrapper with correct `totalElements`. Swagger shows the operation.
+
+**Implementation note:** the straightforward `(:param IS NULL OR ...)` JPQL pattern for optional filters failed against Postgres with `SQLState 42P18 — could not determine data type of parameter` when all filters were null in the same query. Switched `AgendamentoRepository` to `JpaSpecificationExecutor` and built the `data`/`status` predicates conditionally in `AgendamentoService` (no predicate added when a filter is absent) — this sidesteps the untyped-null-parameter issue entirely and reads more clearly than fighting Postgres's parameter type inference. Worth remembering for any future optional-filter query: prefer `Specification` over a `:param IS NULL OR` JPQL query.
 
 **Dependencies:** Task 4
 
 **Files likely touched:**
-- `backend/src/main/java/com/agendafacil/backend/service/AgendamentoService.java` (add `listarAdmin`)
-- `backend/src/main/java/com/agendafacil/backend/controller/AgendamentoController.java` (add endpoint)
-- `backend/src/main/java/com/agendafacil/backend/security/SecurityConfig.java` (no change expected — `/api/admin/**` already falls under `anyRequest().authenticated()`, `@PreAuthorize` handles the role)
+- `backend/src/main/java/com/agendafacil/backend/repository/AgendamentoRepository.java` (now `JpaSpecificationExecutor`)
+- `backend/src/main/java/com/agendafacil/backend/service/AgendamentoService.java` (add `listarAdmin`/`listarAdminTodos`)
+- `backend/src/main/java/com/agendafacil/backend/controller/AdminAgendamentoController.java` (new — `/api/admin/agendamentos` doesn't fit under the existing `/api/agendamentos`-mapped controller)
+- `backend/src/main/java/com/agendafacil/backend/security/SecurityConfig.java` (no change needed — confirmed `/api/admin/**` falls under `anyRequest().authenticated()`, `@PreAuthorize` handles the role)
 - `backend/src/test/java/.../controller/AgendamentoControllerAdminListTest.java`
 
 **Estimated scope:** Medium: 3-4 files
@@ -209,7 +212,7 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-scheduling.md](../../SPEC-scheduli
 
 ## Checkpoint: Module complete
 
-- [ ] All 8 tasks checked off
-- [ ] Every item in SPEC-scheduling.md's Success Criteria is satisfied
-- [ ] `docker compose up --build` works end-to-end
+- [x] All 8 tasks checked off
+- [x] Every item in SPEC-scheduling.md's Success Criteria is satisfied
+- [x] `docker compose up --build` works end-to-end
 - [ ] Human review before starting `reporting`

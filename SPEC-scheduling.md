@@ -64,15 +64,15 @@ This is the module the brief explicitly calls out for correctness testing (`Fase
 
 ## Success Criteria
 
-- [ ] `GET /api/disponibilidade?profissionalId=&servicoId=&data=` returns only slots that fit inside the professional's jornada for that weekday, account for the service's duration, and exclude already-booked times
-- [ ] `POST /api/agendamentos` succeeds for a genuinely open slot, returns 201 with `precoCobrado` snapshotted from the service's current price
-- [ ] Two concurrent/sequential requests for the same professional + overlapping time: exactly one succeeds, the other gets 409 — proven by an integration test, not just by inspection
-- [ ] `PATCH /api/agendamentos/{id}/cancelar` succeeds more than 2 hours before `inicio`, fails (400/409) within the window; a CLIENTE can only cancel their own booking
-- [ ] `PATCH /api/agendamentos/{id}/concluir` is `ROLE_ADMIN`-only and transitions `AGENDADO` → `CONCLUIDO`
-- [ ] `GET /api/agendamentos/meus` returns only the authenticated user's own bookings
-- [ ] `GET /api/admin/agendamentos` is `ROLE_ADMIN`-only, supports `data`/`status`/paging filters
-- [ ] Integration tests cover the conflict guarantee, cancellation window edges, and full lifecycle against a real Testcontainers Postgres; `./mvnw test` passes
-- [ ] Swagger UI shows all new operations
+- [x] `GET /api/disponibilidade?profissionalId=&servicoId=&data=` returns only slots that fit inside the professional's jornada for that weekday, account for the service's duration, and exclude already-booked times
+- [x] `POST /api/agendamentos` succeeds for a genuinely open slot, returns 201 with `precoCobrado` snapshotted from the service's current price
+- [x] Two concurrent/sequential requests for the same professional + overlapping time: exactly one succeeds, the other gets 409 — proven by an integration test, not just by inspection
+- [x] `PATCH /api/agendamentos/{id}/cancelar` succeeds more than 2 hours before `inicio`, fails (400/409) within the window; a CLIENTE can only cancel their own booking
+- [x] `PATCH /api/agendamentos/{id}/concluir` is `ROLE_ADMIN`-only and transitions `AGENDADO` → `CONCLUIDO`
+- [x] `GET /api/agendamentos/meus` returns only the authenticated user's own bookings
+- [x] `GET /api/admin/agendamentos` is `ROLE_ADMIN`-only, supports `data`/`status`/paging filters
+- [x] Integration tests cover the conflict guarantee, cancellation window edges, and full lifecycle against a real Testcontainers Postgres; `./mvnw test` passes
+- [x] Swagger UI shows all new operations
 
 ## Open Questions
 

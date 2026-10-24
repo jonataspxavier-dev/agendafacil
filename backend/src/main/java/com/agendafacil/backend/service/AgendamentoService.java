@@ -16,9 +16,13 @@ import com.agendafacil.backend.repository.AgendamentoRepository;
 import com.agendafacil.backend.repository.ProfissionalRepository;
 import com.agendafacil.backend.repository.ServicoRepository;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -148,6 +152,36 @@ public class AgendamentoService {
         return agendamentoRepository.findByClienteIdOrderByInicioDesc(cliente.getId()).stream()
                 .map(AgendamentoResponse::from)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<AgendamentoResponse> listarAdminTodos(LocalDate data, StatusAgendamento status) {
+        return buscarAdmin(data, status, Pageable.unpaged()).stream()
+                .map(AgendamentoResponse::from)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<AgendamentoResponse> listarAdmin(LocalDate data, StatusAgendamento status, Pageable pageable) {
+        return buscarAdmin(data, status, pageable).map(AgendamentoResponse::from);
+    }
+
+    private Page<Agendamento> buscarAdmin(LocalDate data, StatusAgendamento status, Pageable pageable) {
+        Specification<Agendamento> spec = Specification.allOf();
+
+        if (data != null) {
+            LocalDateTime inicioDia = data.atStartOfDay();
+            LocalDateTime fimDia = data.plusDays(1).atStartOfDay();
+            spec = spec.and((root, query, cb) -> cb.and(
+                    cb.greaterThanOrEqualTo(root.get("inicio"), inicioDia),
+                    cb.lessThan(root.get("inicio"), fimDia)));
+        }
+
+        if (status != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), status));
+        }
+
+        return agendamentoRepository.findAll(spec, pageable);
     }
 
     private boolean cabeNaJanela(Jornada jornada, DayOfWeek diaSemana, LocalDateTime inicio, LocalDateTime fim) {

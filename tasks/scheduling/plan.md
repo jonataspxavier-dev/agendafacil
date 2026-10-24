@@ -45,12 +45,12 @@ Build `disponibilidade` (availability calculation) and the full `agendamento` li
 - [x] Task 5: `PATCH /api/agendamentos/{id}/cancelar` (ownership check, 2-hour window) — depends on Task 4
 - [x] Task 6: `PATCH /api/agendamentos/{id}/concluir` (`ROLE_ADMIN`) — depends on Task 4
 - [x] Task 7: `GET /api/agendamentos/meus` (own bookings only) — depends on Task 4
-- [ ] Task 8: `GET /api/admin/agendamentos` (`ROLE_ADMIN`, `data`/`status`/paging filters) — depends on Task 4
+- [x] Task 8: `GET /api/admin/agendamentos` (`ROLE_ADMIN`, `data`/`status`/paging filters) — depends on Task 4
 
 ### Checkpoint: Module complete
-- [ ] All 8 tasks checked off
-- [ ] Every item in SPEC-scheduling.md's Success Criteria is satisfied
-- [ ] `docker compose up --build` still works end-to-end
+- [x] All 8 tasks checked off
+- [x] Every item in SPEC-scheduling.md's Success Criteria is satisfied
+- [x] `docker compose up --build` still works end-to-end
 - [ ] Human review before starting `reporting`
 
 ## Risks and Mitigations
