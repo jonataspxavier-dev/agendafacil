@@ -49,4 +49,10 @@ public class AuthController {
         Usuario usuario = authService.getAuthenticatedUser(jwt);
         return ResponseEntity.ok(UsuarioResponse.from(usuario));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody RefreshRequest request) {
+        authService.logout(jwt, request);
+        return ResponseEntity.noContent().build();
+    }
 }

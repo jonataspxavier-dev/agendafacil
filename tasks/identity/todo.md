@@ -191,16 +191,19 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-identity.md](../../SPEC-identity.m
 
 ---
 
-## Task 8: Logout
+## Task 8: Logout ✅
 
 **Description:** `POST /api/auth/logout` revokes the caller's current refresh token.
 
 **Acceptance criteria:**
-- [ ] `AuthService.logout(rawToken)` marks the matching `refresh_token` row revoked
-- [ ] Integration test: login → logout → refresh with that token → 401
+- [x] `AuthService.logout(jwt, request)` marks the matching `refresh_token` row revoked — requires a valid access token (not in `SecurityConfig`'s `permitAll`) and checks the token belongs to the authenticated user before revoking (idempotent no-op otherwise, not an error, so it doesn't leak whether a token exists)
+- [x] Integration test: login → logout → refresh with that token → 401; logout without access token → 401; logout cannot revoke another user's refresh token
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
+- [x] Tests pass: `./mvnw test` (TDD red→green, 3/3) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, login → logout (204) → refresh with that token (401); `/v3/api-docs` shows all five `/api/auth/*` operations
+
+**Design decision beyond the original todo:** logout requires an authenticated request (access token) and verifies the refresh token being revoked belongs to that same user, rather than accepting any refresh token unauthenticated — closes an otherwise-easy cross-user token revocation path.
 
 **Dependencies:** Task 7
 

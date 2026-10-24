@@ -98,6 +98,17 @@ public class AuthService {
         return newTokenPair(stored.getUsuario());
     }
 
+    @Transactional
+    public void logout(Jwt jwt, RefreshRequest request) {
+        Long userId = Long.valueOf(jwt.getSubject());
+        refreshTokenRepository.findByTokenHash(hashToken(request.refreshToken()))
+                .filter(token -> token.getUsuario().getId().equals(userId))
+                .ifPresent(token -> {
+                    token.setRevogado(true);
+                    refreshTokenRepository.save(token);
+                });
+    }
+
     public Usuario getAuthenticatedUser(Jwt jwt) {
         Long id = Long.valueOf(jwt.getSubject());
         return usuarioRepository.findById(id)

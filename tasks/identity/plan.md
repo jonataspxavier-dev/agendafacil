@@ -38,12 +38,12 @@ Build register/login/refresh/logout with JWT, backed by Postgres via Flyway migr
 ### Phase 3: Refresh token lifecycle
 - [x] Task 6: `refresh_token` schema (`V3`) + `RefreshToken` entity + `RefreshTokenRepository` — depends on Task 2
 - [x] Task 7: Refresh with rotation (`POST /api/auth/refresh`); login now also issues + persists a refresh token — depends on Task 4, Task 6
-- [ ] Task 8: Logout (`POST /api/auth/logout`, revokes the current refresh token) — depends on Task 7
+- [x] Task 8: Logout (`POST /api/auth/logout`, revokes the current refresh token) — depends on Task 7
 
 ### Checkpoint: Refresh lifecycle
 - [x] Refresh rotates the token (old refresh token rejected after use)
-- [ ] Logout revokes the refresh token (rejected on next use)
-- [ ] Swagger UI shows `/api/auth/refresh` and `/api/auth/logout`
+- [x] Logout revokes the refresh token (rejected on next use)
+- [x] Swagger UI shows `/api/auth/refresh` and `/api/auth/logout`
 
 ### Phase 4: Seed + final checkpoint
 - [ ] Task 9: Admin seed migration (`V4`, BCrypt-hashed password) + README demo-credentials note — depends on Task 2 (parallelizable with Phase 2/3)
