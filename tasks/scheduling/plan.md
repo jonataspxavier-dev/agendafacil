@@ -34,12 +34,12 @@ Build `disponibilidade` (availability calculation) and the full `agendamento` li
 - [x] Swagger shows `/api/disponibilidade`
 
 ### Phase 3: Booking creation (the critical path)
-- [ ] Task 4: `POST /api/agendamentos` — validation, conflict pre-check, exclusion-constraint-violation → 409 translation, `preco_cobrado` snapshot — depends on Task 1, Task 2 (reuses jornada/servico validation)
+- [x] Task 4: `POST /api/agendamentos` — validation, conflict pre-check, exclusion-constraint-violation → 409 translation, `preco_cobrado` snapshot — depends on Task 1, Task 2 (reuses jornada/servico validation)
 
 ### Checkpoint: Booking creation
-- [ ] Integration test proves two overlapping booking attempts for the same professional: exactly one succeeds, the other 409s
-- [ ] Boundary case (one booking ends exactly when another starts) succeeds, not rejected
-- [ ] Swagger shows `POST /api/agendamentos`
+- [x] Integration test proves two overlapping booking attempts for the same professional: exactly one succeeds, the other 409s
+- [x] Boundary case (one booking ends exactly when another starts) succeeds, not rejected
+- [x] Swagger shows `POST /api/agendamentos`
 
 ### Phase 4: Lifecycle + listing
 - [ ] Task 5: `PATCH /api/agendamentos/{id}/cancelar` (ownership check, 2-hour window) — depends on Task 4

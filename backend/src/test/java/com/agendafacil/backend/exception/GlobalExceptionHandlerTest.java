@@ -108,6 +108,17 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
+    void mapsConflitoDeHorarioTo409() {
+        ConflitoDeHorarioException ex = new ConflitoDeHorarioException("Horário indisponível para este profissional");
+
+        ResponseEntity<ErrorResponse> response = handler.handleConflitoDeHorario(ex, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(response.getBody().status()).isEqualTo(409);
+        assertThat(response.getBody().message()).contains("indisponível");
+    }
+
+    @Test
     void mapsUnhandledExceptionTo500() {
         RuntimeException ex = new RuntimeException("algo inesperado");
 

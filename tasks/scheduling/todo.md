@@ -78,20 +78,22 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-scheduling.md](../../SPEC-scheduli
 
 ---
 
-## Task 4: `POST /api/agendamentos`
+## Task 4: `POST /api/agendamentos` ✅
 
 **Description:** The module's critical path. Validates the slot against real jornada/duration/existing bookings, snapshots the price, creates the row, and — this is the part that matters — proves the DB exclusion constraint actually prevents a genuine double-booking, translating the constraint violation into a clean 409.
 
 **Acceptance criteria:**
-- [ ] `AgendamentoRequest(profissionalId, servicoId, inicio)`; validates: professional and service exist and are `ativo`, professional offers the service, `inicio` is in the future, the resulting slot fits the professional's jornada for that weekday and doesn't overlap an existing `AGENDADO` booking (service-layer pre-check)
-- [ ] On success: 201, `AgendamentoResponse` with `precoCobrado` snapshotted from `Servico.preco`, `status = AGENDADO`
-- [ ] Any authenticated user can book (not role-restricted beyond "logged in")
-- [ ] `DataIntegrityViolationException` from the exclusion constraint is caught and translated to a 409 with a clear message — not a generic 500
-- [ ] Integration test: book a slot → 201; attempt to book the **exact same or overlapping** slot for the same professional via two separate requests → exactly one 201, one 409; a slot that ends exactly when another begins → both succeed (no false conflict)
+- [x] `AgendamentoRequest(profissionalId, servicoId, inicio)`; validates: professional and service exist and are `ativo`, professional offers the service, `inicio` is in the future, the resulting slot fits the professional's jornada for that weekday and doesn't overlap an existing `AGENDADO` booking (service-layer pre-check via `findConflitantes`)
+- [x] On success: 201, `AgendamentoResponse` with `precoCobrado` snapshotted from `Servico.preco`, `status = AGENDADO`
+- [x] Any authenticated user can book (no `@PreAuthorize` — the default `anyRequest().authenticated()` is exactly right here)
+- [x] `DataIntegrityViolationException` from the exclusion constraint is caught (around `saveAndFlush`, so it surfaces synchronously, not at commit time) and translated to `ConflitoDeHorarioException` → 409
+- [x] Integration tests: book a slot → 201; the same slot again → 409; back-to-back non-overlapping slots → both 201; outside jornada → 400
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
-- [ ] Manual check: `docker compose up`, book a slot via curl with a real user token, attempt the same slot again, confirm 409
+- [x] Tests pass: `./mvnw test` (TDD red→green, 5/5 + 1 new `GlobalExceptionHandler` case) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, booked a real slot (201 with snapshotted price), repeated the exact same request (409 "Horário indisponível"), confirmed `/api/disponibilidade` no longer lists that slot. Swagger shows the operation.
+
+**Note on responsibility split:** this task's own test proves the HTTP-facing behavior (book once, conflict 409s cleanly) in the normal request flow. The DB constraint's independent guarantee — that it rejects an overlapping insert even when application code is bypassed entirely — was already proven at the repository level in Task 1 and isn't re-tested here.
 
 **Dependencies:** Task 1, Task 2
 
