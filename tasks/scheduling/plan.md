@@ -19,11 +19,11 @@ Build `disponibilidade` (availability calculation) and the full `agendamento` li
 ## Task List
 
 ### Phase 1: Foundation
-- [ ] Task 1: `agendamento` schema (`V9`, exclusion constraint) + `Agendamento` entity + `StatusAgendamento` enum + `AgendamentoRepository` — depends on `identity`'s `usuario`, `catalog`'s `profissional`/`servico`
+- [x] Task 1: `agendamento` schema (`V9`, exclusion constraint) + `Agendamento` entity + `StatusAgendamento` enum + `AgendamentoRepository` — depends on `identity`'s `usuario`, `catalog`'s `profissional`/`servico`
 
 ### Checkpoint: Foundation
-- [ ] `./mvnw test` passes (Testcontainers Postgres applies `V1`-`V9` cleanly, `btree_gist` extension created successfully)
-- [ ] A repository-level test proves the exclusion constraint itself rejects a raw overlapping insert (before any service-layer code exists to pre-check anything)
+- [x] `./mvnw test` passes (Testcontainers Postgres applies `V1`-`V9` cleanly, `btree_gist` extension created successfully)
+- [x] A repository-level test proves the exclusion constraint itself rejects a raw overlapping insert (before any service-layer code exists to pre-check anything)
 
 ### Phase 2: Disponibilidade
 - [ ] Task 2: `DisponibilidadeService` slot calculation (pure core + DB-fetching orchestration) — depends on Task 1

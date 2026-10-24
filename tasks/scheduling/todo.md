@@ -2,19 +2,19 @@
 
 Plan: [plan.md](plan.md) · Spec: [../../SPEC-scheduling.md](../../SPEC-scheduling.md)
 
-## Task 1: `agendamento` schema + entity + repository
+## Task 1: `agendamento` schema + entity + repository ✅
 
 **Description:** `V9__create_agendamento.sql` with the Postgres exclusion constraint, `Agendamento` entity, `StatusAgendamento` enum, `AgendamentoRepository`. This is the module's actual correctness guarantee — prove the constraint works before any service code exists.
 
 **Acceptance criteria:**
-- [ ] `V9__create_agendamento.sql`: `CREATE EXTENSION IF NOT EXISTS btree_gist;`, `agendamento(id, cliente_id FK usuario, profissional_id FK profissional, servico_id FK servico, inicio TIMESTAMP, fim TIMESTAMP, status VARCHAR, preco_cobrado NUMERIC, criado_em TIMESTAMP DEFAULT now())`, a generated `tsrange` column, and `EXCLUDE USING gist (profissional_id WITH =, periodo WITH &&) WHERE (status = 'AGENDADO')`
-- [ ] `StatusAgendamento` enum: `AGENDADO`, `CANCELADO`, `CONCLUIDO`
-- [ ] `Agendamento` entity maps `cliente`/`profissional`/`servico` as `@ManyToOne`, `status` as `@Enumerated(STRING)`, `inicio`/`fim` as `LocalDateTime`
-- [ ] `AgendamentoRepository extends JpaRepository<Agendamento, Long>` with at least `findByProfissionalIdAndStatus(...)` or similar for conflict pre-checking
+- [x] `V9__create_agendamento.sql`: `CREATE EXTENSION IF NOT EXISTS btree_gist;`, `agendamento(id, cliente_id FK usuario, profissional_id FK profissional, servico_id FK servico, inicio TIMESTAMP, fim TIMESTAMP, status VARCHAR, preco_cobrado NUMERIC, criado_em TIMESTAMP DEFAULT now())`, a generated `tsrange` column, and `EXCLUDE USING gist (profissional_id WITH =, periodo WITH &&) WHERE (status = 'AGENDADO')`
+- [x] `StatusAgendamento` enum: `AGENDADO`, `CANCELADO`, `CONCLUIDO`
+- [x] `Agendamento` entity maps `cliente`/`profissional`/`servico` as `@ManyToOne`, `status` as `@Enumerated(STRING)`, `inicio`/`fim` as `LocalDateTime`
+- [x] `AgendamentoRepository extends JpaRepository<Agendamento, Long>` with `findConflitantes(profissionalId, status, inicio, fim)` (JPQL overlap query: `a.inicio < :fim AND a.fim > :inicio`) for conflict pre-checking
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test` — `V1`→`V9` apply cleanly via Testcontainers
-- [ ] A repository-level test inserts one `AGENDADO` row, then attempts a second overlapping `AGENDADO` row for the same `profissional_id` via a raw/direct insert (not through service validation) and asserts it's rejected by the DB (`DataIntegrityViolationException`) — proving the constraint itself works, independent of any application code
+- [x] Tests pass: `./mvnw test` (TDD red→green, 3/3) — `V1`→`V9` apply cleanly via Testcontainers
+- [x] Repository-level tests prove: a genuinely overlapping `AGENDADO` insert is rejected (`DataIntegrityViolationException`, SQLState `23P01`, confirmed in the log); back-to-back non-overlapping bookings succeed; an overlapping booking succeeds once the first is `CANCELADO` (constraint only applies `WHERE status = 'AGENDADO'`)
 
 **Dependencies:** `identity` (`usuario`), `catalog` (`profissional`, `servico`)
 
