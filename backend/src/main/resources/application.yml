@@ -27,3 +27,4 @@ app:
   jwt:
     secret: ${JWT_SECRET:local-dev-secret-change-in-production-0123456789abcdef}
     access-token-ttl-minutes: ${JWT_ACCESS_TTL_MINUTES:15}
+    refresh-token-ttl-days: ${JWT_REFRESH_TTL_DAYS:7}

@@ -164,18 +164,20 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-identity.md](../../SPEC-identity.m
 
 ---
 
-## Task 7: Refresh with rotation
+## Task 7: Refresh with rotation ✅
 
 **Description:** `POST /api/auth/refresh` validates a refresh token, issues a new access+refresh pair, revokes the old refresh token (rotation). Login (Task 4) is extended to also issue and persist a refresh token.
 
 **Acceptance criteria:**
-- [ ] `AuthService.login` now persists a hashed refresh token (7-day expiry) alongside issuing the access token; `AuthResponse` includes both
-- [ ] `AuthService.refresh(rawToken)`: looks up by hash, rejects if not found/expired/revoked (401), otherwise revokes the old row and issues+persists a new refresh token + new access token
-- [ ] Integration tests: refresh with a valid token → 200 with new tokens; refresh with the now-revoked old token → 401; refresh with an expired token → 401
+- [x] `AuthService.login` now persists a hashed refresh token (7-day expiry, SHA-256 deterministic hash — not BCrypt, which can't be looked up by exact match) alongside issuing the access token; `AuthResponse` includes both
+- [x] `AuthService.refresh(request)`: looks up by hash, rejects if not found/expired/revoked (401), otherwise revokes the old row and issues+persists a new refresh token + new access token
+- [x] Integration tests: refresh with a valid token → 200 with new tokens; refresh with the now-revoked old token → 401; refresh with an expired token → 401; unknown token → 401
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
-- [ ] Manual check: `docker compose up`, login, refresh, confirm reusing the original refresh token now 401s
+- [x] Tests pass: `./mvnw test` (TDD red→green, 4/4) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, login, refresh (200, new pair), reuse the original refresh token → 401
+
+**Bug found and fixed during manual verification:** `GlobalExceptionHandler.handleBadCredentials` hardcoded the message "E-mail ou senha inválidos" for every `BadCredentialsException`, which was wrong/confusing for refresh failures (showed a login-specific message for a refresh-token error). Fixed to use `ex.getMessage()` so each throw site's message comes through correctly. Re-verified via docker compose — refresh failures now say "Refresh token inválido".
 
 **Dependencies:** Task 4, Task 6
 
