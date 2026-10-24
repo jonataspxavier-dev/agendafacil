@@ -88,26 +88,30 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-admin-web.md](../../SPEC-admin-web
 
 ---
 
-## Task 4: `AdminProfissionaisPage`
+## Task 4: `AdminProfissionaisPage` ✅
 
 **Description:** CRUD for profissionais, including the module's most involved piece of UI: the jornada row editor.
 
 **Acceptance criteria:**
-- [ ] `services/profissionaisAdminService.ts`: `criar(request)` → `POST /api/profissionais`; `atualizar(id, request)` → `PUT /api/profissionais/{id}`; `desativar(id)` → `DELETE /api/profissionais/{id}` (reuses `profissionaisService.listar()` from `client-web`)
-- [ ] `pages/admin/AdminProfissionaisPage.tsx`: lists active professionals; a form creates/edits one with: nome (required), a `servicoIds` multi-select (checkboxes against the active services list), and a jornada row editor — each row a `diaSemana` select (7 options) + `horaInicio`/`horaFim` time inputs, with add/remove-row controls; pre-populates every field correctly when editing an existing professional
-- [ ] Submitting produces a `ProfissionalRequest`-shaped payload exactly (`servicoIds: number[]`, `jornada: { diaSemana, horaInicio, horaFim }[]`); a "Desativar" action per row updates the list immediately
-- [ ] A validation or backend error surfaces inline
+- [x] `services/profissionaisAdminService.ts`: `criar(request)` → `POST /api/profissionais`; `atualizar(id, request)` → `PUT /api/profissionais/{id}`; `desativar(id)` → `DELETE /api/profissionais/{id}` (reuses `profissionaisService.listar()` from `client-web`)
+- [x] `pages/admin/AdminProfissionaisPage.tsx`: lists active professionals; a form creates/edits one with: nome (required), a `servicoIds` multi-select (checkboxes against the active services list, RHF's native checkbox-group pattern), and a jornada row editor via `useFieldArray` — each row a `diaSemana` select (7 options) + `horaInicio`/`horaFim` time inputs, with add/remove-row controls; pre-populates every field correctly when editing an existing professional (including stripping the backend's `HH:mm:ss` time strings to `HH:mm` for the `<input type="time">` elements)
+- [x] Submitting produces a `ProfissionalRequest`-shaped payload exactly (`servicoIds: number[]`, `jornada: { diaSemana, horaInicio, horaFim }[]`); a "Desativar" action per row updates the list immediately
+- [x] A validation or backend error surfaces inline
+
+**Scope note:** `client-web`'s `profissionaisService.ts` `Profissional` type didn't include `jornada` (not needed for the booking flow) — extended it with a `Jornada[]` field and a `DiaSemana` type, since `AdminProfissionaisPage` needs the real jornada to pre-populate edits. Purely additive (an existing API field the type just didn't model yet); updated `AgendarPage.test.tsx`'s fixtures to match the now-required field.
 
 **Verification:**
-- [ ] Tests pass: `npm test` — adding/removing a jornada row updates what gets submitted; editing an existing professional pre-populates `servicoIds` and jornada correctly; the submit payload matches the form state exactly (mocked service)
-- [ ] Manual check: `docker compose up --build`, create a professional with a specific jornada (e.g. only Tuesday 10:00-14:00) and one service, then confirm via `GET /api/disponibilidade` (or `client-web`'s own booking flow) that availability actually reflects that exact jornada — not just that the form "looked right" after submit
+- [x] Tests pass: `npm test` (49/49 — adding/removing a jornada row updates what gets submitted; editing an existing professional pre-populates `servicoIds` and jornada correctly; the submit payload matches the form state exactly) and `npm run build`
+- [x] Manual check: `docker compose up --build`, created "Profissional Jornada Teste" with exactly one jornada row (Tuesday 10:00-14:00) and one service. Confirmed via a direct `GET /api/disponibilidade` call: Tuesday returned exactly 8 half-hour slots from 10:00-14:00, Monday returned zero slots — proving the jornada editor produces a payload the backend actually honors, not just one that "looks right" in the form. Also verified edit pre-population (all fields restored correctly, including the `HH:mm:ss` → `HH:mm` conversion) and deactivation. No console errors.
 
 **Dependencies:** Task 1
 
 **Files likely touched:**
+- `frontend/src/services/profissionaisService.ts` (added `jornada`/`Jornada`/`DiaSemana`)
 - `frontend/src/services/profissionaisAdminService.ts`
 - `frontend/src/pages/admin/AdminProfissionaisPage.tsx`
 - `frontend/src/pages/admin/AdminProfissionaisPage.test.tsx`
+- `frontend/src/pages/AgendarPage.test.tsx` (fixture fix for the extended `Profissional` type)
 - `frontend/src/App.tsx` (wire real page)
 
 **Estimated scope:** Large: 4 files, but the jornada editor is genuinely the most complex form in the app — budget the most time here, not the most files

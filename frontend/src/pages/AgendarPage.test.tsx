@@ -18,8 +18,8 @@ const servicosMock = [
 ]
 
 const profissionaisMock = [
-  { id: 10, nome: 'Ana Souza', ativo: true, servicoIds: [1] },
-  { id: 20, nome: 'Bruno Lima', ativo: true, servicoIds: [2] },
+  { id: 10, nome: 'Ana Souza', ativo: true, servicoIds: [1], jornada: [] },
+  { id: 20, nome: 'Bruno Lima', ativo: true, servicoIds: [2], jornada: [] },
 ]
 
 const slotsMock = [

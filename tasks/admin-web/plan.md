@@ -33,11 +33,11 @@ The admin-facing half of the shared `frontend/` app: `/admin/dashboard`, `/admin
 
 ### Phase 3: Catalog CRUD
 - [x] Task 3: `AdminServicosPage` + `servicosAdminService` (`criar`/`atualizar`/`desativar`) — create/edit form, deactivate action, list updates immediately
-- [ ] Task 4: `AdminProfissionaisPage` + `profissionaisAdminService` — create/edit form with `servicoIds` multi-select and a repeatable jornada row editor, deactivate action
+- [x] Task 4: `AdminProfissionaisPage` + `profissionaisAdminService` — create/edit form with `servicoIds` multi-select and a repeatable jornada row editor, deactivate action
 
 ### Checkpoint: Catalog CRUD
-- [ ] A serviço created/edited through the UI is immediately reflected in `client-web`'s own public `/servicos` list (same backend data, proving the forms submit real, correct payloads)
-- [ ] A profissional's jornada edited through the UI is correctly reflected in `GET /api/disponibilidade` results (proves the jornada row editor produces a correct `JornadaRequest[]`, not just that the form "looks right")
+- [x] A serviço created/edited through the UI is immediately reflected in `client-web`'s own public `/servicos` list (same backend data, proving the forms submit real, correct payloads)
+- [x] A profissional's jornada edited through the UI is correctly reflected in `GET /api/disponibilidade` results (proves the jornada row editor produces a correct `JornadaRequest[]`, not just that the form "looks right") — verified with a Tuesday-only 10:00-14:00 jornada: Tuesday returned exactly the 8 expected half-hour slots, Monday returned zero
 
 ### Phase 4: Bookings list
 - [ ] Task 5: `AdminAgendamentosPage` + `adminAgendamentosService` (`listar` with `data`/`status`/paging params, `concluir`, `cancelar`)
