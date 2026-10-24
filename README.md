@@ -17,6 +17,15 @@ docker compose up --build
 - Backend: http://localhost:8080 (health: `/actuator/health`, docs: `/swagger-ui.html`)
 - Frontend: http://localhost:5173
 
+## Demo credentials
+
+A seeded ADMIN user is created by the `identity` module's migrations:
+
+- **E-mail:** `admin@agendafacil.com`
+- **Senha:** `AdminAgenda123!`
+
+Use these to log in via `POST /api/auth/login` and exercise admin-only endpoints as they're added by later modules.
+
 ## Development conventions
 
 See [CLAUDE.md](CLAUDE.md) for layering, DTO, testing, and Flyway conventions.

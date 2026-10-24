@@ -216,18 +216,18 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-identity.md](../../SPEC-identity.m
 
 ---
 
-## Task 9: Admin seed migration
+## Task 9: Admin seed migration ✅
 
 **Description:** `V4__seed_admin.sql` inserts one ADMIN user with a pre-computed BCrypt hash. Document the demo credentials in the README.
 
 **Acceptance criteria:**
-- [ ] `V4__seed_admin.sql` inserts one `usuario` row with `perfil = 'ADMIN'` and a BCrypt hash (computed via a throwaway `PasswordEncoder` call, not hand-written)
-- [ ] README gets a short "Demo credentials" note (email + the plaintext password that hashes to the seeded value — plaintext goes in the README only, never in the migration or code)
-- [ ] Integration test: login as the seeded admin succeeds
+- [x] `V4__seed_admin.sql` inserts one `usuario` row with `perfil = 'ADMIN'` and a BCrypt hash — computed via a throwaway `PasswordEncoder.encode(...)` call in a scratch test, printed, copied into the migration, then the scratch test deleted (never hand-written)
+- [x] README has a "Demo credentials" section (`admin@agendafacil.com` / `AdminAgenda123!`) — plaintext only in the README, never in the migration or code
+- [x] Integration test: login as the seeded admin succeeds, `/api/auth/me` confirms `perfil: "ADMIN"`
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
-- [ ] Manual check: `docker compose up`, log in with the documented demo credentials, confirm 200
+- [x] Tests pass: `./mvnw test` (TDD red→green, `AdminSeedTest`) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, logged in with the documented demo credentials → 200, `/api/auth/me` confirmed `ADMIN` role
 
 **Dependencies:** Task 2 (parallelizable with Phase 2/3)
 
@@ -240,9 +240,11 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-identity.md](../../SPEC-identity.m
 
 ---
 
+**Bug found and fixed during final module checkpoint review:** an authenticated request to a genuinely unmapped route (e.g. `/api/auth/rota-que-nao-existe`) returned 500 instead of 404 — `GlobalExceptionHandler`'s catch-all `@ExceptionHandler(Exception.class)` was swallowing Spring's `NoResourceFoundException`. Added a specific handler for it (404, same `ErrorResponse` shape). This directly closed SPEC-identity.md's success criterion "every error response (validation failure, 401, 409, 404) uses the same ErrorResponse shape," which hadn't actually been exercised until this check. TDD: test added red first, then the handler made it green. Re-verified via docker compose.
+
 ## Checkpoint: Module complete
 
-- [ ] All 9 tasks checked off
-- [ ] Every item in SPEC-identity.md's Success Criteria is satisfied
-- [ ] `docker compose up --build` works end-to-end with the real `SecurityConfig`
+- [x] All 9 tasks checked off
+- [x] Every item in SPEC-identity.md's Success Criteria is satisfied
+- [x] `docker compose up --build` works end-to-end with the real `SecurityConfig`
 - [ ] Human review before starting `catalog`

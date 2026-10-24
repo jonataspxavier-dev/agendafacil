@@ -8,12 +8,14 @@ import com.agendafacil.backend.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 class GlobalExceptionHandlerTest {
 
@@ -58,6 +60,17 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
         assertThat(response.getBody().status()).isEqualTo(401);
         assertThat(response.getBody().error()).isEqualTo("Unauthorized");
+    }
+
+    @Test
+    void mapsNoResourceFoundTo404() {
+        NoResourceFoundException ex = new NoResourceFoundException(HttpMethod.GET, "api/auth/rota-inexistente", "No resource");
+
+        ResponseEntity<ErrorResponse> response = handler.handleNoResourceFound(ex, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody().status()).isEqualTo(404);
+        assertThat(response.getBody().error()).isEqualTo("Not Found");
     }
 
     @Test

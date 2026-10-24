@@ -46,12 +46,12 @@ Build register/login/refresh/logout with JWT, backed by Postgres via Flyway migr
 - [x] Swagger UI shows `/api/auth/refresh` and `/api/auth/logout`
 
 ### Phase 4: Seed + final checkpoint
-- [ ] Task 9: Admin seed migration (`V4`, BCrypt-hashed password) + README demo-credentials note — depends on Task 2 (parallelizable with Phase 2/3)
+- [x] Task 9: Admin seed migration (`V4`, BCrypt-hashed password) + README demo-credentials note — depends on Task 2 (parallelizable with Phase 2/3)
 
 ### Checkpoint: Module complete
-- [ ] All 9 tasks checked off
-- [ ] Every item in SPEC-identity.md's Success Criteria is satisfied
-- [ ] `docker compose up --build` still works end-to-end with the real `SecurityConfig` in place
+- [x] All 9 tasks checked off
+- [x] Every item in SPEC-identity.md's Success Criteria is satisfied (404 handling was a gap found and fixed during this checkpoint — see todo.md Task 9)
+- [x] `docker compose up --build` still works end-to-end with the real `SecurityConfig` in place
 - [ ] Human review before starting `catalog`
 
 ## Risks and Mitigations

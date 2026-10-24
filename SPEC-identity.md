@@ -69,14 +69,14 @@ Per `CLAUDE.md`, auth flows are explicitly a business rule requiring tests — a
 
 ## Success Criteria
 
-- [ ] `POST /api/auth/register` creates a CLIENTE user, returns 201, rejects a duplicate email with 409
-- [ ] `POST /api/auth/login` returns an access token + refresh token on correct credentials, 401 on wrong password
-- [ ] `POST /api/auth/refresh` returns a new access+refresh token pair for a valid refresh token, rejects an expired or already-used one with 401
-- [ ] A protected test endpoint returns 401 without a token, 200 with a valid access token, and the token's role claim is readable by `SecurityConfig` for role checks
-- [ ] Every error response (validation failure, 401, 409, 404) uses the same `ErrorResponse` JSON shape
-- [ ] One ADMIN user exists after migrations run (seed, not a public registration path — `register` only creates CLIENTE accounts)
-- [ ] Integration tests cover every flow above against a real Testcontainers Postgres; `./mvnw test` passes
-- [ ] Swagger UI (already wired in `platform-setup`) now shows the `/api/auth/*` operations with request/response schemas
+- [x] `POST /api/auth/register` creates a CLIENTE user, returns 201, rejects a duplicate email with 409
+- [x] `POST /api/auth/login` returns an access token + refresh token on correct credentials, 401 on wrong password
+- [x] `POST /api/auth/refresh` returns a new access+refresh token pair for a valid refresh token, rejects an expired or already-used one with 401
+- [x] A protected test endpoint (`/api/auth/me`) returns 401 without a token, 200 with a valid access token, and the token's role claim is readable by `SecurityConfig` for role checks
+- [x] Every error response (validation failure, 401, 409, 404) uses the same `ErrorResponse` JSON shape — 404 required adding a `NoResourceFoundException` handler, found missing during final verification (see `tasks/identity/todo.md` Task 9)
+- [x] One ADMIN user exists after migrations run (seed, not a public registration path — `register` only creates CLIENTE accounts)
+- [x] Integration tests cover every flow above against a real Testcontainers Postgres; `./mvnw test` passes
+- [x] Swagger UI (already wired in `platform-setup`) now shows the `/api/auth/*` operations with request/response schemas
 
 ## Open Questions
 
