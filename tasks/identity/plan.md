@@ -36,7 +36,7 @@ Build register/login/refresh/logout with JWT, backed by Postgres via Flyway migr
 - [x] Swagger UI shows `/api/auth/register`, `/api/auth/login`, `/api/auth/me` with request/response schemas
 
 ### Phase 3: Refresh token lifecycle
-- [ ] Task 6: `refresh_token` schema (`V3`) + `RefreshToken` entity + `RefreshTokenRepository` — depends on Task 2
+- [x] Task 6: `refresh_token` schema (`V3`) + `RefreshToken` entity + `RefreshTokenRepository` — depends on Task 2
 - [ ] Task 7: Refresh with rotation (`POST /api/auth/refresh`); login now also issues + persists a refresh token — depends on Task 4, Task 6
 - [ ] Task 8: Logout (`POST /api/auth/logout`, revokes the current refresh token) — depends on Task 7
 

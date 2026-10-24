@@ -142,16 +142,16 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-identity.md](../../SPEC-identity.m
 
 ---
 
-## Task 6: `refresh_token` schema + entity + repository
+## Task 6: `refresh_token` schema + entity + repository ✅
 
 **Description:** `V3__create_refresh_token.sql` migration and the `RefreshToken` entity/repository. Stores a hash of the token, not the raw value.
 
 **Acceptance criteria:**
-- [ ] `V3__create_refresh_token.sql`: `refresh_token(id, usuario_id FK → usuario, token_hash UNIQUE NOT NULL, expira_em, revogado BOOLEAN DEFAULT false, criado_em)`
-- [ ] `RefreshToken` entity + `RefreshTokenRepository` with `findByTokenHash(String)`
+- [x] `V3__create_refresh_token.sql`: `refresh_token(id, usuario_id FK → usuario, token_hash UNIQUE NOT NULL, expira_em, revogado BOOLEAN DEFAULT false, criado_em)`, plus an index on `usuario_id`
+- [x] `RefreshToken` entity + `RefreshTokenRepository` with `findByTokenHash(String)`
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test` — Testcontainers Postgres applies `V1`→`V3` cleanly
+- [x] Tests pass: `./mvnw test` (TDD red→green, 2/2) — Testcontainers Postgres applied `V1`→`V3` cleanly; full `./mvnw clean verify` also green
 
 **Dependencies:** Task 2
 
