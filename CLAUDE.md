@@ -14,6 +14,8 @@ Conventions for this repo. Read [PLANO.md](PLANO.md) for the product brief and [
 - **`security/`** holds JWT filters, `SecurityConfig`, and role checks. **`exception/`** holds the global `@RestControllerAdvice` and a standard error-response shape — every error returns the same JSON structure.
 - **Tests are mandatory for business rules** (availability calculation, booking conflicts, cancellation window, auth flows). Infrastructure-only code (config classes, DTO records) doesn't need its own test.
 - **Flyway migrations:** `src/main/resources/db/migration/V<n>__description.sql`, strictly incrementing, never edited once merged. `V1__baseline.sql` is intentionally empty — the first real schema migration belongs to the `identity`/`catalog` modules.
+- **Jackson 3, not classic Jackson 2.** Spring Boot 4's default JSON integration uses `tools.jackson.databind.ObjectMapper` (package `tools.jackson.*`), not `com.fasterxml.jackson.databind.ObjectMapper`. A `com.fasterxml...` `ObjectMapper` is on the classpath transitively (via springdoc) but there's no bean for it — `@Autowired ObjectMapper` in a test must import the `tools.jackson` one or it fails with `NoSuchBeanDefinitionException`.
+- **`SecurityConfig` is stateless by default:** CSRF is disabled and session creation policy is `STATELESS`, since this is a token-based JSON API with no server-side sessions. Don't re-enable either without a specific reason.
 
 ## Frontend (React + Vite + TypeScript)
 

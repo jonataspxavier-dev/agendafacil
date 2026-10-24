@@ -53,19 +53,24 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-identity.md](../../SPEC-identity.m
 
 ---
 
-## Task 3: Register endpoint
+## Task 3: Register endpoint ✅
 
 **Description:** `POST /api/auth/register` creates a CLIENTE user. Validates input, hashes the password, rejects duplicate emails.
 
 **Acceptance criteria:**
-- [ ] `RegisterRequest(String nome, String email, String senha)` with Bean Validation (`@Email`, `@NotBlank`, min length on `senha`)
-- [ ] `AuthService.register(...)` hashes the password, sets `perfil = CLIENTE`, throws `DuplicateEmailException` on existing email
-- [ ] `AuthController.register` returns 201 with the created user's id/email/nome (never the hash)
-- [ ] Integration test: register → 201; register same email again → 409 with `ErrorResponse`
+- [x] `RegisterRequest(String nome, String email, String senha)` with Bean Validation (`@Email`, `@NotBlank`, min length on `senha`)
+- [x] `AuthService.register(...)` hashes the password, sets `perfil = CLIENTE`, throws `DuplicateEmailException` on existing email
+- [x] `AuthController.register` returns 201 with the created user's id/email/nome (never the hash) — `UsuarioResponse`
+- [x] Integration test: register → 201; register same email again → 409 with `ErrorResponse`; invalid email → 400
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
-- [ ] Manual check: `docker compose up`, `curl -X POST .../api/auth/register` with a JSON body, confirm 201 then 409 on repeat
+- [x] Tests pass: `./mvnw test` (TDD red→green) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, curl `/api/auth/register` → 201, repeat → 409 (confirmed against the real container stack)
+
+**Also required (discovered during implementation, not originally listed):**
+- `/api/auth/**` added to `SecurityConfig`'s `permitAll` list (register must be publicly reachable before Task 4's full JWT rewrite)
+- CSRF disabled + `SessionCreationPolicy.STATELESS` set — Spring Security's default CSRF protection was blocking the POST with 403; this is correct for a stateless JSON API regardless, not a one-off hack
+- Test's `ObjectMapper` import fixed to `tools.jackson.databind.ObjectMapper` (Spring Boot 4 default Jackson 3, not classic `com.fasterxml.jackson`) — now documented in `CLAUDE.md`
 
 **Dependencies:** Task 1, Task 2
 

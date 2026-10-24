@@ -14,6 +14,7 @@ Build register/login/refresh/logout with JWT, backed by Postgres via Flyway migr
 - **`GlobalExceptionHandler` ships first** (Task 1), before any endpoint exists, since every later task's error-path tests depend on the `ErrorResponse` shape already existing.
 - **`/api/auth/me` is a real endpoint, not a throwaway.** It's the module's proof that JWT validation + role claims work end-to-end, and it's also genuinely useful later for `client-web`'s "who am I" check — no reason to write it twice.
 - **Admin seed migration (`V4`) ships with this module**, not `catalog`, since it only needs the `usuario` table `identity` already owns (per the spec's resolved Open Question #2).
+- **Discovered during Task 3, not anticipated in the SPEC:** Spring Boot 4 defaults to Jackson 3 (`tools.jackson.databind.ObjectMapper`), and `SecurityConfig` needed CSRF disabled + `STATELESS` sessions for even a public POST endpoint to work. Both now documented in `CLAUDE.md` so later modules don't rediscover them.
 
 ## Task List
 
@@ -26,7 +27,7 @@ Build register/login/refresh/logout with JWT, backed by Postgres via Flyway migr
 - [x] No endpoint exists yet — this phase is schema + cross-cutting infra only
 
 ### Phase 2: Register, login, JWT validation
-- [ ] Task 3: Register endpoint (`POST /api/auth/register`) — depends on Task 1, Task 2
+- [x] Task 3: Register endpoint (`POST /api/auth/register`) — depends on Task 1, Task 2
 - [ ] Task 4: JWT issuing infra + login (`JwtConfig`, rewritten `SecurityConfig`, `POST /api/auth/login` issuing an access token) — depends on Task 1, Task 2
 - [ ] Task 5: `GET /api/auth/me` — proves JWT validation + role claim readable — depends on Task 4
 
