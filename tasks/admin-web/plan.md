@@ -32,7 +32,7 @@ The admin-facing half of the shared `frontend/` app: `/admin/dashboard`, `/admin
 - [x] Task 2: `AdminDashboardPage` + `dashboardService` + a hand-built `BarChart` component for `topServicos`
 
 ### Phase 3: Catalog CRUD
-- [ ] Task 3: `AdminServicosPage` + `servicosAdminService` (`criar`/`atualizar`/`desativar`) — create/edit form, deactivate action, list updates immediately
+- [x] Task 3: `AdminServicosPage` + `servicosAdminService` (`criar`/`atualizar`/`desativar`) — create/edit form, deactivate action, list updates immediately
 - [ ] Task 4: `AdminProfissionaisPage` + `profissionaisAdminService` — create/edit form with `servicoIds` multi-select and a repeatable jornada row editor, deactivate action
 
 ### Checkpoint: Catalog CRUD

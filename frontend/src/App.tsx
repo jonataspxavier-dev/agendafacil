@@ -5,6 +5,7 @@ import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { AgendarPage } from '@/pages/AgendarPage'
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage'
+import { AdminServicosPage } from '@/pages/admin/AdminServicosPage'
 import { LoginPage } from '@/pages/LoginPage'
 import { MeusAgendamentosPage } from '@/pages/MeusAgendamentosPage'
 import { RegisterPage } from '@/pages/RegisterPage'
@@ -48,7 +49,7 @@ function App() {
               path="/admin/servicos"
               element={
                 <AdminRoute>
-                  <div>Serviços admin</div>
+                  <AdminServicosPage />
                 </AdminRoute>
               }
             />

@@ -61,18 +61,20 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-admin-web.md](../../SPEC-admin-web
 
 ---
 
-## Task 3: `AdminServicosPage`
+## Task 3: `AdminServicosPage` ✅
 
 **Description:** CRUD for serviços: list (active only, per the accepted backend limitation), create, edit, deactivate.
 
 **Acceptance criteria:**
-- [ ] `services/servicosAdminService.ts`: `criar(request)` → `POST /api/servicos`; `atualizar(id, request)` → `PUT /api/servicos/{id}`; `desativar(id)` → `DELETE /api/servicos/{id}` (reuses `servicosService.listar()` from `client-web` for the list — no duplicate `listar`)
-- [ ] `pages/admin/AdminServicosPage.tsx`: lists active services; a form (RHF + Zod mirroring `ServicoRequest`'s constraints: nome required, duracaoMin positive integer, preco a positive decimal) creates a new one or edits an existing one (same form, different submit target); a "Desativar" action per row, with the list updating immediately after
-- [ ] A validation or backend error (e.g. malformed input) surfaces inline via `extractErrorMessage`, not a crash
+- [x] `services/servicosAdminService.ts`: `criar(request)` → `POST /api/servicos`; `atualizar(id, request)` → `PUT /api/servicos/{id}`; `desativar(id)` → `DELETE /api/servicos/{id}` (reuses `servicosService.listar()` from `client-web` for the list — no duplicate `listar`)
+- [x] `pages/admin/AdminServicosPage.tsx`: lists active services; a form (RHF + Zod mirroring `ServicoRequest`'s constraints: nome required, duracaoMin positive integer, preco a positive decimal, via `z.coerce.number()`) creates a new one or edits an existing one (same form, different submit target); a "Desativar" action per row, with the list updating immediately after
+- [x] A validation or backend error (e.g. malformed input) surfaces inline via `extractErrorMessage`, not a crash
+
+**Build note:** `z.coerce.number()` fields need `useForm`'s 3-generic form (`useForm<InputType, unknown, OutputType>` using `z.input<typeof schema>`/`z.output<typeof schema>`) rather than a single `z.infer` type — otherwise `tsc -b` fails (Vitest's own transform doesn't type-check, so this only surfaced at build time, not test time). Worth remembering for any future numeric-coercing form.
 
 **Verification:**
-- [ ] Tests pass: `npm test` — Zod schema rejects invalid input before any network call; create/edit submit calls the right service function with the right payload; deactivate calls `desativar` and removes that row from the visible list
-- [ ] Manual check: `docker compose up --build`, create a new serviço, confirm it appears in both the admin list and `client-web`'s public `/servicos`; edit its price, confirm the change is reflected in both places; deactivate it, confirm it disappears from both
+- [x] Tests pass: `npm test` (43/43 — Zod schema rejects invalid input before any network call; create/edit submit calls the right service function with the right payload; deactivate calls `desativar` and removes that row from the visible list) and `npm run build`
+- [x] Manual check: `docker compose up --build`, created "Barba Teste Admin" through the UI, confirmed it appeared in both the admin list and a direct `GET /api/servicos` call; edited its price (25 → 30), confirmed the change in both places; deactivated it, confirmed it disappeared from both. No console errors.
 
 **Dependencies:** Task 1
 
