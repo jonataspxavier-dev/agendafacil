@@ -65,14 +65,14 @@ Per `CLAUDE.md`, business rules need tests; plain CRUD is still tested at the in
 
 ## Success Criteria
 
-- [ ] `GET /api/servicos` and `GET /api/profissionais` work with no `Authorization` header, return only `ativo = true` by default
-- [ ] `POST`/`PUT`/`DELETE` on both resources return 401 with no token, 403 with a valid CLIENTE token, succeed with an ADMIN token
-- [ ] `DELETE` on either resource sets `ativo = false` rather than removing the row (see Open Question #2)
-- [ ] A professional can be linked to one or more services (`profissional_servico`), and `ProfissionalResponse` reflects the link
-- [ ] A professional's weekly jornada (day + start/end time) can be created/read through the API
-- [ ] Seed data exists after migrations run: 3 profissionais, 5 serviços, each professional linked to at least one service, Monday–Saturday jornadas
-- [ ] Integration tests cover every flow above against a real Testcontainers Postgres; `./mvnw test` passes
-- [ ] Swagger UI shows the new `/api/servicos/*` and `/api/profissionais/*` operations
+- [x] `GET /api/servicos` and `GET /api/profissionais` work with no `Authorization` header, return only `ativo = true` by default
+- [x] `POST`/`PUT`/`DELETE` on both resources return 401 with no token, 403 with a valid CLIENTE token, succeed with an ADMIN token
+- [x] `DELETE` on either resource sets `ativo = false` rather than removing the row (see Open Question #2)
+- [x] A professional can be linked to one or more services (`profissional_servico`), and `ProfissionalResponse` reflects the link
+- [x] A professional's weekly jornada (day + start/end time) can be created/read through the API
+- [x] Seed data exists after migrations run: 3 profissionais, 5 serviços, each professional linked to at least one service, Monday–Saturday jornadas
+- [x] Integration tests cover every flow above against a real Testcontainers Postgres; `./mvnw test` passes
+- [x] Swagger UI shows the new `/api/servicos/*` and `/api/profissionais/*` operations
 
 ## Open Questions
 

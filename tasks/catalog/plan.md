@@ -42,12 +42,12 @@ Servico and Profissional CRUD, backed by Flyway migrations `V5`-`V8`, with publi
 - [x] Swagger shows `/api/profissionais/*`
 
 ### Phase 4: Seed + final checkpoint
-- [ ] Task 8: Seed migration (`V8`): 3 profissionais, 5 serviços, links, Mon-Sat jornadas — depends on Task 2, Task 3
+- [x] Task 8: Seed migration (`V8`): 3 profissionais, 5 serviços, links, Mon-Sat jornadas — depends on Task 2, Task 3
 
 ### Checkpoint: Module complete
-- [ ] All 8 tasks checked off
-- [ ] Every item in SPEC-catalog.md's Success Criteria is satisfied
-- [ ] `docker compose up --build` still works end-to-end
+- [x] All 8 tasks checked off
+- [x] Every item in SPEC-catalog.md's Success Criteria is satisfied
+- [x] `docker compose up --build` still works end-to-end
 - [ ] Human review before starting `scheduling`
 
 ## Risks and Mitigations

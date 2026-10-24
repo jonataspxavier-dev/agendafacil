@@ -29,13 +29,17 @@ class ServicoRepositoryTest {
 
     @Test
     void savesAndFindsOnlyActiveServices() {
-        servicoRepository.save(novoServico("Corte", true));
-        servicoRepository.save(novoServico("Serviço descontinuado", false));
+        servicoRepository.save(novoServico("Corte Teste Repositorio", true));
+        servicoRepository.save(novoServico("Serviço descontinuado Teste Repositorio", false));
 
-        Page<Servico> ativos = servicoRepository.findAllByAtivoTrue(PageRequest.of(0, 10));
+        // findAllByAtivoTrue also returns catalog's seed data (V8), so assert
+        // presence/absence by name instead of an exact page size.
+        Page<Servico> ativos = servicoRepository.findAllByAtivoTrue(PageRequest.of(0, 50));
 
-        assertThat(ativos.getContent()).hasSize(1);
-        assertThat(ativos.getContent().get(0).getNome()).isEqualTo("Corte");
+        assertThat(ativos.getContent())
+                .extracting(Servico::getNome)
+                .contains("Corte Teste Repositorio")
+                .doesNotContain("Serviço descontinuado Teste Repositorio");
     }
 
     private Servico novoServico(String nome, boolean ativo) {

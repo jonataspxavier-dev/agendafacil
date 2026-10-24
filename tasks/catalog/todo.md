@@ -192,17 +192,19 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-catalog.md](../../SPEC-catalog.md)
 
 ---
 
-## Task 8: Seed migration
+## Task 8: Seed migration ✅
 
 **Description:** `V8__seed_catalog.sql`: 3 profissionais, 5 serviços, `profissional_servico` links, Monday-Saturday jornadas for each professional.
 
 **Acceptance criteria:**
-- [ ] `V8__seed_catalog.sql` inserts 5 serviços (generic salon demo data — see SPEC's resolved Open Question #3), 3 profissionais, links each professional to at least one service, and gives each professional a Mon-Sat 09:00-18:00 jornada
-- [ ] Integration test: after migrations, `GET /api/servicos` returns 5, `GET /api/profissionais` returns 3 with non-empty `servicoIds` and 6 `jornada` entries each
+- [x] `V8__seed_catalog.sql` inserts 5 serviços (Corte de Cabelo, Manicure, Depilação, Massagem, Limpeza de Pele), 3 profissionais (Ana Souza, Bruno Lima, Carla Mendes), links each to 2 services, and gives each a Mon-Sat 09:00-18:00 jornada (6 entries) — written as a `DO $$ ... $$` PL/pgSQL block capturing ids via `RETURNING INTO`, not hardcoded ids
+- [x] Integration test (`CatalogSeedTest`): after migrations, `GET /api/servicos` returns 5, `GET /api/profissionais` returns 3 with non-empty `servicoIds` and 6 `jornada` entries each
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
-- [ ] Manual check: `docker compose up`, curl both list endpoints, confirm counts match
+- [x] Tests pass: `./mvnw test` (TDD red→green) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, curled both list endpoints, confirmed 5 serviços and 3 profissionais with correct links/jornada counts
+
+**Bug found and fixed (test coupling, not production code):** introducing permanent seed data broke three already-passing tests (`ServicoRepositoryTest`, `ServicoControllerListTest`, `ProfissionalControllerListTest`) that asserted exact row counts, assuming an empty table. Rewrote them to assert presence/absence of distinctively-named fixtures (or a dynamic baseline-count) instead of hardcoded totals. Documented the pattern in `CLAUDE.md` — any future module adding seed data will hit the same thing otherwise.
 
 **Dependencies:** Task 2, Task 3
 

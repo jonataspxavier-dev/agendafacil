@@ -1,7 +1,7 @@
 package com.agendafacil.backend.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.agendafacil.backend.entity.Jornada;
@@ -25,7 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
+// Note: catalog's seed migration (V8) permanently adds 3 active professionals
+// to every test database, so assertions here locate this test's own fixture
+// by name via a JSONPath filter instead of assuming index [0] or an exact
+// total row count.
 @Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -45,12 +51,15 @@ class ProfissionalControllerListTest {
     @Autowired
     private ProfissionalRepository profissionalRepository;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @BeforeEach
     void seed() {
-        Servico corte = servicoRepository.save(novoServico("Corte"));
+        Servico corte = servicoRepository.save(novoServico("Corte Teste Lista Profissional"));
 
         Profissional ativo = new Profissional();
-        ativo.setNome("Fernanda");
+        ativo.setNome("Fernanda Teste Lista");
         ativo.setAtivo(true);
         ativo.setServicos(Set.of(corte));
         Jornada segunda = new Jornada();
@@ -62,20 +71,33 @@ class ProfissionalControllerListTest {
         profissionalRepository.save(ativo);
 
         Profissional inativo = new Profissional();
-        inativo.setNome("Inativo");
+        inativo.setNome("Inativo Teste Lista");
         inativo.setAtivo(false);
         profissionalRepository.save(inativo);
     }
 
     @Test
     void listsOnlyActiveProfissionaisWithServicosAndJornadaNoAuth() throws Exception {
-        mockMvc.perform(get("/api/profissionais"))
+        String body = mockMvc.perform(get("/api/profissionais"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].nome").value("Fernanda"))
-                .andExpect(jsonPath("$[0].servicoIds.length()").value(1))
-                .andExpect(jsonPath("$[0].jornada.length()").value(1))
-                .andExpect(jsonPath("$[0].jornada[0].diaSemana").value("MONDAY"));
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        JsonNode list = objectMapper.readTree(body);
+        JsonNode fernanda = null;
+        for (JsonNode item : list) {
+            String nome = item.get("nome").asString();
+            assertThat(nome).isNotEqualTo("Inativo Teste Lista");
+            if ("Fernanda Teste Lista".equals(nome)) {
+                fernanda = item;
+            }
+        }
+
+        assertThat(fernanda).as("Fernanda Teste Lista deve aparecer na listagem pública").isNotNull();
+        assertThat(fernanda.get("servicoIds")).hasSize(1);
+        assertThat(fernanda.get("jornada")).hasSize(1);
+        assertThat(fernanda.get("jornada").get(0).get("diaSemana").asString()).isEqualTo("MONDAY");
     }
 
     private Servico novoServico(String nome) {
