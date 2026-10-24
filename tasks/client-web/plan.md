@@ -28,7 +28,7 @@ Build the customer-facing pages and shared app infrastructure on top of the exis
 - [x] `docker compose up --build`: the frontend container can reach `GET /api/servicos` through its own origin (confirmed via `curl http://localhost:5173/api/servicos` matching the direct backend response) — proves the nginx reverse-proxy actually works, not just compiles. Also confirmed the Vite dev-server proxy independently.
 
 ### Phase 2: Public pages
-- [ ] Task 2: `ServicosPage` + `servicosService` — public list, loading/error states
+- [x] Task 2: `ServicosPage` + `servicosService` — public list, loading/error states
 
 ### Phase 3: Auth
 - [ ] Task 3: `LoginPage` + `RegisterPage` + `authService` + `AuthContext`'s real `login`/`register`/`logout` methods (Zod validation, token storage, backend error surfacing, e.g. 409 on duplicate email)

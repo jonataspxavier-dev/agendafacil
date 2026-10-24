@@ -45,19 +45,21 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-client-web.md](../../SPEC-client-w
 
 ---
 
-## Task 2: `ServicosPage`
+## Task 2: `ServicosPage` ✅
 
 **Description:** The public landing page: list active services, no login required.
 
 **Acceptance criteria:**
-- [ ] `services/servicosService.ts`: `listar()` calls `GET /api/servicos`
-- [ ] `pages/ServicosPage.tsx`: fetches on mount, shows a loading state, then the list (nome, descrição, duração, preço formatted via `Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })`), or an error message with a retry action on failure
-- [ ] Each service has an "Agendar" action that navigates to `/agendar` (carrying the chosen `servicoId`, e.g. via route state or a query param)
-- [ ] Route is public — not wrapped in `ProtectedRoute`
+- [x] `services/servicosService.ts`: `listar()` calls `GET /api/servicos`
+- [x] `pages/ServicosPage.tsx`: fetches on mount, shows a loading state, then the list (nome, descrição, duração, preço formatted via `Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })`), or an error message with a retry action on failure
+- [x] Each service has an "Agendar" action that navigates to `/agendar` (carrying the chosen `servicoId` via route state — read by `AgendarPage` in Task 4)
+- [x] Route (`/servicos`) is public — not wrapped in `ProtectedRoute`; `/` redirects to `/servicos`
 
 **Verification:**
-- [ ] Tests pass: `npm test` — `ServicosPage` renders a loading state then the list on a successful mocked fetch, and an error state on a failed one
-- [ ] Manual check: `docker compose up --build`, open the frontend with no login, see the 5 seeded services load
+- [x] Tests pass: `npm test` (7/7 — `ServicosPage` renders a loading state, then the list on a successful mocked fetch, then an error state with a retry button on a failed one) and `npm run build`
+- [x] Manual check: `docker compose up --build`, opened the frontend in the browser pane with no login, confirmed `/` redirects to `/servicos` and all 5 seeded services load with correct BRL formatting, no console errors. Checked mobile width (375px) too — no horizontal scroll, cards stack cleanly.
+
+**Bug found and fixed along the way:** the page rendered with a black background and barely-visible dark-on-dark text — `index.css` set no explicit body background/color, so it inherited the browser's dark `prefers-color-scheme` default instead of the app's intended light theme. Fixed with an explicit `background-color`/`color` on `body` in `index.css` (a durable fix, not page-specific).
 
 **Dependencies:** Task 1 (router shell)
 
@@ -65,6 +67,9 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-client-web.md](../../SPEC-client-w
 - `frontend/src/services/servicosService.ts`
 - `frontend/src/pages/ServicosPage.tsx`
 - `frontend/src/pages/ServicosPage.test.tsx`
+- `frontend/src/index.css` (explicit light background/text color)
+- `frontend/src/App.tsx` (`/` → `/servicos` redirect, route wired)
+- `frontend/src/App.test.tsx` (updated for the new redirect, mocking `servicosService`)
 
 **Estimated scope:** Small: 3 files
 
