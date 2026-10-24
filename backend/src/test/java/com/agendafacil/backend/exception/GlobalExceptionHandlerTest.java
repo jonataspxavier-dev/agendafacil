@@ -97,6 +97,17 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
+    void mapsInvalidRequestTo400() {
+        InvalidRequestException ex = new InvalidRequestException("servicoId inexistente: 999");
+
+        ResponseEntity<ErrorResponse> response = handler.handleInvalidRequest(ex, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody().status()).isEqualTo(400);
+        assertThat(response.getBody().message()).contains("999");
+    }
+
+    @Test
     void mapsUnhandledExceptionTo500() {
         RuntimeException ex = new RuntimeException("algo inesperado");
 

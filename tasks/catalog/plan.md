@@ -35,11 +35,11 @@ Servico and Profissional CRUD, backed by Flyway migrations `V5`-`V8`, with publi
 
 ### Phase 3: Profissional CRUD + associations + jornada
 - [x] Task 6: `GET /api/profissionais` (public, response includes `servicoIds` + `jornada`, optional paging) — depends on Task 3
-- [ ] Task 7: `POST`/`PUT`/`DELETE /api/profissionais` (`ROLE_ADMIN`, soft delete, atomic `servicoIds`+`jornada` replace on write) — depends on Task 1, Task 3
+- [x] Task 7: `POST`/`PUT`/`DELETE /api/profissionais` (`ROLE_ADMIN`, soft delete, atomic `servicoIds`+`jornada` replace on write) — depends on Task 1, Task 3
 
 ### Checkpoint: Profissional
-- [ ] Full CRUD cycle works via integration test, including linking services and setting jornada
-- [ ] Swagger shows `/api/profissionais/*`
+- [x] Full CRUD cycle works via integration test, including linking services and setting jornada
+- [x] Swagger shows `/api/profissionais/*`
 
 ### Phase 4: Seed + final checkpoint
 - [ ] Task 8: Seed migration (`V8`): 3 profissionais, 5 serviços, links, Mon-Sat jornadas — depends on Task 2, Task 3

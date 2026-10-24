@@ -161,21 +161,23 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-catalog.md](../../SPEC-catalog.md)
 
 ---
 
-## Task 7: `POST`/`PUT`/`DELETE /api/profissionais`
+## Task 7: `POST`/`PUT`/`DELETE /api/profissionais` ✅
 
 **Description:** Admin-only write endpoints. Create/update accept `servicoIds` + `jornada` and replace both atomically. `DELETE` sets `ativo = false`.
 
 **Acceptance criteria:**
-- [ ] `POST /api/profissionais` creates (with optional initial `servicoIds`/`jornada`), 201, `ROLE_ADMIN` only
-- [ ] `PUT /api/profissionais/{id}` replaces `servicoIds` (set-replace on the `@ManyToMany`) and `jornada` (delete-then-reinsert) atomically, 200, same auth rule
-- [ ] `DELETE /api/profissionais/{id}` sets `ativo = false`, 204, same auth rule
-- [ ] Referencing a nonexistent `servicoId` in the request → 400, not a silent drop
-- [ ] `ProfissionalRequest` validated (`nome` not blank)
-- [ ] Integration tests: full CRUD cycle as ADMIN including linking 2 services and setting 3 jornada entries; updating jornada replaces the old entries (not additive); 401/403 as no-token/CLIENTE
+- [x] `POST /api/profissionais` creates (with optional initial `servicoIds`/`jornada`), 201, `ROLE_ADMIN` only
+- [x] `PUT /api/profissionais/{id}` replaces `servicoIds` (set-replace on the `@ManyToMany`) and `jornada` (`.clear()` + re-add on the managed `List`, relying on `orphanRemoval = true`) atomically, 200, same auth rule
+- [x] `DELETE /api/profissionais/{id}` sets `ativo = false`, 204, same auth rule
+- [x] Referencing a nonexistent `servicoId` in the request → 400 (`InvalidRequestException`), not a silent drop
+- [x] `ProfissionalRequest` validated (`nome` not blank)
+- [x] Integration tests: full CRUD cycle as ADMIN linking 2 services and setting 3 jornada entries; updating to 1 jornada entry proves replace, not append; 401/403 as no-token/CLIENTE; 400 on unknown servicoId; 404 on nonexistent id
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
-- [ ] Manual check: `docker compose up`, full CRUD cycle via curl with an admin token, including a jornada update that proves old entries are gone (count check)
+- [x] Tests pass: `./mvnw test` (TDD red→green) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, created a professional with 3 jornada entries, updated to 1 — confirmed via curl that the response shows exactly 1, not 4
+
+**No mid-task split needed** — the plan flagged this as the module's largest task with a fallback to split into two commits if it grew unwieldy; the `.clear()` + re-add pattern for `jornada` and set-replace for `servicoIds` kept it to one coherent `aplicar()` method, so it shipped as planned.
 
 **Dependencies:** Task 1, Task 3
 
