@@ -41,7 +41,7 @@ Scaffold the AgendaFácil repo — git, backend (Spring Boot/Maven), frontend (V
 
 ### Phase 3: Wire it together
 - [x] Task 6: Flyway baseline migration + config pointed at Postgres (file written; DB verification blocked on Docker)
-- [ ] Task 7: docker-compose.yml (postgres + backend + frontend) with healthchecks
+- [x] Task 7: docker-compose.yml (postgres + backend + frontend) with healthchecks — written; `docker compose up` run itself blocked on Docker
 - [ ] Task 8: README.md stub + initial commit
 
 ### Checkpoint: Complete (module done)

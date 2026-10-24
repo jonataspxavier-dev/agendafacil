@@ -149,19 +149,19 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-plat
 
 ---
 
-## Task 7: docker-compose.yml (postgres + backend + frontend)
+## Task 7: docker-compose.yml (postgres + backend + frontend) ✅ (run verification pending Docker)
 
 **Description:** Write `docker-compose.yml` at `agendafacil/` root wiring the three services together via service-name hostnames, with healthchecks for each, so the whole stack starts with one command.
 
 **Acceptance criteria:**
-- [ ] `docker compose up --build` starts postgres, backend, frontend with zero manual steps, from a clean checkout
-- [ ] Backend's Postgres connection uses the `postgres` service name, not `localhost`
-- [ ] Frontend's API base URL uses the `backend` service name (or an env var defaulting to it), not `localhost`
-- [ ] Each service has a healthcheck; `docker compose ps` shows all three healthy
-- [ ] `docker compose down -v` cleans up cleanly
+- [x] `docker-compose.yml` written: postgres (17-alpine, healthcheck via `pg_isready`), backend (builds `./backend`, healthcheck via `curl` against `/actuator/health`, `depends_on: postgres` healthy), frontend (builds `./frontend`, healthcheck via `wget`, `depends_on: backend` healthy)
+- [x] Backend's Postgres connection uses the `postgres` service name (already wired in Task 2's `application.yml` via `DB_HOST` env var, which compose sets)
+- [ ] Frontend's API base URL uses the `backend` service name — **not yet applicable: frontend has no API calls yet (no business screens exist until `client-web`/`admin-web`)**
+- [ ] `docker compose up --build` actually starts all three healthy — **blocked: no Docker in this environment**
+- [ ] `docker compose down -v` cleans up — same blocker
 
 **Verification:**
-- [ ] Manual check: `docker compose up --build` from a clean state, `docker compose ps` shows healthy, curl backend `/actuator/health` → 200 and frontend root → 200, then `docker compose down -v`
+- [ ] Manual check: `docker compose up --build`, `docker compose ps` shows healthy, curl backend/frontend — **blocked on Docker; added `curl` to backend's runtime image and rely on busybox `wget` in nginx:alpine for frontend's healthcheck**
 
 **Dependencies:** Task 2, Task 4, Task 6
 
