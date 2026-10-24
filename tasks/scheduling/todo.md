@@ -136,16 +136,17 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-scheduling.md](../../SPEC-scheduli
 
 ---
 
-## Task 6: `PATCH /api/agendamentos/{id}/concluir`
+## Task 6: `PATCH /api/agendamentos/{id}/concluir` ✅
 
 **Description:** `ROLE_ADMIN`-only transition `AGENDADO` → `CONCLUIDO`, no time constraint.
 
 **Acceptance criteria:**
-- [ ] 401 no token, 403 CLIENTE token, 200 + `status = CONCLUIDO` for ADMIN
-- [ ] Only valid from `AGENDADO` (not from `CANCELADO`) — 409/400 otherwise
+- [x] 401 no token, 403 CLIENTE token, 200 + `status = CONCLUIDO` for ADMIN
+- [x] Only valid from `AGENDADO` (not from `CANCELADO`) — 400 otherwise
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
+- [x] Tests pass: `./mvnw test` (TDD red→green, 4/4) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, CLIENTE token → 403, ADMIN token → 200 with `status: "CONCLUIDO"`
 
 **Dependencies:** Task 4
 

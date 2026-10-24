@@ -128,6 +128,20 @@ public class AgendamentoService {
         return AgendamentoResponse.from(agendamentoRepository.save(agendamento));
     }
 
+    @Transactional
+    public AgendamentoResponse concluir(Long id) {
+        Agendamento agendamento = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado: " + id));
+
+        if (agendamento.getStatus() != StatusAgendamento.AGENDADO) {
+            throw new InvalidRequestException(
+                    "Agendamento não pode ser concluído (status atual: " + agendamento.getStatus() + ")");
+        }
+
+        agendamento.setStatus(StatusAgendamento.CONCLUIDO);
+        return AgendamentoResponse.from(agendamentoRepository.save(agendamento));
+    }
+
     private boolean cabeNaJanela(Jornada jornada, DayOfWeek diaSemana, LocalDateTime inicio, LocalDateTime fim) {
         return jornada.getDiaSemana() == diaSemana
                 && !inicio.toLocalTime().isBefore(jornada.getHoraInicio())

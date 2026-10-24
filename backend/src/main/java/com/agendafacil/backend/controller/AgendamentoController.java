@@ -6,6 +6,7 @@ import com.agendafacil.backend.service.AgendamentoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -33,5 +34,11 @@ public class AgendamentoController {
     @PatchMapping("/{id}/cancelar")
     public ResponseEntity<AgendamentoResponse> cancelar(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) {
         return ResponseEntity.ok(agendamentoService.cancelar(id, jwt));
+    }
+
+    @PatchMapping("/{id}/concluir")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<AgendamentoResponse> concluir(@PathVariable Long id) {
+        return ResponseEntity.ok(agendamentoService.concluir(id));
     }
 }
