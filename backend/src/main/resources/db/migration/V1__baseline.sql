@@ -1,0 +1,3 @@
+-- Intentionally empty. Schema ownership belongs to the identity/catalog
+-- modules (see CLAUDE.md for the Flyway naming convention). This migration
+-- only proves Flyway can reach and migrate against Postgres from this module.

@@ -127,17 +127,17 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-plat
 
 ---
 
-## Task 6: Flyway baseline migration + config
+## Task 6: Flyway baseline migration + config ✅ (DB verification pending Docker)
 
 **Description:** Add Flyway configuration pointing at the Postgres service, with a genuinely empty `V1__baseline.sql` (no tables — schema ownership belongs to `identity`/`catalog`). Confirm Flyway runs on backend startup against a real Postgres instance.
 
 **Acceptance criteria:**
-- [ ] `V1__baseline.sql` exists under `backend/src/main/resources/db/migration/` and contains no table definitions (a comment is fine)
-- [ ] Backend startup logs show Flyway successfully applying the baseline migration against Postgres
-- [ ] `flyway_schema_history` table exists in the database after startup
+- [x] `V1__baseline.sql` exists under `backend/src/main/resources/db/migration/` and contains no table definitions (a comment is fine)
+- [ ] Backend startup logs show Flyway successfully applying the baseline migration against Postgres — **blocked: needs Docker/Postgres**
+- [ ] `flyway_schema_history` table exists in the database after startup — same blocker
 
 **Verification:**
-- [ ] Manual check: run Postgres (container or local), start backend, confirm `flyway_schema_history` row for V1 exists
+- [ ] Manual check: run Postgres (container or local), start backend, confirm `flyway_schema_history` row for V1 exists — **blocked on Docker; revisit with Task 2's and Task 7's live checks once Docker is installed**
 
 **Dependencies:** Task 2
 
