@@ -4,6 +4,7 @@ import com.agendafacil.backend.dto.AgendamentoRequest;
 import com.agendafacil.backend.dto.AgendamentoResponse;
 import com.agendafacil.backend.entity.Agendamento;
 import com.agendafacil.backend.entity.Jornada;
+import com.agendafacil.backend.entity.Perfil;
 import com.agendafacil.backend.entity.Profissional;
 import com.agendafacil.backend.entity.Servico;
 import com.agendafacil.backend.entity.StatusAgendamento;
@@ -18,6 +19,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,6 +101,31 @@ public class AgendamentoService {
         }
 
         return AgendamentoResponse.from(agendamento);
+    }
+
+    @Transactional
+    public AgendamentoResponse cancelar(Long id, Jwt jwt) {
+        Usuario usuarioAutenticado = authService.getAuthenticatedUser(jwt);
+        Agendamento agendamento = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado: " + id));
+
+        boolean isAdmin = usuarioAutenticado.getPerfil() == Perfil.ADMIN;
+        boolean isDono = agendamento.getCliente().getId().equals(usuarioAutenticado.getId());
+        if (!isAdmin && !isDono) {
+            throw new AccessDeniedException("Você não pode cancelar o agendamento de outro usuário");
+        }
+
+        if (agendamento.getStatus() != StatusAgendamento.AGENDADO) {
+            throw new InvalidRequestException(
+                    "Agendamento não pode ser cancelado (status atual: " + agendamento.getStatus() + ")");
+        }
+
+        if (!agendamento.getInicio().isAfter(LocalDateTime.now().plusHours(2))) {
+            throw new InvalidRequestException("Cancelamento só é permitido até 2 horas antes do horário agendado");
+        }
+
+        agendamento.setStatus(StatusAgendamento.CANCELADO);
+        return AgendamentoResponse.from(agendamentoRepository.save(agendamento));
     }
 
     private boolean cabeNaJanela(Jornada jornada, DayOfWeek diaSemana, LocalDateTime inicio, LocalDateTime fim) {

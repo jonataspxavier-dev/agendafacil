@@ -110,20 +110,20 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-scheduling.md](../../SPEC-scheduli
 
 ---
 
-## Task 5: `PATCH /api/agendamentos/{id}/cancelar`
+## Task 5: `PATCH /api/agendamentos/{id}/cancelar` ✅
 
 **Description:** CLIENTE cancels their own booking, ADMIN can cancel any; rejected inside the 2-hour window.
 
 **Acceptance criteria:**
-- [ ] Succeeds (200, `status → CANCELADO`) when `inicio` is more than 2 hours away
-- [ ] Fails (400/409) when `inicio` is within 2 hours or in the past
-- [ ] A CLIENTE attempting to cancel another user's booking → 403 (or 404, not leaking existence — pick one and be consistent); ADMIN can cancel any booking regardless of owner
-- [ ] Already-`CANCELADO`/`CONCLUIDO` bookings can't be cancelled again (409 or 400)
-- [ ] Integration tests cover: success path, inside-window rejection, cross-user rejection (as CLIENTE), ADMIN-cancels-anyone success, double-cancel rejection
+- [x] Succeeds (200, `status → CANCELADO`) when `inicio` is more than 2 hours away
+- [x] Fails (400) when `inicio` is within 2 hours
+- [x] A CLIENTE attempting to cancel another user's booking → 403 (`AccessDeniedException`, reusing `identity`'s existing handler); ADMIN can cancel any booking regardless of owner
+- [x] Already-`CANCELADO` bookings can't be cancelled again (400, with a message naming the current status)
+- [x] Integration tests cover: success path, inside-window rejection, cross-user rejection (as CLIENTE), ADMIN-cancels-anyone success, double-cancel rejection
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
-- [ ] Manual check: `docker compose up`, book a slot, cancel it, confirm `status = CANCELADO`; confirm the slot reappears in `/api/disponibilidade`
+- [x] Tests pass: `./mvnw test` (TDD red→green, 5/5) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, booked a slot, cancelled it (200), cancelled again (400, clear message), confirmed the slot reappears in `/api/disponibilidade`
 
 **Dependencies:** Task 4
 

@@ -42,7 +42,7 @@ Build `disponibilidade` (availability calculation) and the full `agendamento` li
 - [x] Swagger shows `POST /api/agendamentos`
 
 ### Phase 4: Lifecycle + listing
-- [ ] Task 5: `PATCH /api/agendamentos/{id}/cancelar` (ownership check, 2-hour window) — depends on Task 4
+- [x] Task 5: `PATCH /api/agendamentos/{id}/cancelar` (ownership check, 2-hour window) — depends on Task 4
 - [ ] Task 6: `PATCH /api/agendamentos/{id}/concluir` (`ROLE_ADMIN`) — depends on Task 4
 - [ ] Task 7: `GET /api/agendamentos/meus` (own bookings only) — depends on Task 4
 - [ ] Task 8: `GET /api/admin/agendamentos` (`ROLE_ADMIN`, `data`/`status`/paging filters) — depends on Task 4
