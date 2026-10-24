@@ -28,9 +28,10 @@ export function LoginPage() {
   async function onSubmit(values: LoginFormValues) {
     setErro(null)
     try {
-      await login(values.email, values.senha)
+      const usuario = await login(values.email, values.senha)
       const state = location.state as { from?: { pathname?: string } } | null
-      navigate(state?.from?.pathname ?? '/servicos', { replace: true })
+      const destinoPadrao = usuario.perfil === 'ADMIN' ? '/admin/dashboard' : '/servicos'
+      navigate(state?.from?.pathname ?? destinoPadrao, { replace: true })
     } catch (error) {
       setErro(extractErrorMessage(error))
     }

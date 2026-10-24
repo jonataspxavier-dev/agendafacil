@@ -23,6 +23,7 @@ function renderLoginPage(authValue: AuthContextValue) {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/servicos" element={<div>Página de serviços</div>} />
+          <Route path="/admin/dashboard" element={<div>Painel admin</div>} />
         </Routes>
       </MemoryRouter>
     </AuthContext.Provider>,
@@ -43,7 +44,9 @@ describe('LoginPage', () => {
   })
 
   it('calls login with the form values and redirects to /servicos on success', async () => {
-    const login = vi.fn().mockResolvedValue(undefined)
+    const login = vi
+      .fn()
+      .mockResolvedValue({ id: 1, nome: 'Cliente Teste', email: 'cliente@example.com', perfil: 'CLIENTE' })
     renderLoginPage(authStub({ login }))
 
     fireEvent.change(screen.getByLabelText(/e-mail/i), { target: { value: 'cliente@example.com' } })
@@ -55,6 +58,21 @@ describe('LoginPage', () => {
     })
     await waitFor(() => {
       expect(screen.getByText('Página de serviços')).toBeInTheDocument()
+    })
+  })
+
+  it('redirects an ADMIN user to /admin/dashboard on success', async () => {
+    const login = vi
+      .fn()
+      .mockResolvedValue({ id: 2, nome: 'Admin Teste', email: 'admin@example.com', perfil: 'ADMIN' })
+    renderLoginPage(authStub({ login }))
+
+    fireEvent.change(screen.getByLabelText(/e-mail/i), { target: { value: 'admin@example.com' } })
+    fireEvent.change(screen.getByLabelText(/senha/i), { target: { value: 'senha123' } })
+    fireEvent.click(screen.getByRole('button', { name: /entrar/i }))
+
+    await waitFor(() => {
+      expect(screen.getByText('Painel admin')).toBeInTheDocument()
     })
   })
 

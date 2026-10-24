@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 
 export function Nav() {
-  const { isAuthenticated, logout } = useAuth()
+  const { user, isAuthenticated, logout } = useAuth()
   const navigate = useNavigate()
 
   async function sair() {
@@ -16,8 +16,26 @@ export function Nav() {
         <Link to="/servicos" className="text-lg font-semibold text-slate-900">
           AgendaFácil
         </Link>
-        <nav className="flex items-center gap-4 text-sm">
-          {isAuthenticated ? (
+        <nav className="flex flex-wrap items-center gap-4 text-sm">
+          {isAuthenticated && user?.perfil === 'ADMIN' ? (
+            <>
+              <Link to="/admin/dashboard" className="text-slate-700 hover:text-slate-900">
+                Dashboard
+              </Link>
+              <Link to="/admin/servicos" className="text-slate-700 hover:text-slate-900">
+                Serviços
+              </Link>
+              <Link to="/admin/profissionais" className="text-slate-700 hover:text-slate-900">
+                Profissionais
+              </Link>
+              <Link to="/admin/agendamentos" className="text-slate-700 hover:text-slate-900">
+                Agendamentos
+              </Link>
+              <button type="button" onClick={sair} className="text-slate-700 hover:text-slate-900">
+                Sair
+              </button>
+            </>
+          ) : isAuthenticated ? (
             <>
               <Link to="/meus-agendamentos" className="text-slate-700 hover:text-slate-900">
                 Meus agendamentos

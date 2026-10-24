@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { AdminRoute } from '@/components/AdminRoute'
 import { Layout } from '@/components/Layout'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { AuthProvider } from '@/contexts/AuthContext'
@@ -32,6 +33,38 @@ function App() {
                 <ProtectedRoute>
                   <MeusAgendamentosPage />
                 </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/dashboard"
+              element={
+                <AdminRoute>
+                  <div>Dashboard admin</div>
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/servicos"
+              element={
+                <AdminRoute>
+                  <div>Serviços admin</div>
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/profissionais"
+              element={
+                <AdminRoute>
+                  <div>Profissionais admin</div>
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/agendamentos"
+              element={
+                <AdminRoute>
+                  <div>Agendamentos admin</div>
+                </AdminRoute>
               }
             />
           </Routes>

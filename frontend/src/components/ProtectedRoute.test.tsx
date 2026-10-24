@@ -5,6 +5,7 @@ import { AuthContext, type AuthContextValue } from '@/contexts/AuthContext'
 import { ProtectedRoute } from './ProtectedRoute'
 
 const noop = async () => {}
+const noopLogin = async () => ({ id: 1, nome: 'Teste', email: 'teste@example.com', perfil: 'CLIENTE' as const })
 
 function renderProtected(value: AuthContextValue) {
   return render(
@@ -32,7 +33,7 @@ describe('ProtectedRoute', () => {
       user: null,
       isAuthenticated: false,
       isLoading: false,
-      login: noop,
+      login: noopLogin,
       register: noop,
       logout: noop,
     })
@@ -45,7 +46,7 @@ describe('ProtectedRoute', () => {
       user: { id: 1, nome: 'Cliente Teste', email: 'cliente@example.com', perfil: 'CLIENTE' },
       isAuthenticated: true,
       isLoading: false,
-      login: noop,
+      login: noopLogin,
       register: noop,
       logout: noop,
     })
@@ -58,7 +59,7 @@ describe('ProtectedRoute', () => {
       user: null,
       isAuthenticated: false,
       isLoading: true,
-      login: noop,
+      login: noopLogin,
       register: noop,
       logout: noop,
     })

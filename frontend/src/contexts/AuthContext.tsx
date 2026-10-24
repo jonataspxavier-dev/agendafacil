@@ -7,7 +7,7 @@ export interface AuthContextValue {
   user: Usuario | null
   isAuthenticated: boolean
   isLoading: boolean
-  login: (email: string, senha: string) => Promise<void>
+  login: (email: string, senha: string) => Promise<Usuario>
   register: (nome: string, email: string, senha: string) => Promise<void>
   logout: () => Promise<void>
 }
@@ -52,6 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     storeTokens(tokens)
     const usuario = await authService.me()
     setUser(usuario)
+    return usuario
   }
 
   async function register(nome: string, email: string, senha: string) {
