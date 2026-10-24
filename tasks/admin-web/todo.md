@@ -118,18 +118,18 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-admin-web.md](../../SPEC-admin-web
 
 ---
 
-## Task 5: `AdminAgendamentosPage`
+## Task 5: `AdminAgendamentosPage` ✅
 
 **Description:** The system-wide bookings list: filters, pagination, and the `concluir`/`cancelar` actions.
 
 **Acceptance criteria:**
-- [ ] `services/adminAgendamentosService.ts`: `listar({ data?, status?, page, size })` → `GET /api/admin/agendamentos` with those exact query params; `concluir(id)` → `PATCH /api/agendamentos/{id}/concluir`; `cancelar(id)` → `PATCH /api/agendamentos/{id}/cancelar` (same endpoint `client-web`'s `agendamentosService.cancelar` already calls — reuse that function rather than duplicating it)
-- [ ] `pages/admin/AdminAgendamentosPage.tsx`: a `data` filter (date input), a `status` filter (select: all/AGENDADO/CANCELADO/CONCLUIDO), and pagination controls (page/size), all reflected in the `listar` call; results show service, professional, client... (whatever `AgendamentoResponse` exposes), status, price
-- [ ] "Concluir" shown only on `AGENDADO` rows (admin-only action, already enforced server-side too); "Cancelar" shown only on `AGENDADO` rows; both update that row in place on success, surface the backend's error inline on failure (e.g. cancelling inside the 2h window)
+- [x] `services/adminAgendamentosService.ts`: `listar({ data?, status?, page, size })` → `GET /api/admin/agendamentos` with those exact query params; `concluir(id)` → `PATCH /api/agendamentos/{id}/concluir`; `cancelar(id)` → `PATCH /api/agendamentos/{id}/cancelar` (re-exports `client-web`'s `agendamentosService.cancelar` rather than duplicating it — confirmed Vitest's automocking handles the re-export transparently)
+- [x] `pages/admin/AdminAgendamentosPage.tsx`: a `data` filter (date input), a `status` filter (select: all/AGENDADO/CANCELADO/CONCLUIDO), and pagination controls (Anterior/Próxima + page indicator, fixed page size of 10), all reflected in the `listar` call; changing a filter resets to page 0; results show service, professional, date/time, status, price (`AgendamentoResponse` exposes no client name, so none shown)
+- [x] "Concluir" shown only on `AGENDADO` rows (admin-only action, already enforced server-side too); "Cancelar" shown only on `AGENDADO` rows; both update that row in place on success, surface the backend's error inline on failure (e.g. cancelling inside the 2h window)
 
 **Verification:**
-- [ ] Tests pass: `npm test` — changing a filter or page control calls `listar` with the exact right params; `concluir`/`cancelar` call the right endpoint with the right id and update that row; a failure surfaces inline
-- [ ] Manual check: `docker compose up --build`, book a few slots as a client (different dates/statuses), confirm the admin list's `data`/`status` filters and pagination behave correctly, and that concluding/cancelling from the admin list actually changes the booking's real status
+- [x] Tests pass: `npm test` (58/58 — changing a filter or page control calls `listar` with the exact right params; `concluir`/`cancelar` call the right endpoint with the right id and update that row; a failure surfaces inline) and `npm run build`
+- [x] Manual check: `docker compose up --build`, booked two fresh slots as a client on 2026-10-28, then from the admin list: `status=CANCELADO` filter matched a direct API call exactly (3 results); `data=2026-10-28` filter narrowed to exactly those 2 fresh bookings; concluded one (status updated to "Concluído" in place, actions disappeared) and cancelled the other (updated to "Cancelado" in place) — both confirmed as real status changes. No unexpected console errors.
 
 **Dependencies:** Task 1
 

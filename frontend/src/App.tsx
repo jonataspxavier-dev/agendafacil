@@ -5,6 +5,7 @@ import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { AgendarPage } from '@/pages/AgendarPage'
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage'
+import { AdminAgendamentosPage } from '@/pages/admin/AdminAgendamentosPage'
 import { AdminProfissionaisPage } from '@/pages/admin/AdminProfissionaisPage'
 import { AdminServicosPage } from '@/pages/admin/AdminServicosPage'
 import { LoginPage } from '@/pages/LoginPage'
@@ -66,7 +67,7 @@ function App() {
               path="/admin/agendamentos"
               element={
                 <AdminRoute>
-                  <div>Agendamentos admin</div>
+                  <AdminAgendamentosPage />
                 </AdminRoute>
               }
             />

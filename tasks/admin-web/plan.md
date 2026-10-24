@@ -40,7 +40,7 @@ The admin-facing half of the shared `frontend/` app: `/admin/dashboard`, `/admin
 - [x] A profissional's jornada edited through the UI is correctly reflected in `GET /api/disponibilidade` results (proves the jornada row editor produces a correct `JornadaRequest[]`, not just that the form "looks right") — verified with a Tuesday-only 10:00-14:00 jornada: Tuesday returned exactly the 8 expected half-hour slots, Monday returned zero
 
 ### Phase 4: Bookings list
-- [ ] Task 5: `AdminAgendamentosPage` + `adminAgendamentosService` (`listar` with `data`/`status`/paging params, `concluir`, `cancelar`)
+- [x] Task 5: `AdminAgendamentosPage` + `adminAgendamentosService` (`listar` with `data`/`status`/paging params, `concluir`, `cancelar`)
 
 ### Phase 5: Polish + end-to-end verification
 - [ ] Task 6: Full manual admin walkthrough against `docker compose up --build`: log in as admin → dashboard shows real numbers → create and edit a serviço → create a profissional with jornada and servicoIds → deactivate one of each → filter/page the bookings list → conclude and cancel a booking from the admin list
