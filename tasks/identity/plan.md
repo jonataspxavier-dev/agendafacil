@@ -29,11 +29,11 @@ Build register/login/refresh/logout with JWT, backed by Postgres via Flyway migr
 ### Phase 2: Register, login, JWT validation
 - [x] Task 3: Register endpoint (`POST /api/auth/register`) — depends on Task 1, Task 2
 - [x] Task 4: JWT issuing infra + login (`JwtConfig`, rewritten `SecurityConfig`, `POST /api/auth/login` issuing an access token) — depends on Task 1, Task 2
-- [ ] Task 5: `GET /api/auth/me` — proves JWT validation + role claim readable — depends on Task 4
+- [x] Task 5: `GET /api/auth/me` — proves JWT validation + role claim readable — depends on Task 4
 
 ### Checkpoint: Core auth
-- [ ] Register → login → call `/api/auth/me` with the access token works end-to-end in an integration test
-- [ ] Swagger UI shows `/api/auth/register`, `/api/auth/login`, `/api/auth/me` with request/response schemas
+- [x] Register → login → call `/api/auth/me` with the access token works end-to-end in an integration test and via docker compose
+- [x] Swagger UI shows `/api/auth/register`, `/api/auth/login`, `/api/auth/me` with request/response schemas
 
 ### Phase 3: Refresh token lifecycle
 - [ ] Task 6: `refresh_token` schema (`V3`) + `RefreshToken` entity + `RefreshTokenRepository` — depends on Task 2

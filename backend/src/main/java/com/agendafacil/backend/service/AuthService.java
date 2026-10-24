@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -64,6 +65,12 @@ public class AuthService {
         }
 
         return new AuthResponse(issueAccessToken(usuario), accessTokenTtlMinutes * 60);
+    }
+
+    public Usuario getAuthenticatedUser(Jwt jwt) {
+        Long id = Long.valueOf(jwt.getSubject());
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Usuário do token não encontrado: " + id));
     }
 
     private String issueAccessToken(Usuario usuario) {

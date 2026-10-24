@@ -117,17 +117,20 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-identity.md](../../SPEC-identity.m
 
 ---
 
-## Task 5: `GET /api/auth/me`
+## Task 5: `GET /api/auth/me` ✅
 
 **Description:** Protected endpoint returning the authenticated user's own profile. Proves the JWT filter chain and role claim work end-to-end.
 
 **Acceptance criteria:**
-- [ ] `GET /api/auth/me` returns 401 with no token, 200 with a valid token
-- [ ] Response body includes `nome`, `email`, `perfil` (no password hash) — reuses `UsuarioResponse` DTO from Task 3
-- [ ] Integration test: register → login → call `/api/auth/me` with the access token → 200 with matching data
+- [x] `GET /api/auth/me` returns 401 with no token, 200 with a valid token
+- [x] Response body includes `nome`, `email`, `perfil` (no password hash) — reuses `UsuarioResponse` DTO from Task 3
+- [x] Integration test: register → login → call `/api/auth/me` with the access token → 200 with matching data; invalid token → 401
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
+- [x] Tests pass: `./mvnw test` (TDD red→green, 3/3) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, register→login→`/me` without token (401) and with token (200) via curl; `/v3/api-docs` confirms all three `/api/auth/*` operations are documented
+
+**Also required:** narrowed `SecurityConfig`'s `permitAll` from `/api/auth/**` to the two actually-public paths (`/api/auth/register`, `/api/auth/login`), so `/me` (and later `/logout`) fall under `anyRequest().authenticated()`.
 
 **Dependencies:** Task 4
 
