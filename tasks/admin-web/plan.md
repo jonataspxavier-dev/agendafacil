@@ -29,7 +29,7 @@ The admin-facing half of the shared `frontend/` app: `/admin/dashboard`, `/admin
 - [x] `docker compose up --build`: logging in as the seeded admin (`admin@agendafacil.com`) redirects to `/admin/dashboard`; logging in as a CLIENTE and manually visiting `/admin/dashboard` redirects to `/servicos`; logging out and visiting it redirects to `/login`
 
 ### Phase 2: Dashboard
-- [ ] Task 2: `AdminDashboardPage` + `dashboardService` + a hand-built `BarChart` component for `topServicos`
+- [x] Task 2: `AdminDashboardPage` + `dashboardService` + a hand-built `BarChart` component for `topServicos`
 
 ### Phase 3: Catalog CRUD
 - [ ] Task 3: `AdminServicosPage` + `servicosAdminService` (`criar`/`atualizar`/`desativar`) — create/edit form, deactivate action, list updates immediately

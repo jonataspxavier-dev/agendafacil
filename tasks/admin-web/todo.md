@@ -34,18 +34,18 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-admin-web.md](../../SPEC-admin-web
 
 ---
 
-## Task 2: `AdminDashboardPage`
+## Task 2: `AdminDashboardPage` ✅
 
 **Description:** Real numbers from `GET /api/admin/dashboard`, plus a minimal bar chart for top services.
 
 **Acceptance criteria:**
-- [ ] `services/dashboardService.ts`: `obter()` → `GET /api/admin/dashboard`
-- [ ] `components/BarChart.tsx`: takes `{ label: string; value: number }[]`, renders one bar per item with width proportional to the max value in the set (plain `<div>`s + Tailwind, no library)
-- [ ] `pages/admin/AdminDashboardPage.tsx`: fetches on mount, loading/error states (reusing `LoadingSpinner`/`ErrorMessage`); shows `agendamentosHoje` and `faturamentoMes` (formatted via `Intl.NumberFormat`) as simple stat displays, and `topServicos` through `BarChart`
+- [x] `services/dashboardService.ts`: `obter()` → `GET /api/admin/dashboard`
+- [x] `components/BarChart.tsx`: takes `{ label: string; value: number }[]`, renders one bar per item with width proportional to the max value in the set (plain `<div>`s + Tailwind, no library) — each bar exposes `role="progressbar"`/`aria-valuenow` for both accessibility and testability
+- [x] `pages/admin/AdminDashboardPage.tsx`: fetches on mount, loading/error states (reusing `LoadingSpinner`/`ErrorMessage`); shows `agendamentosHoje` and `faturamentoMes` (formatted via `Intl.NumberFormat`) as simple stat displays, and `topServicos` through `BarChart`
 
 **Verification:**
-- [ ] Tests pass: `npm test` — `AdminDashboardPage` renders the three figures from a mocked `dashboardService.obter()`; `BarChart`'s bar widths are proportional to given values (e.g. a value half the max renders at ~50% width)
-- [ ] Manual check: `docker compose up --build`, log in as admin, confirm `/admin/dashboard` shows real figures matching a direct `GET /api/admin/dashboard` call
+- [x] Tests pass: `npm test` (37/37 — `AdminDashboardPage` renders the three figures from a mocked `dashboardService.obter()`; `BarChart`'s bar widths are proportional to given values, confirmed exact percentages for max/half-max/zero) and `npm run build`
+- [x] Manual check: `docker compose up --build`, logged in as admin, confirmed `/admin/dashboard` shows real figures (`agendamentosHoje: 2`, `faturamentoMes: R$ 50,00`, one bar for Corte de Cabelo) matching a direct `GET /api/admin/dashboard` call exactly. Checked mobile width (375px) — stat cards stack cleanly, no horizontal scroll.
 
 **Dependencies:** Task 1
 
