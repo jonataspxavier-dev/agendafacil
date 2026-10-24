@@ -26,20 +26,20 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-plat
 
 ---
 
-## Task 2: Backend Spring Boot scaffold + Dockerfile
+## Task 2: Backend Spring Boot scaffold + Dockerfile ✅ (build verified; live check pending Docker)
 
-**Description:** Generate the Spring Boot 3.x / Java 21 Maven project in `backend/` with Web, Data JPA, Security, Validation, Flyway, PostgreSQL driver, Actuator, and springdoc-openapi dependencies. Create the empty package skeleton (`controller/`, `service/`, `repository/`, `dto/`, `entity/`, `security/`, `exception/`) with no business classes. Add a `Dockerfile` that builds and runs the jar.
+**Description:** Generate the Spring Boot (4.0.9 — see Architecture Decisions in plan.md) / Java 21 Maven project in `backend/` with Web, Data JPA, Security, Validation, Flyway, PostgreSQL driver, Actuator, and springdoc-openapi dependencies. Create the empty package skeleton (`controller/`, `service/`, `repository/`, `dto/`, `entity/`, `security/`, `exception/`) with no business classes. Add a `Dockerfile` that builds and runs the jar.
 
 **Acceptance criteria:**
-- [ ] `./mvnw clean verify` succeeds with no business logic
-- [ ] `GET /actuator/health` returns 200 when run locally
-- [ ] `/swagger-ui.html` is reachable (empty — no endpoints yet)
-- [ ] All seven package directories exist, empty except for a `.gitkeep` or package-info if needed
-- [ ] `backend/Dockerfile` builds a runnable image
+- [x] `./mvnw clean verify` succeeds with no business logic
+- [ ] `GET /actuator/health` returns 200 when run locally — **blocked: needs a reachable Postgres; app can't boot without Docker/Flyway target. Revisit once Docker is installed (Task 7).**
+- [ ] `/swagger-ui.html` is reachable — same blocker as above
+- [x] All seven package directories exist, empty except for `.gitkeep` (security/ got a real `SecurityConfig.java` instead)
+- [x] `backend/Dockerfile` builds a runnable image (image build itself not yet tested — needs Docker)
 
 **Verification:**
-- [ ] Build succeeds: `./mvnw clean verify` (from `backend/`)
-- [ ] Manual check: `./mvnw spring-boot:run`, curl `/actuator/health` → 200, open `/swagger-ui.html` → loads
+- [x] Build succeeds: `./mvnw clean verify` (from `backend/`) — passes, jar produced
+- [ ] Manual check: `./mvnw spring-boot:run`, curl `/actuator/health` → 200, open `/swagger-ui.html` → loads — **blocked on Docker/Postgres, see above**
 
 **Dependencies:** Task 1
 
