@@ -85,20 +85,22 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-identity.md](../../SPEC-identity.m
 
 ---
 
-## Task 4: JWT issuing infra + login
+## Task 4: JWT issuing infra + login ✅
 
 **Description:** `JwtConfig` (HS256 `JwtEncoder`/`JwtDecoder` beans from a `JWT_SECRET` env var), rewritten `SecurityConfig` (JWT resource-server auth, keeping `platform-setup`'s infra `permitAll` rules), and `POST /api/auth/login` issuing an access token (15 min) with the user's id/role as claims. Refresh token issuance is Task 7 — this task's login returns just the access token for now (`AuthResponse.refreshToken` added in Task 7).
 
 **Acceptance criteria:**
-- [ ] `JwtConfig` provides `JwtEncoder`/`JwtDecoder` beans using an HMAC-SHA256 key from `JWT_SECRET` (env var, with a local-dev default like `platform-setup`'s `DB_PASSWORD` pattern)
-- [ ] `SecurityConfig` uses `oauth2ResourceServer(oauth2 -> oauth2.jwt(...))`; `/actuator/health`, `/swagger-ui/**`, `/v3/api-docs/**`, and now `/api/auth/**` are `permitAll`; everything else requires authentication
-- [ ] Access token claims include `sub` (user id), `email`, `role`; expires in 15 minutes
-- [ ] `AuthController.login` returns 200 with the access token on correct credentials, and the `GlobalExceptionHandler`'s 401 shape on wrong password
-- [ ] Integration test: login with correct/wrong password → 200/401
+- [x] `JwtConfig` provides `JwtEncoder`/`JwtDecoder` beans using an HMAC-SHA256 key from `JWT_SECRET` (env var, local-dev default in `application.yml`)
+- [x] `SecurityConfig` uses `oauth2ResourceServer(oauth2 -> oauth2.jwt(...))` with a `JwtAuthenticationConverter` mapping the `role` claim to a `ROLE_*` authority; `/actuator/health`, `/swagger-ui/**`, `/v3/api-docs/**`, `/api/auth/**` are `permitAll`; everything else requires authentication
+- [x] Access token claims include `sub` (user id), `email`, `role`; expires in 15 minutes (`app.jwt.access-token-ttl-minutes`)
+- [x] `AuthController.login` returns 200 with the access token on correct credentials, and the `GlobalExceptionHandler`'s 401 shape on wrong password or unknown email
+- [x] Integration test: login with correct/wrong password/unknown email → 200/401/401; token claims asserted directly from the decoded JWT payload
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
-- [ ] Manual check: `docker compose up`, register then login via curl, confirm a JWT comes back and `/actuator/health` and `/swagger-ui.html` still work unauthenticated (SecurityConfig rewrite didn't regress `platform-setup`'s checkpoint)
+- [x] Tests pass: `./mvnw test` (TDD red→green, 4/4 in `AuthControllerLoginTest`) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, curl register → login → got a real JWT; `/actuator/health` (200) and `/swagger-ui.html` (200) still work unauthenticated — `SecurityConfig` rewrite did not regress `platform-setup`'s checkpoint
+
+**Also required (discovered during implementation):** no third-party JWT library needed — `spring-security-oauth2-jose` + `nimbus-jose-jwt` came transitively via `spring-boot-starter-security-oauth2-resource-server`, confirming the SPEC's Open Question #4 decision was viable without extra dependencies.
 
 **Dependencies:** Task 1, Task 2
 

@@ -1,5 +1,7 @@
 package com.agendafacil.backend.controller;
 
+import com.agendafacil.backend.dto.AuthResponse;
+import com.agendafacil.backend.dto.LoginRequest;
 import com.agendafacil.backend.dto.RegisterRequest;
 import com.agendafacil.backend.dto.UsuarioResponse;
 import com.agendafacil.backend.entity.Usuario;
@@ -26,5 +28,10 @@ public class AuthController {
     public ResponseEntity<UsuarioResponse> register(@Valid @RequestBody RegisterRequest request) {
         Usuario usuario = authService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioResponse.from(usuario));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authService.login(request));
     }
 }
