@@ -18,7 +18,7 @@ Source brief: [`../projeto-2-agendamentos-react-spring.md`](../projeto-2-agendam
 
 | Module | Spec status |
 |---|---|
-| `platform-setup` | All 8 tasks implemented; 4 success criteria (live health/Swagger, Testcontainers smoke test, `docker compose up`) blocked on Docker Desktop install |
+| `platform-setup` | Done — all 8 tasks implemented and verified (Docker installed; `docker compose up --build` confirmed all 3 services healthy). Pending: human review before starting `identity` |
 | `identity` | Not started |
 | `catalog` | Not started |
 | `scheduling` | Not started |

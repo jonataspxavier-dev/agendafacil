@@ -22,34 +22,34 @@ Scaffold the AgendaFácil repo — git, backend (Spring Boot/Maven), frontend (V
 
 ### Phase 1: Repo foundation
 - [x] Task 1: Git init + top-level structure + CLAUDE.md
-- [ ] Task 2: Backend Spring Boot scaffold + Dockerfile
+- [x] Task 2: Backend Spring Boot scaffold + Dockerfile
 
 ### Checkpoint: Phase 1
-- [ ] `./mvnw clean verify` succeeds in `backend/`
-- [ ] `backend/` has no business entities, only the Spring Boot skeleton
-- [ ] CLAUDE.md documents layering, DTO, and testing conventions
+- [x] `./mvnw clean verify` succeeds in `backend/`
+- [x] `backend/` has no business entities, only the Spring Boot skeleton
+- [x] CLAUDE.md documents layering, DTO, and testing conventions
 
 ### Phase 2: Test infra + frontend
-- [x] Task 3: Backend test infra (JUnit 5, Mockito, Testcontainers) with zero test cases — dependency wiring done; container smoke test still blocked on Docker
+- [x] Task 3: Backend test infra (JUnit 5, Mockito, Testcontainers) with zero test cases — Testcontainers smoke test verified against a real Postgres container
 - [x] Task 4: Frontend Vite+TS scaffold + libs (Router, Axios, RHF, Zod, Tailwind) + Dockerfile
 - [x] Task 5: Frontend test infra (Vitest + RTL) with zero test cases
 
 ### Checkpoint: Phase 2
-- [ ] `./mvnw test` passes clean (0 tests)
-- [ ] `npm test` passes clean (0 tests)
-- [ ] `npm run build` and `npm run lint` succeed in `frontend/`
+- [x] `./mvnw test` passes clean
+- [x] `npm test` passes clean
+- [x] `npm run build` and `npm run lint` succeed in `frontend/`
 
 ### Phase 3: Wire it together
-- [x] Task 6: Flyway baseline migration + config pointed at Postgres (file written; DB verification blocked on Docker)
-- [x] Task 7: docker-compose.yml (postgres + backend + frontend) with healthchecks — written; `docker compose up` run itself blocked on Docker
+- [x] Task 6: Flyway baseline migration + config pointed at Postgres — verified applying against real Postgres (Testcontainers and docker compose)
+- [x] Task 7: docker-compose.yml (postgres + backend + frontend) with healthchecks — verified, all three services healthy
 - [x] Task 8: README.md stub + initial commit
 
 ### Checkpoint: Complete (module done)
-- [ ] `docker compose up --build` starts all three services with zero manual steps
-- [ ] Backend `/actuator/health` returns 200
-- [ ] Frontend dev server responds 200
-- [ ] Swagger UI reachable (empty)
-- [ ] All SPEC-platform-setup.md success criteria checked off
+- [x] `docker compose up --build` starts all three services with zero manual steps
+- [x] Backend `/actuator/health` returns 200
+- [x] Frontend dev server responds 200
+- [x] Swagger UI reachable (empty)
+- [x] All SPEC-platform-setup.md success criteria checked off
 - [ ] Human review before starting `identity`
 
 ## Risks and Mitigations

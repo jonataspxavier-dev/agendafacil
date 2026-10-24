@@ -26,20 +26,20 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-plat
 
 ---
 
-## Task 2: Backend Spring Boot scaffold + Dockerfile ✅ (build verified; live check pending Docker)
+## Task 2: Backend Spring Boot scaffold + Dockerfile ✅
 
 **Description:** Generate the Spring Boot (4.0.9 — see Architecture Decisions in plan.md) / Java 21 Maven project in `backend/` with Web, Data JPA, Security, Validation, Flyway, PostgreSQL driver, Actuator, and springdoc-openapi dependencies. Create the empty package skeleton (`controller/`, `service/`, `repository/`, `dto/`, `entity/`, `security/`, `exception/`) with no business classes. Add a `Dockerfile` that builds and runs the jar.
 
 **Acceptance criteria:**
 - [x] `./mvnw clean verify` succeeds with no business logic
-- [ ] `GET /actuator/health` returns 200 when run locally — **blocked: needs a reachable Postgres; app can't boot without Docker/Flyway target. Revisit once Docker is installed (Task 7).**
-- [ ] `/swagger-ui.html` is reachable — same blocker as above
+- [x] `GET /actuator/health` returns 200 when run locally — verified via `docker compose up`: `{"status":"UP"}`
+- [x] `/swagger-ui.html` is reachable — verified: redirects to `/swagger-ui/index.html`, loads in browser, "No operations defined in spec!" (expected, no business endpoints yet)
 - [x] All seven package directories exist, empty except for `.gitkeep` (security/ got a real `SecurityConfig.java` instead)
-- [x] `backend/Dockerfile` builds a runnable image (image build itself not yet tested — needs Docker)
+- [x] `backend/Dockerfile` builds a runnable image — verified via `docker compose up --build`
 
 **Verification:**
 - [x] Build succeeds: `./mvnw clean verify` (from `backend/`) — passes, jar produced
-- [ ] Manual check: `./mvnw spring-boot:run`, curl `/actuator/health` → 200, open `/swagger-ui.html` → loads — **blocked on Docker/Postgres, see above**
+- [x] Manual check: via `docker compose up --build`, curl `/actuator/health` → 200, `/swagger-ui.html` → loads (confirmed in-browser)
 
 **Dependencies:** Task 1
 
@@ -53,18 +53,18 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-plat
 
 ---
 
-## Task 3: Backend test infra (JUnit 5, Mockito, Testcontainers) ✅ (container smoke test pending Docker)
+## Task 3: Backend test infra (JUnit 5, Mockito, Testcontainers) ✅
 
 **Description:** Wire JUnit 5, Mockito, and Testcontainers (Postgres module) onto the Maven classpath with a working Testcontainers base config, so `identity` can add its first `@Test` without touching build config.
 
 **Acceptance criteria:**
-- [x] `./mvnw test` runs clean with zero `@Test` methods
-- [ ] A Testcontainers Postgres container can start successfully in a throwaway smoke test — **blocked: needs Docker to actually spin up a container**
+- [x] `./mvnw test` runs clean with zero `@Test` methods (initial run) and with 1 Testcontainers-backed test (final run)
+- [x] A Testcontainers Postgres container can start successfully in a throwaway smoke test — verified: `AgendaFacilBackendApplicationTests` starts a real `postgres:17-alpine` container, 1/1 passing
 - [x] Dependencies are scoped `test` only (`spring-boot-testcontainers`, `testcontainers-junit-jupiter`, `testcontainers-postgresql`; JUnit5/Mockito already came in via `spring-boot-starter-*-test` artifacts added in Task 2)
 
 **Verification:**
-- [x] Tests pass: `./mvnw test` (0 tests, exit 0)
-- [ ] Manual check: logs show the Testcontainers Postgres container starting and stopping — **blocked on Docker**
+- [x] Tests pass: `./mvnw test` — 1/1 passing with live Postgres container
+- [x] Manual check: logs show the Testcontainers Postgres container starting (`tc.postgres:17-alpine -- Container is started`) and Flyway/Hibernate connecting to it successfully
 
 **Dependencies:** Task 2
 
@@ -127,17 +127,17 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-plat
 
 ---
 
-## Task 6: Flyway baseline migration + config ✅ (DB verification pending Docker)
+## Task 6: Flyway baseline migration + config ✅
 
 **Description:** Add Flyway configuration pointing at the Postgres service, with a genuinely empty `V1__baseline.sql` (no tables — schema ownership belongs to `identity`/`catalog`). Confirm Flyway runs on backend startup against a real Postgres instance.
 
 **Acceptance criteria:**
 - [x] `V1__baseline.sql` exists under `backend/src/main/resources/db/migration/` and contains no table definitions (a comment is fine)
-- [ ] Backend startup logs show Flyway successfully applying the baseline migration against Postgres — **blocked: needs Docker/Postgres**
-- [ ] `flyway_schema_history` table exists in the database after startup — same blocker
+- [x] Backend startup logs show Flyway successfully applying the baseline migration against Postgres — verified via Task 3's Testcontainers test and the `docker compose up` run: `"Successfully applied 1 migration to schema \"public\", now at version v1"`
+- [x] `flyway_schema_history` table exists in the database after startup — confirmed (Flyway log: `Creating Schema History table "public"."flyway_schema_history"`)
 
 **Verification:**
-- [ ] Manual check: run Postgres (container or local), start backend, confirm `flyway_schema_history` row for V1 exists — **blocked on Docker; revisit with Task 2's and Task 7's live checks once Docker is installed**
+- [x] Manual check: verified via both the Testcontainers test (Task 3) and the full `docker compose up` run — Flyway applies V1 cleanly in both
 
 **Dependencies:** Task 2
 
@@ -149,19 +149,19 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-plat
 
 ---
 
-## Task 7: docker-compose.yml (postgres + backend + frontend) ✅ (run verification pending Docker)
+## Task 7: docker-compose.yml (postgres + backend + frontend) ✅
 
 **Description:** Write `docker-compose.yml` at `agendafacil/` root wiring the three services together via service-name hostnames, with healthchecks for each, so the whole stack starts with one command.
 
 **Acceptance criteria:**
 - [x] `docker-compose.yml` written: postgres (17-alpine, healthcheck via `pg_isready`), backend (builds `./backend`, healthcheck via `curl` against `/actuator/health`, `depends_on: postgres` healthy), frontend (builds `./frontend`, healthcheck via `wget`, `depends_on: backend` healthy)
 - [x] Backend's Postgres connection uses the `postgres` service name (already wired in Task 2's `application.yml` via `DB_HOST` env var, which compose sets)
-- [ ] Frontend's API base URL uses the `backend` service name — **not yet applicable: frontend has no API calls yet (no business screens exist until `client-web`/`admin-web`)**
-- [ ] `docker compose up --build` actually starts all three healthy — **blocked: no Docker in this environment**
-- [ ] `docker compose down -v` cleans up — same blocker
+- [x] Frontend's API base URL uses the `backend` service name — **N/A: frontend has no API calls yet (no business screens exist until `client-web`/`admin-web`); convention is documented in CLAUDE.md for when it's needed**
+- [x] `docker compose up --build` starts all three healthy — verified: `postgres` healthy ~25s, `backend` healthy ~38s, `frontend` healthy ~27s
+- [x] `docker compose down -v` cleans up — verified: all containers, the network, and the volume removed cleanly
 
 **Verification:**
-- [ ] Manual check: `docker compose up --build`, `docker compose ps` shows healthy, curl backend/frontend — **blocked on Docker; added `curl` to backend's runtime image and rely on busybox `wget` in nginx:alpine for frontend's healthcheck**
+- [x] Manual check: `docker compose up --build`, `docker compose ps` showed all three `(healthy)`, curl `/actuator/health` → 200, `/swagger-ui.html` → 200 (via redirect), frontend root → 200 (confirmed in-browser), then `docker compose down -v` cleaned up
 
 **Dependencies:** Task 2, Task 4, Task 6
 
@@ -172,7 +172,7 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-plat
 
 ---
 
-## Task 8: README.md stub + initial commit ✅ (stack boots on a fresh clone not yet verified — pending Docker)
+## Task 8: README.md stub + initial commit ✅
 
 **Description:** Write a `README.md` stub documenting the stack and the one-command run instruction. Make sure everything from Tasks 1-7 is committed.
 
@@ -182,7 +182,7 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-plat
 
 **Verification:**
 - [x] `git status` is clean
-- [ ] Manual check: follow the README's own run instructions and confirm the stack comes up — **blocked: no Docker in this environment**
+- [x] Manual check: README's own run instruction (`docker compose up --build`) verified end-to-end in Task 7's check
 
 **Dependencies:** Task 7
 
@@ -195,6 +195,6 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-platform-setup.md](../../SPEC-plat
 
 ## Checkpoint: Module complete
 
-- [x] All 8 tasks checked off (code/config side)
-- [ ] Every item in SPEC-platform-setup.md's Success Criteria is satisfied — **4 of 8 blocked on Docker Desktop being installed: live health check, Swagger reachability, `./mvnw test`/`npm test` already pass but the Testcontainers smoke test doesn't exist yet, `docker compose up --build` itself**
+- [x] All 8 tasks checked off
+- [x] Every item in SPEC-platform-setup.md's Success Criteria is satisfied — verified end-to-end with Docker Desktop installed and running
 - [ ] Human review before starting the `identity` module
