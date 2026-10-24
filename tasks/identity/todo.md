@@ -2,17 +2,17 @@
 
 Plan: [plan.md](plan.md) · Spec: [../../SPEC-identity.md](../../SPEC-identity.md)
 
-## Task 1: Global error handling
+## Task 1: Global error handling ✅
 
 **Description:** Add `GlobalExceptionHandler` (`@RestControllerAdvice`) and the `ErrorResponse` record, so every later task's error-path tests (409 duplicate, 401, 400 validation) have a shape to assert against.
 
 **Acceptance criteria:**
-- [ ] `ErrorResponse(Instant timestamp, int status, String error, String message, String path)` exists in `dto/`
-- [ ] `GlobalExceptionHandler` maps: Bean Validation failures → 400, a custom `DuplicateEmailException` → 409, `BadCredentialsException`/auth failures → 401, unhandled → 500 — all producing `ErrorResponse`
-- [ ] No endpoint exists yet to exercise this against, so acceptance is a unit test calling the handler methods directly with fake exceptions
+- [x] `ErrorResponse(Instant timestamp, int status, String error, String message, String path)` exists in `dto/`
+- [x] `GlobalExceptionHandler` maps: Bean Validation failures → 400, a custom `DuplicateEmailException` → 409, `BadCredentialsException`/auth failures → 401, unhandled → 500 — all producing `ErrorResponse`
+- [x] Unit test calling the handler methods directly with fake/mocked exceptions (TDD: written red, then made green)
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
+- [x] Tests pass: `./mvnw test` (4/4 in `GlobalExceptionHandlerTest`, full `./mvnw clean verify` also green)
 
 **Dependencies:** None
 

@@ -18,7 +18,7 @@ Build register/login/refresh/logout with JWT, backed by Postgres via Flyway migr
 ## Task List
 
 ### Phase 1: Foundation
-- [ ] Task 1: Global error handling (`GlobalExceptionHandler`, `ErrorResponse`)
+- [x] Task 1: Global error handling (`GlobalExceptionHandler`, `ErrorResponse`)
 - [ ] Task 2: `usuario` schema (`V2`) + `Usuario` entity + `UsuarioRepository` + `Perfil` enum + `PasswordEncoder` bean
 
 ### Checkpoint: Foundation
