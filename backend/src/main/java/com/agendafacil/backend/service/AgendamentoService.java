@@ -142,6 +142,14 @@ public class AgendamentoService {
         return AgendamentoResponse.from(agendamentoRepository.save(agendamento));
     }
 
+    @Transactional(readOnly = true)
+    public List<AgendamentoResponse> listarMeus(Jwt jwt) {
+        Usuario cliente = authService.getAuthenticatedUser(jwt);
+        return agendamentoRepository.findByClienteIdOrderByInicioDesc(cliente.getId()).stream()
+                .map(AgendamentoResponse::from)
+                .toList();
+    }
+
     private boolean cabeNaJanela(Jornada jornada, DayOfWeek diaSemana, LocalDateTime inicio, LocalDateTime fim) {
         return jornada.getDiaSemana() == diaSemana
                 && !inicio.toLocalTime().isBefore(jornada.getHoraInicio())

@@ -159,16 +159,17 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-scheduling.md](../../SPEC-scheduli
 
 ---
 
-## Task 7: `GET /api/agendamentos/meus`
+## Task 7: `GET /api/agendamentos/meus` ✅
 
 **Description:** Authenticated user's own booking history.
 
 **Acceptance criteria:**
-- [ ] Returns only the caller's own bookings (resolved via `AuthService.getAuthenticatedUser(jwt)`), 401 with no token
-- [ ] Another user's bookings never appear, verified by an integration test with two users
+- [x] Returns only the caller's own bookings (resolved via `AuthService.getAuthenticatedUser(jwt)`), 401 with no token
+- [x] Another user's bookings never appear, verified by an integration test with two users booking different slots
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test`
+- [x] Tests pass: `./mvnw test` (TDD red→green, 2/2) and full `./mvnw clean verify`
+- [x] Manual check: `docker compose up`, no token → 401, with token → 200 with exactly the caller's own booking. Swagger shows the operation.
 
 **Dependencies:** Task 4
 

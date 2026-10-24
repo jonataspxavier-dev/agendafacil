@@ -22,4 +22,6 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
             @Param("status") StatusAgendamento status,
             @Param("inicio") LocalDateTime inicio,
             @Param("fim") LocalDateTime fim);
+
+    List<Agendamento> findByClienteIdOrderByInicioDesc(Long clienteId);
 }
