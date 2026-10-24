@@ -24,17 +24,17 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-catalog.md](../../SPEC-catalog.md)
 
 ---
 
-## Task 2: `servico` schema + entity + repository
+## Task 2: `servico` schema + entity + repository ✅
 
 **Description:** `V5__create_servico.sql`, `Servico` entity, `ServicoRepository`.
 
 **Acceptance criteria:**
-- [ ] `V5__create_servico.sql`: `servico(id, nome, descricao, duracao_min, preco, ativo DEFAULT true)`
-- [ ] `Servico` entity maps 1:1; `preco` as `BigDecimal`
-- [ ] `ServicoRepository extends JpaRepository<Servico, Long>` with `findAllByAtivoTrue(Pageable)` (or equivalent)
+- [x] `V5__create_servico.sql`: `servico(id, nome, descricao, duracao_min, preco, ativo DEFAULT true)`
+- [x] `Servico` entity maps 1:1; `preco` as `BigDecimal`
+- [x] `ServicoRepository extends JpaRepository<Servico, Long>` with `findAllByAtivoTrue(Pageable)`
 
 **Verification:**
-- [ ] Tests pass: `./mvnw test` — Testcontainers Postgres applies `V1`→`V5` cleanly
+- [x] Tests pass: `./mvnw test` (TDD red→green) — Testcontainers Postgres applied `V1`→`V5` cleanly; full `./mvnw clean verify` also green
 
 **Dependencies:** None
 
