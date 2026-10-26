@@ -1,5 +1,7 @@
 package com.agendafacil.backend.security;
 
+import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,12 +14,25 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 // platform-setup placeholder endpoints stay open; identity Task 4 adds JWT validation for everything else
 // endpoints de placeholder do platform-setup ficam abertos; a Task 4 do identity adiciona validação JWT para o resto
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    // Unset by default: frontend and backend share an origin locally and in Docker Compose
+    // (nginx/Vite proxy '/api'), so no CORS is needed there. Only set ALLOWED_ORIGIN when
+    // frontend and backend are deployed to different origins (e.g. Vercel + Render).
+    // Vazio por padrão: frontend e backend compartilham a mesma origem localmente e no Docker
+    // Compose (nginx/proxy do Vite fazem '/api'), então nenhum CORS é necessário ali. Defina
+    // ALLOWED_ORIGIN apenas quando frontend e backend forem implantados em origens diferentes
+    // (ex.: Vercel + Render).
+    @Value("${app.allowed-origin:}")
+    private String allowedOrigin;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -58,6 +73,22 @@ public class SecurityConfig {
                         .permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
+
+        if (!allowedOrigin.isBlank()) {
+            http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+        }
+
         return http.build();
+    }
+
+    private CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of(allowedOrigin));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

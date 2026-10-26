@@ -1,0 +1,52 @@
+# Render Blueprint — deploys the Postgres database and the backend API together.
+# Blueprint do Render — implanta o banco de dados Postgres e a API do backend juntos.
+#
+# Usage / Uso: Render dashboard → New → Blueprint → point at this repo.
+# Render provisions both resources below and wires the DB env vars automatically.
+# Render provisiona os dois recursos abaixo e conecta as variáveis de ambiente do banco
+# automaticamente.
+#
+# After the first deploy, set ALLOWED_ORIGIN (in the service's Environment tab) to the
+# Vercel frontend URL once you have it — see README.md's deploy guide for the full steps.
+# Depois do primeiro deploy, defina ALLOWED_ORIGIN (na aba Environment do serviço) com a
+# URL do frontend na Vercel assim que você tiver — veja o guia de deploy no README.md.
+
+databases:
+  - name: agendafacil-db
+    databaseName: agendafacil
+    user: agendafacil
+    plan: free
+
+services:
+  - type: web
+    name: agendafacil-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: agendafacil-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: agendafacil-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: agendafacil-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: agendafacil-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: agendafacil-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ALLOWED_ORIGIN
+        sync: false

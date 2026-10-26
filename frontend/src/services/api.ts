@@ -26,7 +26,17 @@ export function clearTokens(): void {
   localStorage.removeItem(REFRESH_TOKEN_KEY)
 }
 
-export const api = axios.create({ baseURL: '/api' })
+// When VITE_API_URL is unset (local dev via the Vite proxy, or Docker Compose via nginx),
+// '/api' is a same-origin relative path and no CORS is ever needed. When deploying the
+// frontend and backend to different origins (e.g. Vercel + Render), set VITE_API_URL to
+// the backend's full URL at build time and enable CORS for that origin on the backend.
+// Quando VITE_API_URL não está definida (dev local via proxy do Vite, ou Docker Compose via
+// nginx), '/api' é um caminho relativo de mesma origem e nenhum CORS é necessário. Ao fazer
+// deploy do frontend e do backend em origens diferentes (ex.: Vercel + Render), defina
+// VITE_API_URL com a URL completa do backend no build e habilite CORS para essa origem no backend.
+const baseURL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : '/api'
+
+export const api = axios.create({ baseURL })
 
 api.interceptors.request.use((config) => {
   const token = getAccessToken()
@@ -42,7 +52,7 @@ export async function refreshTokens(): Promise<AuthTokens> {
     throw new Error('Nenhum refresh token disponível')
   }
 
-  const { data } = await axios.post<AuthTokens & { expiresInSeconds: number }>('/api/auth/refresh', {
+  const { data } = await axios.post<AuthTokens & { expiresInSeconds: number }>(`${baseURL}/auth/refresh`, {
     refreshToken,
   })
   storeTokens(data)

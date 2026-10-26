@@ -127,6 +127,7 @@ agendafacil/
 ├── docs/       Screenshots used in this README
 ├── tasks/      Per-module implementation plans and task checklists
 ├── docker-compose.yml
+├── render.yaml         Render Blueprint (Postgres + backend) — see Deploying for free
 ├── PLANO.md           the original product brief (pt-BR)
 ├── capability-map.md  module breakdown and build order
 ├── SPEC-*.md          one spec per module, each with its own success criteria
@@ -168,18 +169,18 @@ cd frontend && npm test
 
 ### Deploying for free
 
-The brief suggests Render/Railway for the backend + database and Vercel for the frontend. None of this is deployed yet — here's the path to do it:
+Backend + database on **Render**, frontend on **Vercel**. The backend already supports this split-origin setup out of the box via two env vars — `ALLOWED_ORIGIN` (backend, opt-in CORS) and `VITE_API_URL` (frontend, build-time API base URL) — both of which default to today's same-origin, no-CORS behavior when unset, so local `docker compose` is unaffected.
 
-1. **Database (Render or Railway):** create a managed PostgreSQL instance. Either provider's free/hobby Postgres works — note the connection host, port, database name, user, and password it gives you.
-2. **Backend (Render or Railway, same provider as the DB for a private network link):**
-   - Deploy `backend/` as a Docker-based web service (it already has a working multi-stage `Dockerfile`).
-   - Set environment variables: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` (from step 1), and **`JWT_SECRET`** — the app ships with a `local-dev-secret-...` default (see `application.yml`) that is fine for `docker compose` but must be overridden with a real random secret for any public deployment.
-   - Flyway migrations (and the demo seed data) run automatically on boot, same as locally.
-   - Note the public URL Render/Railway assigns the backend service.
-3. **Frontend (Vercel):**
+1. **Database + backend (Render, one step via Blueprint):**
+   - In the Render dashboard: **New → Blueprint**, point it at this repo. Render reads [`render.yaml`](render.yaml) and provisions a free Postgres instance plus the backend as a Docker web service, wiring `DB_HOST`/`DB_PORT`/`DB_NAME`/`DB_USER`/`DB_PASSWORD` automatically and generating a random `JWT_SECRET` for you.
+   - Flyway migrations and the demo seed data run automatically on first boot, same as locally.
+   - Note the public URL Render assigns the backend service (e.g. `https://agendafacil-backend.onrender.com`) — you'll need it in step 2.
+2. **Frontend (Vercel):**
    - Import the repo, set the **root directory** to `frontend/`.
    - Build command: `npm run build`; output directory: `dist`.
-   - The frontend currently expects same-origin `/api/*` requests, proxied by nginx in the Docker build (see `frontend/nginx.conf`). Vercel doesn't run that nginx step, so you'll need **one small adjustment** before this works on Vercel: either (a) add a `vercel.json` rewrite that proxies `/api/*` to the backend's public URL from step 2, or (b) point `frontend/src/services/api.ts`'s `baseURL` at the backend's full URL via a `VITE_API_URL` build-time env var and enable CORS for Vercel's domain in the backend's `SecurityConfig` (the one case where this app's CORS-free design doesn't apply out of the box, since Vercel and Render/Railway are different origins).
+   - Add an environment variable **`VITE_API_URL`** set to the backend URL from step 1 (no trailing slash).
+   - Deploy, then note the URL Vercel assigns the frontend (e.g. `https://agendafacil.vercel.app`).
+3. **Close the loop:** back in Render, open the backend service's Environment tab and set **`ALLOWED_ORIGIN`** to the Vercel URL from step 2 (`render.yaml` provisions this variable but leaves it blank on purpose, since the frontend URL isn't known until after step 2). Render redeploys automatically; the backend now accepts cross-origin requests from exactly that one domain.
 4. **Demo user:** the seeded admin account (above) is available immediately after the backend's first boot against the new database — no extra step needed.
 
 ### Known limitations
@@ -225,6 +226,7 @@ agendafacil/
 ├── docs/       Prints usados neste README
 ├── tasks/      Planos de implementação e checklists de tarefas por módulo
 ├── docker-compose.yml
+├── render.yaml         Blueprint do Render (Postgres + backend) — ver Deploy gratuito
 ├── PLANO.md           o briefing original do produto
 ├── capability-map.md  divisão dos módulos e ordem de construção
 ├── SPEC-*.md          uma especificação por módulo, cada uma com seus critérios de sucesso
@@ -266,18 +268,18 @@ cd frontend && npm test
 
 ### Deploy gratuito
 
-O briefing sugere Render/Railway para o backend + banco e Vercel para o frontend. Nada disso está implantado ainda — aqui está o caminho para fazer:
+Backend + banco no **Render**, frontend na **Vercel**. O backend já suporta esse cenário de origens diferentes prontinho, via duas variáveis de ambiente — `ALLOWED_ORIGIN` (backend, CORS opcional) e `VITE_API_URL` (frontend, URL base da API no build) — ambas com padrão igual ao comportamento atual de mesma origem sem CORS quando não definidas, então o `docker compose` local não é afetado.
 
-1. **Banco de dados (Render ou Railway):** crie uma instância gerenciada de PostgreSQL. O Postgres gratuito/hobby de qualquer um dos dois funciona — anote o host, porta, nome do banco, usuário e senha fornecidos.
-2. **Backend (Render ou Railway, de preferência o mesmo provedor do banco para rede privada):**
-   - Implante `backend/` como um serviço web baseado em Docker (já tem um `Dockerfile` multi-stage funcional).
-   - Configure as variáveis de ambiente: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` (do passo 1), e **`JWT_SECRET`** — a aplicação já vem com um valor padrão `local-dev-secret-...` (ver `application.yml`) que serve para o `docker compose`, mas precisa ser substituído por um segredo aleatório real em qualquer deploy público.
-   - As migrations do Flyway (e os dados de seed de demonstração) rodam automaticamente na subida, igual ao ambiente local.
-   - Anote a URL pública que o Render/Railway atribui ao serviço do backend.
-3. **Frontend (Vercel):**
+1. **Banco de dados + backend (Render, um único passo via Blueprint):**
+   - No painel do Render: **New → Blueprint**, aponte para este repositório. O Render lê o [`render.yaml`](render.yaml) e provisiona um Postgres gratuito mais o backend como um serviço web Docker, conectando `DB_HOST`/`DB_PORT`/`DB_NAME`/`DB_USER`/`DB_PASSWORD` automaticamente e gerando um `JWT_SECRET` aleatório para você.
+   - As migrations do Flyway e os dados de seed de demonstração rodam automaticamente na primeira subida, igual ao ambiente local.
+   - Anote a URL pública que o Render atribui ao serviço do backend (ex.: `https://agendafacil-backend.onrender.com`) — você vai precisar dela no passo 2.
+2. **Frontend (Vercel):**
    - Importe o repositório, defina o **diretório raiz** como `frontend/`.
    - Comando de build: `npm run build`; diretório de saída: `dist`.
-   - O frontend hoje espera requisições `/api/*` no mesmo domínio, feitas via proxy do nginx no build Docker (veja `frontend/nginx.conf`). A Vercel não roda esse passo do nginx, então é preciso **um pequeno ajuste** antes de funcionar lá: ou (a) adicionar um rewrite em `vercel.json` que faça proxy de `/api/*` para a URL pública do backend do passo 2, ou (b) apontar o `baseURL` de `frontend/src/services/api.ts` para a URL completa do backend via uma variável de ambiente de build `VITE_API_URL`, habilitando CORS para o domínio da Vercel no `SecurityConfig` do backend (o único caso em que o design sem CORS deste app não se aplica de imediato, já que Vercel e Render/Railway são origens diferentes).
+   - Adicione a variável de ambiente **`VITE_API_URL`** com a URL do backend do passo 1 (sem barra no final).
+   - Faça o deploy e anote a URL que a Vercel atribui ao frontend (ex.: `https://agendafacil.vercel.app`).
+3. **Fechando o ciclo:** de volta no Render, abra a aba Environment do serviço do backend e defina **`ALLOWED_ORIGIN`** com a URL da Vercel do passo 2 (o `render.yaml` já provisiona essa variável em branco de propósito, já que a URL do frontend só existe depois do passo 2). O Render reimplanta automaticamente; o backend passa a aceitar requisições cross-origin exatamente daquele domínio.
 4. **Usuário de demonstração:** a conta admin semeada (acima) já fica disponível logo após a primeira subida do backend contra o novo banco — sem passo extra.
 
 ### Limitações conhecidas
