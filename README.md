@@ -167,6 +167,12 @@ cd backend && ./mvnw clean verify
 cd frontend && npm test
 ```
 
+### Live demo
+
+- Frontend: https://agendafacil-tan.vercel.app
+- Backend: https://agendafacil-backend-rq0w.onrender.com (free tier — the first request after idle can take ~50s to wake up)
+- Demo login: use the credentials in the table above.
+
 ### Deploying for free
 
 Backend + database on **Render**, frontend on **Vercel**. The backend already supports this split-origin setup out of the box via two env vars — `ALLOWED_ORIGIN` (backend, opt-in CORS) and `VITE_API_URL` (frontend, build-time API base URL) — both of which default to today's same-origin, no-CORS behavior when unset, so local `docker compose` is unaffected.
@@ -186,7 +192,7 @@ Backend + database on **Render**, frontend on **Vercel**. The backend already su
 ### Known limitations
 
 - There's no endpoint to view or reactivate a deactivated service/professional — `catalog`'s `GET` endpoints only ever return active rows, and `DELETE` only deactivates. This was a deliberate, reviewed scope decision (see `SPEC-admin-web.md`'s Open Questions) rather than an oversight.
-- No live deployment yet (see the deploy guide above).
+- The live demo runs on free tiers: the Render backend spins down after inactivity (cold start ~50s) and the Postgres database expires after 90 days on Render's free plan.
 
 ---
 
@@ -266,6 +272,12 @@ cd backend && ./mvnw clean verify
 cd frontend && npm test
 ```
 
+### Demo ao vivo
+
+- Frontend: https://agendafacil-tan.vercel.app
+- Backend: https://agendafacil-backend-rq0w.onrender.com (camada gratuita — a primeira requisição após ficar ocioso pode levar ~50s para acordar)
+- Login de demonstração: use as credenciais da tabela acima.
+
 ### Deploy gratuito
 
 Backend + banco no **Render**, frontend na **Vercel**. O backend já suporta esse cenário de origens diferentes prontinho, via duas variáveis de ambiente — `ALLOWED_ORIGIN` (backend, CORS opcional) e `VITE_API_URL` (frontend, URL base da API no build) — ambas com padrão igual ao comportamento atual de mesma origem sem CORS quando não definidas, então o `docker compose` local não é afetado.
@@ -285,4 +297,4 @@ Backend + banco no **Render**, frontend na **Vercel**. O backend já suporta ess
 ### Limitações conhecidas
 
 - Não existe endpoint para ver ou reativar um serviço/profissional desativado — os `GET`s do `catalog` só retornam registros ativos, e o `DELETE` apenas desativa. Foi uma decisão de escopo deliberada e revisada (ver as Open Questions de `SPEC-admin-web.md`), não um esquecimento.
-- Ainda não há deploy ao vivo (ver o guia de deploy acima).
+- O demo ao vivo roda em camadas gratuitas: o backend no Render hiberna após inatividade (cold start de ~50s) e o banco Postgres expira após 90 dias no plano gratuito do Render.
