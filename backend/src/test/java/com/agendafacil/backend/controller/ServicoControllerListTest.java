@@ -26,6 +26,10 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 // Note: catalog's seed migration (V8) permanently adds 5 active services to
 // every test database, so assertions here check for presence/absence of this
 // test's own fixtures (by a distinctive name) rather than an exact row count.
+// Nota: a migration de seed do catalog (V8) adiciona permanentemente 5
+// serviços ativos em todo banco de teste, então as asserções aqui checam a
+// presença/ausência das fixtures deste teste (por um nome distintivo), em
+// vez de uma contagem exata de linhas.
 @Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc

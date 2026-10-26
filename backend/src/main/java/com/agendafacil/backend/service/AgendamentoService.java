@@ -101,6 +101,9 @@ public class AgendamentoService {
             // Belt-and-suspenders: the service-layer pre-check above catches the
             // common case, but the DB exclusion constraint is the actual guarantee
             // under concurrent requests (see AgendamentoRepositoryTest).
+            // Cinto e suspensório: a pré-checagem acima na camada de serviço cobre o
+            // caso comum, mas a constraint de exclusão do banco é a garantia real
+            // sob requisições concorrentes (ver AgendamentoRepositoryTest).
             throw new ConflitoDeHorarioException("Horário indisponível para este profissional");
         }
 

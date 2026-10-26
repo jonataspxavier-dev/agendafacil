@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 class DisponibilidadeServiceTest {
 
-    private static final LocalDate SEGUNDA = LocalDate.of(2026, 1, 5); // a Monday
+    private static final LocalDate SEGUNDA = LocalDate.of(2026, 1, 5); // a Monday / uma segunda-feira
 
     @Test
     void noJornadaMeansNoSlots() {

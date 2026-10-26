@@ -36,6 +36,10 @@ import tools.jackson.databind.ObjectMapper;
 // an overlapping insert even when application code is bypassed) is proven in
 // AgendamentoRepositoryTest. This test proves the HTTP-facing behavior is correct
 // in the normal request flow: book once, then the same/overlapping slot 409s cleanly.
+// Nota: a garantia de conflito em nível de banco (a constraint de exclusão rejeitando
+// um insert sobreposto mesmo quando o código da aplicação é contornado) é provada em
+// AgendamentoRepositoryTest. Este teste prova que o comportamento via HTTP está correto
+// no fluxo normal de requisição: reserva uma vez, depois o mesmo horário/sobreposto dá 409.
 @Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc

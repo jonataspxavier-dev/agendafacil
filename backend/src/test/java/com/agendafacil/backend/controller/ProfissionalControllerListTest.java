@@ -32,6 +32,10 @@ import tools.jackson.databind.ObjectMapper;
 // to every test database, so assertions here locate this test's own fixture
 // by name via a JSONPath filter instead of assuming index [0] or an exact
 // total row count.
+// Nota: a migration de seed do catalog (V8) adiciona permanentemente 3
+// profissionais ativos em todo banco de teste, então as asserções aqui
+// localizam a fixture deste teste pelo nome via filtro JSONPath, em vez de
+// assumir o índice [0] ou uma contagem total exata de linhas.
 @Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc

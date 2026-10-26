@@ -34,6 +34,8 @@ class ServicoRepositoryTest {
 
         // findAllByAtivoTrue also returns catalog's seed data (V8), so assert
         // presence/absence by name instead of an exact page size.
+        // findAllByAtivoTrue também retorna os dados de seed do catalog (V8),
+        // então a asserção é por presença/ausência do nome, não pelo tamanho exato da página.
         Page<Servico> ativos = servicoRepository.findAllByAtivoTrue(PageRequest.of(0, 50));
 
         assertThat(ativos.getContent())

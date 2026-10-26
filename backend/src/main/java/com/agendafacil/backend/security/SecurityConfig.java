@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.SecurityFilterChain;
 
 // platform-setup placeholder endpoints stay open; identity Task 4 adds JWT validation for everything else
+// endpoints de placeholder do platform-setup ficam abertos; a Task 4 do identity adiciona validação JWT para o resto
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
