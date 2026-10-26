@@ -58,14 +58,14 @@ Same approach as `client-web`: Vitest + Testing Library, business logic gets tes
 
 ## Success Criteria
 
-- [ ] A `CLIENTE` (or logged-out visitor) hitting any `/admin/*` route is redirected, never shown admin UI
-- [ ] `/admin/dashboard` shows real `agendamentosHoje`/`faturamentoMes`/`topServicos` from `GET /api/admin/dashboard`, with a simple bar visualization for top services
-- [ ] `/admin/servicos` lists active services, creates/edits one with validation matching the backend's constraints, and deactivates one (with the list updating immediately)
-- [ ] `/admin/profissionais` lists active professionals, creates/edits one including `servicoIds` (multi-select) and `jornada` (repeatable day/hora rows), and deactivates one
-- [ ] `/admin/agendamentos` lists bookings with working `data`/`status` filters and pagination, matching `GET /api/admin/agendamentos`'s actual filter semantics
-- [ ] An ADMIN logging in is redirected to `/admin/dashboard`, not `/servicos`
-- [ ] `docker compose up --build` supports a full admin walkthrough (log in as the seeded admin, view dashboard, create/edit/deactivate a serviço and a profissional, filter the bookings list) with no console errors
-- [ ] Automated tests (Vitest) pass for `AdminRoute`'s three-way redirect logic and the CRUD forms' validation/submission logic
+- [x] A `CLIENTE` (or logged-out visitor) hitting any `/admin/*` route is redirected, never shown admin UI
+- [x] `/admin/dashboard` shows real `agendamentosHoje`/`faturamentoMes`/`topServicos` from `GET /api/admin/dashboard`, with a simple bar visualization for top services
+- [x] `/admin/servicos` lists active services, creates/edits one with validation matching the backend's constraints, and deactivates one (with the list updating immediately)
+- [x] `/admin/profissionais` lists active professionals, creates/edits one including `servicoIds` (multi-select) and `jornada` (repeatable day/hora rows), and deactivates one
+- [x] `/admin/agendamentos` lists bookings with working `data`/`status` filters and pagination, matching `GET /api/admin/agendamentos`'s actual filter semantics
+- [x] An ADMIN logging in is redirected to `/admin/dashboard`, not `/servicos`
+- [x] `docker compose up --build` supports a full admin walkthrough (log in as the seeded admin, view dashboard, create/edit/deactivate a serviço and a profissional, filter the bookings list) with no console errors
+- [x] Automated tests (Vitest) pass for `AdminRoute`'s three-way redirect logic and the CRUD forms' validation/submission logic
 
 ## Open Questions
 

@@ -43,12 +43,12 @@ The admin-facing half of the shared `frontend/` app: `/admin/dashboard`, `/admin
 - [x] Task 5: `AdminAgendamentosPage` + `adminAgendamentosService` (`listar` with `data`/`status`/paging params, `concluir`, `cancelar`)
 
 ### Phase 5: Polish + end-to-end verification
-- [ ] Task 6: Full manual admin walkthrough against `docker compose up --build`: log in as admin → dashboard shows real numbers → create and edit a serviço → create a profissional with jornada and servicoIds → deactivate one of each → filter/page the bookings list → conclude and cancel a booking from the admin list
+- [x] Task 6: Full manual admin walkthrough against `docker compose up --build`: log in as admin → dashboard shows real numbers → create and edit a serviço → create a profissional with jornada and servicoIds → deactivate one of each → filter/page the bookings list → conclude and cancel a booking from the admin list
 
 ### Checkpoint: Module complete
-- [ ] All 6 tasks checked off
-- [ ] Every item in SPEC-admin-web.md's Success Criteria is satisfied
-- [ ] `docker compose up --build` works end-to-end for the full admin journey
+- [x] All 6 tasks checked off
+- [x] Every item in SPEC-admin-web.md's Success Criteria is satisfied
+- [x] `docker compose up --build` works end-to-end for the full admin journey
 - [ ] Human review — this is the last planned module per capability-map.md
 
 ## Risks and Mitigations

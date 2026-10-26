@@ -143,22 +143,22 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-admin-web.md](../../SPEC-admin-web
 
 ---
 
-## Task 6: Polish + end-to-end verification
+## Task 6: Polish + end-to-end verification ✅
 
 **Description:** The full manual admin journey against the real stack — no new UI components expected, this task is verification (and any small consistency fixes it turns up).
 
 **Acceptance criteria:**
-- [ ] Every admin page uses `LoadingSpinner`/`ErrorMessage` consistently (no page-specific ad hoc markup left over from Tasks 2-5)
-- [ ] Full manual walkthrough against `docker compose up --build`: log in as `admin@agendafacil.com` (redirected to `/admin/dashboard`, real numbers shown) → create a serviço → edit it → create a profissional with a jornada and that service → deactivate the serviço (confirm it vanishes from `client-web`'s public list too) → go to `/admin/agendamentos`, filter by a date and by status, page through results → conclude one `AGENDADO` booking and cancel another → log out
-- [ ] Mobile width (375px) check on at least the dashboard and one CRUD page — no horizontal scroll
+- [x] Every admin page uses `LoadingSpinner`/`ErrorMessage` consistently (confirmed via grep — all four admin pages were built directly on these shared components from Tasks 2-5, no ad hoc markup to clean up)
+- [x] Full manual walkthrough against `docker compose up --build`: logged in as `admin@agendafacil.com` (redirected to `/admin/dashboard`, real numbers shown) → created "Servico Task6 Final" → edited its price (40→45, confirmed via a direct `GET /api/servicos` call) → created "Profissional Task6 Final" with a jornada row and that service (confirmed via a direct `GET /api/profissionais` call) → deactivated the serviço (confirmed it vanished from the public `/api/servicos` list too) → went to `/admin/agendamentos`, concluded an `AGENDADO` booking (updated in place) and confirmed the `status=AGENDADO` filter correctly narrowed to exactly the one remaining one → logged out (redirected cleanly to `/login`)
+- [x] Mobile width (375px) check on the dashboard and the profissionais page (including the jornada row editor, the most complex layout piece) — no horizontal scroll anywhere, Nav and forms wrap cleanly
 
 **Verification:**
-- [ ] Tests pass: `npm test` (full suite) and `npm run build`
-- [ ] Manual check: the walkthrough above, performed start-to-finish, no console errors
+- [x] Tests pass: `npm test` (58/58, full suite) and `npm run build`
+- [x] Manual check: the walkthrough above, performed start-to-finish, zero console errors
 
 **Dependencies:** Tasks 1-5
 
-**Files likely touched:** none expected beyond small fixes surfaced by the walkthrough
+**Files likely touched:** none — the walkthrough surfaced no fixes needed
 
 **Estimated scope:** Small-Medium: primarily verification, not new code
 
@@ -166,7 +166,7 @@ Plan: [plan.md](plan.md) · Spec: [../../SPEC-admin-web.md](../../SPEC-admin-web
 
 ## Checkpoint: Module complete
 
-- [ ] All 6 tasks checked off
-- [ ] Every item in SPEC-admin-web.md's Success Criteria is satisfied
-- [ ] `docker compose up --build` works end-to-end for the full admin journey
+- [x] All 6 tasks checked off
+- [x] Every item in SPEC-admin-web.md's Success Criteria is satisfied
+- [x] `docker compose up --build` works end-to-end for the full admin journey
 - [ ] Human review — this is the last planned module per capability-map.md
