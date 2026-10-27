@@ -148,14 +148,14 @@ docker compose up --build
 - Backend: http://localhost:8080 (health check: `/actuator/health`)
 - API docs: http://localhost:8080/swagger-ui.html
 
-No manual setup step is needed — Flyway runs the schema migrations and seeds demo data (5 services, 3 professionals with weekly schedules, 1 admin user) automatically on first boot.
+No manual setup step is needed — Flyway runs the schema migrations and seeds demo data (5 services, 3 professionals with weekly schedules, 1 admin user, 1 client user) automatically on first boot.
 
 ### Demo credentials
 
 | Role | Email | Password |
 |---|---|---|
 | ADMIN | `admin@agendafacil.com` | `AdminAgenda123!` |
-| CLIENTE | *(register your own via the "Cadastrar" link)* | — |
+| CLIENTE | `cliente@agendafacil.com` | `ClienteAgenda123!` |
 
 ### Running the tests
 
@@ -253,14 +253,14 @@ docker compose up --build
 - Backend: http://localhost:8080 (health check: `/actuator/health`)
 - Documentação da API: http://localhost:8080/swagger-ui.html
 
-Nenhum passo manual é necessário — o Flyway roda as migrations do schema e popula os dados de demonstração (5 serviços, 3 profissionais com jornadas semanais, 1 usuário admin) automaticamente na primeira subida.
+Nenhum passo manual é necessário — o Flyway roda as migrations do schema e popula os dados de demonstração (5 serviços, 3 profissionais com jornadas semanais, 1 usuário admin, 1 usuário cliente) automaticamente na primeira subida.
 
 ### Credenciais de demonstração
 
 | Papel | E-mail | Senha |
 |---|---|---|
 | ADMIN | `admin@agendafacil.com` | `AdminAgenda123!` |
-| CLIENTE | *(cadastre o seu pelo link "Cadastrar")* | — |
+| CLIENTE | `cliente@agendafacil.com` | `ClienteAgenda123!` |
 
 ### Rodando os testes
 

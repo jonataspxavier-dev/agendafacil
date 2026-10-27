@@ -38,11 +38,53 @@ const baseURL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/
 
 export const api = axios.create({ baseURL })
 
-api.interceptors.request.use((config) => {
+// Render's free tier spins the backend down after inactivity; the first request after that
+// can take up to ~1 minute to wake it back up. If a request is still pending past this
+// threshold, we assume it's a cold start and surface a message so the user doesn't think
+// the app is broken — see setOnSlowRequestChange.
+// O backend do Render (camada gratuita) hiberna após inatividade; a primeira requisição depois
+// disso pode levar até ~1 minuto para acordar. Se uma requisição ainda está pendente após esse
+// limite, assumimos que é um cold start e mostramos um aviso para o usuário não achar que o
+// app quebrou — ver setOnSlowRequestChange.
+const COLD_START_THRESHOLD_MS = 4000
+
+let slowRequestCount = 0
+let onSlowRequestChange: ((isSlow: boolean) => void) | undefined
+
+export function setOnSlowRequestChange(handler: (isSlow: boolean) => void): void {
+  onSlowRequestChange = handler
+}
+
+interface TimedRequestConfig extends InternalAxiosRequestConfig {
+  _wakeTimerId?: ReturnType<typeof setTimeout>
+  _wasSlow?: boolean
+}
+
+function clearWakeTimer(config: TimedRequestConfig | undefined): void {
+  if (!config) return
+  clearTimeout(config._wakeTimerId)
+  config._wakeTimerId = undefined
+  if (config._wasSlow) {
+    config._wasSlow = false
+    slowRequestCount = Math.max(0, slowRequestCount - 1)
+    if (slowRequestCount === 0) {
+      onSlowRequestChange?.(false)
+    }
+  }
+}
+
+api.interceptors.request.use((config: TimedRequestConfig) => {
   const token = getAccessToken()
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
+  config._wakeTimerId = setTimeout(() => {
+    config._wasSlow = true
+    slowRequestCount += 1
+    if (slowRequestCount === 1) {
+      onSlowRequestChange?.(true)
+    }
+  }, COLD_START_THRESHOLD_MS)
   return config
 })
 
@@ -80,9 +122,13 @@ export function extractErrorMessage(error: unknown): string {
 }
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    clearWakeTimer(response.config as TimedRequestConfig)
+    return response
+  },
   async (error: AxiosError) => {
     const originalRequest = error.config as RetryableRequestConfig | undefined
+    clearWakeTimer(originalRequest as TimedRequestConfig | undefined)
     const status = error.response?.status
 
     if (status === 401 && originalRequest && !originalRequest._retry && getRefreshToken()) {
